@@ -15,9 +15,11 @@
 [![Website](https://img.shields.io/badge/Website-chronocode.netlify.app-ff6b6b?style=for-the-badge&logo=netlify&logoColor=white)](https://chronocode.netlify.app)
 [![Node.js](https://img.shields.io/badge/Node.js-v18+-339933?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org)
 [![Electron](https://img.shields.io/badge/Electron-v42-47848F?style=for-the-badge&logo=electron&logoColor=white)](https://electronjs.org)
-[![GitHub Stars](https://img.shields.io/github/stars/harshkhatri7/ChronoCode-web?style=for-the-badge&color=c5f21d)](https://github.com/harshkhatri7/ChronoCode-web/stargazers)
-[![GitHub Issues](https://img.shields.io/github/issues/harshkhatri7/ChronoCode-web?style=for-the-badge&color=ff6b6b)](https://github.com/harshkhatri7/ChronoCode-web/issues)
-[![GitHub Last Commit](https://img.shields.io/github/last-commit/harshkhatri7/ChronoCode-web?style=for-the-badge&color=6366f1)](https://github.com/harshkhatri7/ChronoCode-web/commits)
+[![Real-Time](https://img.shields.io/badge/Real--Time-Watcher-c5f21d?style=for-the-badge&logo=socket.io&logoColor=white)](https://github.com/harshkhatri7/ChronoCode-web)
+[![Auto-Save](https://img.shields.io/badge/Auto--Save-Snapshots-6366f1?style=for-the-badge)](https://github.com/harshkhatri7/ChronoCode-web)
+[![Dashboard](https://img.shields.io/badge/Interactive-Dashboard-ff6b6b?style=for-the-badge)](https://chronocode.netlify.app/docs/)
+[![Zero Config](https://img.shields.io/badge/Zero_Config-a78bfa?style=for-the-badge)](https://github.com/harshkhatri7/ChronoCode-web)
+[![Diff Viewer](https://img.shields.io/badge/Diff_Viewer-c5f21d?style=for-the-badge)](https://chronocode.netlify.app/docs/)
 [![PRs Welcome](https://img.shields.io/badge/PRs-Welcome-c5f21d?style=for-the-badge&logo=git&logoColor=white)](https://github.com/harshkhatri7/ChronoCode-web/pulls)
 
 <br />
