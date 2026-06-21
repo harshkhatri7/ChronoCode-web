@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Downloads — ChronoCode</title>
+    <meta name="description" content="Download ChronoCode time-traveling development engine installers for Windows, macOS, and Linux." />
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body class="bg-onyx text-snow font-sans antialiased relative">
+    
+    <!-- Background Elements -->
+    <div class="grid-backdrop"></div>
+    <div class="ambient-orb" id="ambientOrb"></div>
+
+    <!-- Navigation Header -->
+    <header class="navbar">
+      <div class="navbar-container">
+        <a href="index.html" class="logo-area">
+          <img src="assets/logo.png" alt="ChronoCode Logo" class="logo-icon" />
+          <span class="logo-text">ChronoCode</span>
+        </a>
+        <nav class="nav-links">
+          <a href="index.html#features" class="nav-link">Features</a>
+          <a href="index.html#how-it-works" class="nav-link">How it Works</a>
+          <a href="download.html" class="nav-link">Downloads</a>
+          <a href="support.html" class="nav-link">Support</a>
+        </nav>
+        <div class="nav-cta">
+          <a href="index.html" class="cta-btn-nav">Back to Home</a>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="main-wrapper">
+      
+      <!-- DOWNLOAD SECTION -->
+      <section class="download-section fade-in">
+        <div class="section-header text-center">
+          <span class="download-badge"><i data-lucide="download" class="tagline-icon"></i> PRODUCTION BINARIES</span>
+          <h1 class="hero-title">Download ChronoCode</h1>
+          <p class="hero-subtitle">Get the latest desktop client for your workspace platform.</p>
+        </div>
+
+        <div class="download-table-container glass mt-8">
+          <div class="table-header-row">
+            <div class="th-col">Platform</div>
+            <div class="th-col">Package Type</div>
+            <div class="th-col">Architecture</div>
+            <div class="th-col">Version</div>
+            <div class="th-col text-right">Download Link</div>
+          </div>
+          
+          <!-- Windows Row -->
+          <div class="table-row">
+            <div class="td-col platform-col">
+              <i data-lucide="monitor" class="os-table-icon text-indigo"></i>
+              <div>
+                <span class="os-title">Windows</span>
+                <span class="os-sub">Windows 10, 11 (64-bit)</span>
+              </div>
+            </div>
+            <div class="td-col font-mono text-xs">Installer (.exe)</div>
+            <div class="td-col font-mono text-xs">x64</div>
+            <div class="td-col font-mono text-xs">v3.0.0-beta.1</div>
+            <div class="td-col text-right">
+              <a href="https://github.com/harshkhatri7/eagebase/releases/download/v3.0.0-beta.1/ChronoCode.Setup.3.0.0-beta.1.exe" class="table-btn"><i data-lucide="download" class="btn-icon-inline"></i> Download .exe</a>
+            </div>
+          </div>
+
+          <!-- macOS Row -->
+          <div class="table-row">
+            <div class="td-col platform-col">
+              <i data-lucide="laptop" class="os-table-icon text-lime"></i>
+              <div>
+                <span class="os-title">macOS</span>
+                <span class="os-sub">Intel & Apple Silicon DMG</span>
+              </div>
+            </div>
+            <div class="td-col font-mono text-xs">Disk Image (.dmg)</div>
+            <div class="td-col font-mono text-xs">Universal</div>
+            <div class="td-col font-mono text-xs">v3.0.0-beta.1</div>
+            <div class="td-col text-right">
+              <a href="https://github.com/harshkhatri7/eagebase/releases/download/v3.0.0-beta.1/ChronoCode-3.0.0-beta.1.dmg" class="table-btn"><i data-lucide="download" class="btn-icon-inline"></i> Download .dmg</a>
+            </div>
+          </div>
+
+          <!-- Linux Row -->
+          <div class="table-row">
+            <div class="td-col platform-col">
+              <i data-lucide="terminal" class="os-table-icon text-slate"></i>
+              <div>
+                <span class="os-title">Linux</span>
+                <span class="os-sub">Universal Portable Executable</span>
+              </div>
+            </div>
+            <div class="td-col font-mono text-xs">AppImage (.AppImage)</div>
+            <div class="td-col font-mono text-xs">x64</div>
+            <div class="td-col font-mono text-xs">v3.0.0-beta.1</div>
+            <div class="td-col text-right">
+              <a href="https://github.com/harshkhatri7/eagebase/releases/download/v3.0.0-beta.1/ChronoCode-3.0.0-beta.1.AppImage" class="table-btn"><i data-lucide="download" class="btn-icon-inline"></i> Download AppImage</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="support-notice-card glass mt-12 text-center">
+          <h3 class="notice-title">Need Help or Found an Issue?</h3>
+          <p class="notice-desc">Our client engine is fully open-source. For issues, configuration help, or code contributions, visit the support board.</p>
+          <a href="https://github.com/harshkhatri7/eagebase" target="_blank" class="notice-link-btn"><i data-lucide="github" class="btn-icon-inline"></i> Visit GitHub Support Page</a>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="footer-container">
+        <div class="footer-left">
+          <img src="assets/logo.png" alt="ChronoCode Logo" class="footer-logo" />
+          <span>&copy; 2026 ChronoCode. Open Source MIT License.</span>
+        </div>
+        <div class="footer-right">
+          <a href="https://github.com/harshkhatri7/eagebase" target="_blank" class="footer-link">GitHub Repo</a>
+          <a href="support.html" class="footer-link">Support & Issues</a>
+          <a href="index.html" class="footer-link">Home</a>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- App Scripts -->
+    <script src="app.js"></script>
+  </body>
+</html>
