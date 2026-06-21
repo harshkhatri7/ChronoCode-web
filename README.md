@@ -8,10 +8,60 @@
 
 **Automatic micro-versioning. Real-time file telemetry. Instant restoration.**
 
+<br />
+
+<!-- CORE BADGES -->
 [![License: MIT](https://img.shields.io/badge/License-MIT-6366f1.svg?style=for-the-badge)](https://github.com/harshkhatri7/ChronoCode-web/blob/main/LICENSE)
 [![Version](https://img.shields.io/badge/Version-3.0.0--beta.1-c5f21d.svg?style=for-the-badge)](https://github.com/harshkhatri7/ChronoCode-web/releases/latest)
 [![Website](https://img.shields.io/badge/Website-chronocode.netlify.app-ff6b6b?style=for-the-badge&logo=netlify&logoColor=white)](https://chronocode.netlify.app)
-[![GitHub Stars](https://img.shields.io/github/stars/harshkhatri7/ChronoCode-web?style=for-the-badge&color=c5f21d)](https://github.com/harshkhatri7/ChronoCode-web)
+[![Open Source](https://img.shields.io/badge/Open_Source-YES-c5f21d?style=for-the-badge&logo=opensourceinitiative&logoColor=white)](https://github.com/harshkhatri7/ChronoCode-web)
+
+<!-- GITHUB BADGES -->
+[![GitHub Stars](https://img.shields.io/github/stars/harshkhatri7/ChronoCode-web?style=for-the-badge&color=c5f21d)](https://github.com/harshkhatri7/ChronoCode-web/stargazers)
+[![GitHub Forks](https://img.shields.io/github/forks/harshkhatri7/ChronoCode-web?style=for-the-badge&color=6366f1)](https://github.com/harshkhatri7/ChronoCode-web/network/members)
+[![GitHub Watchers](https://img.shields.io/github/watchers/harshkhatri7/ChronoCode-web?style=for-the-badge&color=a78bfa)](https://github.com/harshkhatri7/ChronoCode-web)
+[![GitHub Issues](https://img.shields.io/github/issues/harshkhatri7/ChronoCode-web?style=for-the-badge&color=ff6b6b)](https://github.com/harshkhatri7/ChronoCode-web/issues)
+[![GitHub Pull Requests](https://img.shields.io/github/issues-pr/harshkhatri7/ChronoCode-web?style=for-the-badge&color=c5f21d)](https://github.com/harshkhatri7/ChronoCode-web/pulls)
+[![GitHub Last Commit](https://img.shields.io/github/last-commit/harshkhatri7/ChronoCode-web?style=for-the-badge&color=6366f1)](https://github.com/harshkhatri7/ChronoCode-web/commits)
+[![GitHub Commit Activity](https://img.shields.io/github/commit-activity/w/harshkhatri7/ChronoCode-web?style=for-the-badge&color=c5f21d)](https://github.com/harshkhatri7/ChronoCode-web/graphs/commit-activity)
+
+<!-- TECH BADGES -->
+[![Node.js](https://img.shields.io/badge/Node.js-v18+-339933?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org)
+[![JavaScript](https://img.shields.io/badge/JavaScript-ES2024-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)](https://javascript.com)
+[![Electron](https://img.shields.io/badge/Electron-v42-47848F?style=for-the-badge&logo=electron&logoColor=white)](https://electronjs.org)
+[![Express.js](https://img.shields.io/badge/Express.js-v4-000000?style=for-the-badge&logo=express&logoColor=white)](https://expressjs.com)
+[![WebSocket](https://img.shields.io/badge/WebSocket-WS-6366f1?style=for-the-badge&logo=socket.io&logoColor=white)](https://ws.io)
+[![Chokidar](https://img.shields.io/badge/Chokidar-v4-c5f21d?style=for-the-badge)](https://github.com/paulmillr/chokidar)
+
+<!-- PLATFORM BADGES -->
+[![Windows](https://img.shields.io/badge/Windows-0078D4?style=for-the-badge&logo=windows&logoColor=white)](https://github.com/harshkhatri7/ChronoCode-web/releases/latest)
+[![macOS](https://img.shields.io/badge/macOS-000000?style=for-the-badge&logo=apple&logoColor=white)](https://github.com/harshkhatri7/ChronoCode-web/releases/latest)
+[![Linux](https://img.shields.io/badge/Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black)](https://github.com/harshkhatri7/ChronoCode-web/releases/latest)
+
+<!-- QUALITY BADGES -->
+[![Code Size](https://img.shields.io/github/languages/code-size/harshkhatri7/ChronoCode-web?style=for-the-badge&color=c5f21d)](https://github.com/harshkhatri7/ChronoCode-web)
+[![Repo Size](https://img.shields.io/github/repo-size/harshkhatri7/ChronoCode-web?style=for-the-badge&color=6366f1)](https://github.com/harshkhatri7/ChronoCode-web)
+[![Top Language](https://img.shields.io/github/languages/top/harshkhatri7/ChronoCode-web?style=for-the-badge&color=c5f21d)](https://github.com/harshkhatri7/ChronoCode-web)
+[![File Count](https://img.shields.io/github/directory-file-count/harshkhatri7/ChronoCode-web?style=for-the-badge&color=a78bfa)](https://github.com/harshkhatri7/ChronoCode-web)
+
+<!-- COMMUNITY BADGES -->
+[![PRs Welcome](https://img.shields.io/badge/PRs-Welcome-c5f21d?style=for-the-badge&logo=git&logoColor=white)](https://github.com/harshkhatri7/ChronoCode-web/pulls)
+[![Issues](https://img.shields.io/badge/Issues-Welcome-6366f1?style=for-the-badge&logo=github&logoColor=white)](https://github.com/harshkhatri7/ChronoCode-web/issues)
+[![Hacktoberfest](https://img.shields.io/badge/Hacktoberfest-Welcome-ff6b6b?style=for-the-badge)](https://hacktoberfest.com)
+[![Contributors](https://img.shields.io/github/contributors/harshkhatri7/ChronoCode-web?style=for-the-badge&color=c5f21d)](https://github.com/harshkhatri7/ChronoCode-web/graphs/contributors)
+
+<!-- STATUS BADGES -->
+[![Maintenance](https://img.shields.io/badge/Maintenance-Active-c5f21d?style=for-the-badge)](https://github.com/harshkhatri7/ChronoCode-web)
+[![Beta](https://img.shields.io/badge/Status-Beta-ff6b6b?style=for-the-badge&logo=git&logoColor=white)](https://github.com/harshkhatri7/ChronoCode-web)
+[![ChatGPT](https://img.shields.io/badge/Built_with-ChatGPT-74aa9c?style=for-the-badge&logo=openai&logoColor=white)](https://openai.com)
+[![Made with Love](https://img.shields.io/badge/Made_with-❤️-ff6b6b?style=for-the-badge)](https://github.com/harshkhatri7/ChronoCode-web)
+
+<br />
+
+[![Documentation](https://img.shields.io/badge/Documentation-📖-6366f1?style=for-the-badge)](https://chronocode.netlify.app/docs/)
+[![Download](https://img.shields.io/badge/Download-⬇️-c5f21d?style=for-the-badge)](https://chronocode.netlify.app/download.html)
+[![Support](https://img.shields.io/badge/Support-💬-a78bfa?style=for-the-badge)](https://chronocode.netlify.app/support.html)
+[![Report Bug](https://img.shields.io/badge/Report_Bug-🐛-ff6b6b?style=for-the-badge)](https://github.com/harshkhatri7/ChronoCode-web/issues)
 
 <br />
 
