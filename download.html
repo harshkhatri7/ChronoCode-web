@@ -1,143 +1,175 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Downloads — ChronoCode</title>
-    <meta name="description" content="Download ChronoCode time-traveling development engine installers for Windows, macOS, and Linux." />
-    
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-    
-    <!-- Stylesheet -->
-    <link rel="stylesheet" href="styles.css" />
-  </head>
-  <body class="bg-onyx text-snow font-sans antialiased relative">
-    
-    <!-- Background Elements -->
-    <div class="grid-backdrop"></div>
-    <div class="ambient-orb" id="ambientOrb"></div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Downloads — ChronoCode</title>
+  <meta name="description" content="Download ChronoCode time-traveling development engine for Windows, macOS, and Linux." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="bg-dots"></div>
+  <div class="bg-grid"></div>
+  <div class="ambient-orb orb-indigo" id="orb"></div>
+  <div class="ambient-orb orb-lime"></div>
 
-    <!-- Navigation Header -->
+  <div class="site-wrap">
+
+    <!-- NAVBAR -->
     <header class="navbar">
-      <div class="navbar-container">
-        <a href="index.html" class="logo-area">
-          <img src="assets/logo.png" alt="ChronoCode Logo" class="logo-icon" />
-          <span class="logo-text">ChronoCode</span>
+      <div class="navbar-inner">
+        <a href="index.html" class="nav-brand">
+          <img src="assets/logo.png" alt="ChronoCode" />
+          ChronoCode
         </a>
         <nav class="nav-links">
           <a href="index.html#features" class="nav-link">Features</a>
-          <a href="index.html#how-it-works" class="nav-link">How it Works</a>
-          <a href="download.html" class="nav-link">Downloads</a>
+          <a href="index.html#how" class="nav-link">How it Works</a>
+          <a href="download.html" class="nav-link active">Downloads</a>
           <a href="support.html" class="nav-link">Support</a>
         </nav>
         <div class="nav-cta">
-          <a href="index.html" class="cta-btn-nav">Back to Home</a>
+          <a href="index.html" class="btn-nav">Home</a>
         </div>
       </div>
     </header>
 
-    <!-- Main Container -->
-    <main class="main-wrapper">
-      
-      <!-- DOWNLOAD SECTION -->
-      <section class="download-section fade-in">
-        <div class="section-header text-center">
-          <span class="download-badge"><i data-lucide="download" class="tagline-icon"></i> PRODUCTION BINARIES</span>
-          <h1 class="hero-title">Download ChronoCode</h1>
-          <p class="hero-subtitle">Get the latest desktop client for your workspace platform.</p>
+    <!-- DOWNLOAD HERO -->
+    <section class="hero" style="min-height: auto; padding-top: 90px; padding-bottom: var(--sp-8);">
+      <div class="container">
+        <div class="hero-content reveal">
+          <span class="tag tag-indigo" style="margin-bottom:12px">
+            <svg class="tag-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Production Binaries
+          </span>
+          <h1 class="hero-title" style="font-size: clamp(28px,4vw,42px)">Download ChronoCode</h1>
+          <p class="hero-desc" style="margin-bottom:0">Get the latest desktop client for your platform.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- DOWNLOAD CARDS -->
+    <section class="section-sm" style="padding-top:0">
+      <div class="container container-tight">
+        <div class="download-grid">
+
+          <!-- Windows -->
+          <div class="card dl-card reveal">
+            <div class="dl-os-icon os-windows">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+            </div>
+            <div>
+              <div class="dl-os-name">Windows</div>
+              <div class="dl-os-detail">Windows 10, 11 (64-bit)</div>
+            </div>
+            <div class="dl-specs">
+              <span class="dl-spec">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/></svg>
+                x64
+              </span>
+              <span class="dl-spec">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                .exe
+              </span>
+              <span class="dl-spec">v3.0.0-beta.1</span>
+            </div>
+            <a href="https://github.com/harshkhatri7/eagebase/releases/download/v3.0.0-beta.1/ChronoCode.Setup.3.0.0-beta.1.exe" class="btn-download" data-os="windows">
+              <svg class="dl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Download .exe
+            </a>
+          </div>
+
+          <!-- macOS -->
+          <div class="card dl-card reveal">
+            <div class="dl-os-icon os-macos">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+            </div>
+            <div>
+              <div class="dl-os-name">macOS</div>
+              <div class="dl-os-detail">Intel & Apple Silicon DMG</div>
+            </div>
+            <div class="dl-specs">
+              <span class="dl-spec">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                Universal
+              </span>
+              <span class="dl-spec">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                .dmg
+              </span>
+              <span class="dl-spec">v3.0.0-beta.1</span>
+            </div>
+            <a href="https://github.com/harshkhatri7/eagebase/releases/download/v3.0.0-beta.1/ChronoCode-3.0.0-beta.1.dmg" class="btn-download" data-os="macos">
+              <svg class="dl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Download .dmg
+            </a>
+          </div>
+
+          <!-- Linux -->
+          <div class="card dl-card reveal">
+            <div class="dl-os-icon os-linux">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+            </div>
+            <div>
+              <div class="dl-os-name">Linux</div>
+              <div class="dl-os-detail">Universal Portable Executable</div>
+            </div>
+            <div class="dl-specs">
+              <span class="dl-spec">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/></svg>
+                x64
+              </span>
+              <span class="dl-spec">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                .AppImage
+              </span>
+              <span class="dl-spec">v3.0.0-beta.1</span>
+            </div>
+            <a href="https://github.com/harshkhatri7/eagebase/releases/download/v3.0.0-beta.1/ChronoCode-3.0.0-beta.1.AppImage" class="btn-download" data-os="linux">
+              <svg class="dl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Download AppImage
+            </a>
+          </div>
+
         </div>
 
-        <div class="download-table-container glass mt-8">
-          <div class="table-header-row">
-            <div class="th-col">Platform</div>
-            <div class="th-col">Package Type</div>
-            <div class="th-col">Architecture</div>
-            <div class="th-col">Version</div>
-            <div class="th-col text-right">Download Link</div>
-          </div>
-          
-          <!-- Windows Row -->
-          <div class="table-row">
-            <div class="td-col platform-col">
-              <i data-lucide="monitor" class="os-table-icon text-indigo"></i>
-              <div>
-                <span class="os-title">Windows</span>
-                <span class="os-sub">Windows 10, 11 (64-bit)</span>
-              </div>
-            </div>
-            <div class="td-col font-mono text-xs">Installer (.exe)</div>
-            <div class="td-col font-mono text-xs">x64</div>
-            <div class="td-col font-mono text-xs">v3.0.0-beta.1</div>
-            <div class="td-col text-right">
-              <a href="https://github.com/harshkhatri7/eagebase/releases/download/v3.0.0-beta.1/ChronoCode.Setup.3.0.0-beta.1.exe" class="table-btn"><i data-lucide="download" class="btn-icon-inline"></i> Download .exe</a>
-            </div>
-          </div>
-
-          <!-- macOS Row -->
-          <div class="table-row">
-            <div class="td-col platform-col">
-              <i data-lucide="laptop" class="os-table-icon text-lime"></i>
-              <div>
-                <span class="os-title">macOS</span>
-                <span class="os-sub">Intel & Apple Silicon DMG</span>
-              </div>
-            </div>
-            <div class="td-col font-mono text-xs">Disk Image (.dmg)</div>
-            <div class="td-col font-mono text-xs">Universal</div>
-            <div class="td-col font-mono text-xs">v3.0.0-beta.1</div>
-            <div class="td-col text-right">
-              <a href="https://github.com/harshkhatri7/eagebase/releases/download/v3.0.0-beta.1/ChronoCode-3.0.0-beta.1.dmg" class="table-btn"><i data-lucide="download" class="btn-icon-inline"></i> Download .dmg</a>
-            </div>
-          </div>
-
-          <!-- Linux Row -->
-          <div class="table-row">
-            <div class="td-col platform-col">
-              <i data-lucide="terminal" class="os-table-icon text-slate"></i>
-              <div>
-                <span class="os-title">Linux</span>
-                <span class="os-sub">Universal Portable Executable</span>
-              </div>
-            </div>
-            <div class="td-col font-mono text-xs">AppImage (.AppImage)</div>
-            <div class="td-col font-mono text-xs">x64</div>
-            <div class="td-col font-mono text-xs">v3.0.0-beta.1</div>
-            <div class="td-col text-right">
-              <a href="https://github.com/harshkhatri7/eagebase/releases/download/v3.0.0-beta.1/ChronoCode-3.0.0-beta.1.AppImage" class="table-btn"><i data-lucide="download" class="btn-icon-inline"></i> Download AppImage</a>
-            </div>
-          </div>
+        <!-- Support CTA -->
+        <div class="card card-glass reveal" style="margin-top: var(--sp-6); padding: var(--sp-6); text-align:center;">
+          <h3 style="font-size:16px; font-weight:600; margin-bottom: var(--sp-2);">Need Help or Found an Issue?</h3>
+          <p style="font-size:13px; color:var(--text-300); margin-bottom: var(--sp-4); max-width:440px; margin-left:auto; margin-right:auto;">
+            ChronoCode is fully open-source. For issues, configuration help, or contributions, visit our GitHub.
+          </p>
+          <a href="https://github.com/harshkhatri7/eagebase" target="_blank" class="btn btn-secondary" style="font-size:13px; padding:8px 18px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+            Visit GitHub Support
+          </a>
         </div>
+      </div>
+    </section>
 
-        <div class="support-notice-card glass mt-12 text-center">
-          <h3 class="notice-title">Need Help or Found an Issue?</h3>
-          <p class="notice-desc">Our client engine is fully open-source. For issues, configuration help, or code contributions, visit the support board.</p>
-          <a href="https://github.com/harshkhatri7/eagebase" target="_blank" class="notice-link-btn"><i data-lucide="github" class="btn-icon-inline"></i> Visit GitHub Support Page</a>
-        </div>
-      </section>
-
-    </main>
-
-    <!-- Footer -->
+    <!-- FOOTER -->
     <footer class="footer">
-      <div class="footer-container">
-        <div class="footer-left">
-          <img src="assets/logo.png" alt="ChronoCode Logo" class="footer-logo" />
-          <span>&copy; 2026 ChronoCode. Open Source MIT License.</span>
-        </div>
-        <div class="footer-right">
-          <a href="https://github.com/harshkhatri7/eagebase" target="_blank" class="footer-link">GitHub Repo</a>
-          <a href="support.html" class="footer-link">Support & Issues</a>
-          <a href="index.html" class="footer-link">Home</a>
+      <div class="container">
+        <div class="footer-inner">
+          <div class="footer-left">
+            <img src="assets/logo.png" alt="ChronoCode" />
+            <span>&copy; 2026 ChronoCode. Open Source MIT License.</span>
+          </div>
+          <div class="footer-links">
+            <a href="https://github.com/harshkhatri7/eagebase" target="_blank" class="footer-link">GitHub</a>
+            <a href="support.html" class="footer-link">Support</a>
+            <a href="index.html" class="footer-link">Home</a>
+          </div>
         </div>
       </div>
     </footer>
 
-    <!-- Lucide Icons CDN -->
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <!-- App Scripts -->
-    <script src="app.js"></script>
-  </body>
+  </div>
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="app.js"></script>
+</body>
 </html>

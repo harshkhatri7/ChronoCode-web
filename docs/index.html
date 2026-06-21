@@ -1,247 +1,212 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ChronoCode — Time-Traveling Development Engine</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css" />
-    <script src="https://unpkg.com/lucide@latest"></script>
-  </head>
-  <body class="bg-[#08090a] text-[#f7f8f8] font-sans antialiased relative">
-    
-    <div class="grid-backdrop"></div>
-    <div class="ambient-orb"></div>
-    <div class="ambient-orb orb-two"></div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ChronoCode — Documentation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="bg-dots"></div>
+  <div class="bg-grid"></div>
+  <div class="ambient-orb orb-indigo" id="orb"></div>
+  <div class="ambient-orb orb-lime"></div>
 
-    <!-- Navigation Header -->
+  <div class="site-wrap">
+
+    <!-- NAVBAR -->
     <header class="navbar">
-      <div class="navbar-container">
-        <div class="logo-area">
-          <svg viewBox="0 0 512 512" fill="none" class="logo-svg" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="256" cy="256" r="200" fill="none" stroke="#ffffff" stroke-width="24" stroke-linecap="round"/>
-            <line x1="256" y1="256" x2="256" y2="120" stroke="#ffffff" stroke-width="20" stroke-linecap="round"/>
-            <line x1="256" y1="256" x2="360" y2="200" stroke="#ffffff" stroke-width="14" stroke-linecap="round"/>
-            <circle cx="256" cy="256" r="16" fill="#ffffff"/>
+      <div class="navbar-inner">
+        <a href="../web/index.html" class="nav-brand">
+          <svg viewBox="0 0 512 512" fill="none" width="24" height="24">
+            <circle cx="256" cy="256" r="200" fill="none" stroke="#f0f2f5" stroke-width="24"/>
+            <line x1="256" y1="256" x2="256" y2="120" stroke="#f0f2f5" stroke-width="20" stroke-linecap="round"/>
+            <line x1="256" y1="256" x2="360" y2="200" stroke="#f0f2f5" stroke-width="14" stroke-linecap="round"/>
+            <circle cx="256" cy="256" r="16" fill="#f0f2f5"/>
           </svg>
-          <span class="logo-text">ChronoCode</span>
-        </div>
-        <div class="nav-links">
+          ChronoCode
+        </a>
+        <nav class="nav-links">
           <a href="#features" class="nav-link">Features</a>
           <a href="#demo" class="nav-link">Interactive Demo</a>
           <a href="#quickstart" class="nav-link">Quick Start</a>
-          <a href="https://github.com/harshkhatri7/ChronoCode" class="nav-btn">GitHub Repo</a>
-        </div>
+          <a href="https://github.com/harshkhatri7/ChronoCode" class="nav-link">GitHub</a>
+        </nav>
       </div>
     </header>
 
-    <!-- Hero Section -->
-    <section class="hero-section">
-      <div class="hero-container">
-        <span class="badge-new">ChronoCode V3.0.0-Beta</span>
-        <h1 class="hero-title">Automatic versioning for the AI coding era</h1>
-        <p class="hero-subtitle">
-          ChronoCode watches your local workspace, captures snapshots on every save, and exposes an interactive dashboard to browse, compare, and restore any micro-version instantly.
-        </p>
-
-        <div class="hero-buttons">
-          <a href="#demo" class="btn btn-primary">Try Interactive Demo</a>
-          <div class="install-box">
-            <code class="install-cmd">git clone https://github.com/harshkhatri7/ChronoCode.git</code>
-            <button class="copy-btn" onclick="copyInstallCmd()">
-              <svg viewBox="0 0 16 16" fill="currentColor" width="14" height="14"><path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 14h-7.5A1.75 1.75 0 0 1 0 12.25v-5.5Zm10.25-4.5H5.75A1.75 1.75 0 0 0 4 4v5.5c0 .966.784 1.75 1.75 1.75h4.5A1.75 1.75 0 0 0 12 9.5V4a1.75 1.75 0 0 0-1.75-1.75Zm-.25 7.5h-4.5a.25.25 0 0 1-.25-.25V4c0-.138.112-.25.25-.25h4.5c0 .138.112.25.25.25v5.5c0 .138-.112.25-.25.25Z"/></svg>
-            </button>
+    <!-- HERO -->
+    <section class="hero" style="min-height: 70vh;">
+      <div class="container">
+        <div class="hero-content reveal">
+          <span class="tag tag-indigo" style="margin-bottom:12px">ChronoCode V3.0.0-Beta</span>
+          <h1 class="hero-title">Automatic versioning for the AI coding era</h1>
+          <p class="hero-desc">
+            ChronoCode watches your workspace, captures snapshots on every save, and exposes an interactive dashboard to browse, compare, and restore any micro-version.
+          </p>
+          <div class="hero-actions" style="flex-direction:column; align-items:center; gap:12px;">
+            <a href="#demo" class="btn btn-primary">Try Interactive Demo</a>
+            <div style="display:flex; align-items:center; gap:8px; background:var(--surface-200); border:1px solid var(--border-default); padding:8px 14px; border-radius:var(--radius-md);">
+              <code style="font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--lime);">git clone https://github.com/harshkhatri7/ChronoCode.git</code>
+              <button onclick="copyCmd()" style="color:var(--text-400); padding:4px; transition:color 0.15s;" onmouseover="this.style.color='var(--text-100)'" onmouseout="this.style.color='var(--text-400)'">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              </button>
+            </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Interactive Demo Section -->
-    <section class="demo-section" id="demo">
-      <div class="section-container">
-        <div class="section-header">
+    <!-- INTERACTIVE DEMO -->
+    <section class="section-sm" id="demo">
+      <div class="container">
+        <div class="section-head reveal">
           <h2 class="section-title">Interactive Time Travel</h2>
-          <p class="section-subtitle">Click the nodes below to simulate traveling back in time through your code snapshots.</p>
+          <p class="section-desc">Click nodes to simulate traveling through code snapshots.</p>
         </div>
-
-        <div class="demo-layout glass">
-          <div class="demo-sidebar">
-            <span class="panel-hdr">Snapshots List</span>
-            <div class="node-selector-grid">
-              <button class="node-btn active" onclick="selectDemoNode(0, this)">
-                <span class="node-dot green"></span>
-                <div class="node-meta">
-                  <span class="node-time">10:42:15 AM</span>
-                  <span class="node-desc">Clean up watcher logs</span>
-                </div>
-              </button>
-              <button class="node-btn" onclick="selectDemoNode(1, this)">
-                <span class="node-dot green"></span>
-                <div class="node-meta">
-                  <span class="node-time">10:39:10 AM</span>
-                  <span class="node-desc">Setup ws heartbeats</span>
-                </div>
-              </button>
-              <button class="node-btn" onclick="selectDemoNode(2, this)">
-                <span class="node-dot green"></span>
-                <div class="node-meta">
-                  <span class="node-time">10:35:48 AM</span>
-                  <span class="node-desc">Add active window tracker</span>
-                </div>
-              </button>
-              <button class="node-btn" onclick="selectDemoNode(3, this)">
-                <span class="node-dot green"></span>
-                <div class="node-meta">
-                  <span class="node-time">10:31:02 AM</span>
-                  <span class="node-desc">Add Express endpoint</span>
-                </div>
-              </button>
-            </div>
+        <div class="card card-glass reveal" style="display:grid; grid-template-columns: 280px 1fr; overflow:hidden; min-height:380px;">
+          <!-- Sidebar -->
+          <div style="border-right:1px solid var(--border-subtle); display:flex; flex-direction:column;">
+            <div style="padding:10px 16px; border-bottom:1px solid var(--border-subtle); font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:var(--text-400);">Snapshots</div>
+            <div style="padding:8px; display:flex; flex-direction:column; gap:4px; overflow-y:auto; flex:1;" id="demoNodes"></div>
           </div>
-
-          <div class="demo-main">
-            <div class="demo-main-header">
-              <span class="breadcrumb-root">server.js</span>
-              <span class="breadcrumb-slash">/</span>
-              <span class="breadcrumb-active" id="demoFileHeader">Clean up watcher logs</span>
+          <!-- Code Panel -->
+          <div style="display:flex; flex-direction:column; background:var(--surface-000);">
+            <div style="padding:10px 16px; border-bottom:1px solid var(--border-subtle); font-size:12px; font-family:'JetBrains Mono',monospace;">
+              <span style="color:var(--text-400)">server.js</span>
+              <span style="color:var(--text-500); margin:0 4px;">/</span>
+              <span style="color:var(--indigo); font-weight:500;" id="demoHeader">Clean up watcher logs</span>
             </div>
-            <pre class="demo-code"><code id="demoCodeDisplay">Loading code...</code></pre>
+            <pre style="padding:16px; font-family:'JetBrains Mono',monospace; font-size:13px; line-height:1.7; color:var(--text-200); overflow:auto; flex:1; margin:0;" id="demoCode">Loading...</pre>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Features Section -->
-    <section class="features-section" id="features">
-      <div class="section-container">
-        <div class="section-header">
+    <!-- FEATURES -->
+    <section class="section-sm" id="features">
+      <div class="container">
+        <div class="section-head reveal">
           <h2 class="section-title">Why ChronoCode?</h2>
-          <p class="section-subtitle">Built to fill the safety gap left by manual Git commits.</p>
+          <p class="section-desc">Built to fill the safety gap left by manual Git commits.</p>
         </div>
-
         <div class="features-grid">
-          <div class="feature-card glass">
-            <span class="feature-icon"><i data-lucide="timer" class="feature-lucide-icon"></i></span>
-            <h3 class="feature-card-title">Debounced Auto-Saves</h3>
-            <p class="feature-card-desc">
-              Every save event is queued and debounced by 300ms, storing snapshots locally in timestamped folders without interrupting your focus.
-            </p>
+          <div class="card-glass feature-card reveal">
+            <div class="feature-icon-wrap" style="background:var(--lime-dim); border-color:rgba(197,242,29,0.12); color:var(--lime);">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            </div>
+            <h3 class="feature-title">Debounced Auto-Saves</h3>
+            <p class="feature-desc">Every save event is queued and debounced by 300ms, storing snapshots locally without interrupting focus.</p>
           </div>
-
-          <div class="feature-card glass">
-            <span class="feature-icon"><i data-lucide="git-branch" class="feature-lucide-icon"></i></span>
-            <h3 class="feature-card-title">Git Branch Aware</h3>
-            <p class="feature-card-desc">
-              Automatically reads the active Git branch and tags each version. Travel back to specific feature iterations seamlessly.
-            </p>
+          <div class="card-glass feature-card reveal">
+            <div class="feature-icon-wrap" style="background:var(--emerald-dim); border-color:rgba(16,185,129,0.15); color:var(--emerald);">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="6" y1="3" x2="6" y2="15"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 1-9 9"/></svg>
+            </div>
+            <h3 class="feature-title">Git Branch Aware</h3>
+            <p class="feature-desc">Reads the active Git branch and tags each version. Travel back to specific feature iterations.</p>
           </div>
-
-          <div class="feature-card glass">
-            <span class="feature-icon"><i data-lucide="monitor" class="feature-lucide-icon"></i></span>
-            <h3 class="feature-card-title">Active IDE Tracking</h3>
-            <p class="feature-card-desc">
-              On Windows, ChronoCode queries the foreground window to detect which IDE (VS Code, Cursor, WebStorm) is in focus and tags versions with the active file.
-            </p>
+          <div class="card-glass feature-card reveal">
+            <div class="feature-icon-wrap">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+            </div>
+            <h3 class="feature-title">Active IDE Tracking</h3>
+            <p class="feature-desc">Queries the foreground window to detect which IDE is in focus and tags versions with the active file.</p>
           </div>
-
-          <div class="feature-card glass">
-            <span class="feature-icon"><i data-lucide="rotate-ccw" class="feature-lucide-icon"></i></span>
-            <h3 class="feature-card-title">One-Click Restores</h3>
-            <p class="feature-card-desc">
-              Find the version you need in the dashboard, click Restore, and your workspace reverts instantly. Zero command-line friction.
-            </p>
+          <div class="card-glass feature-card reveal">
+            <div class="feature-icon-wrap" style="background:var(--crimson-dim); border-color:rgba(239,68,68,0.12); color:var(--crimson);">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+            </div>
+            <h3 class="feature-title">One-Click Restores</h3>
+            <p class="feature-desc">Find the version you need, click Restore, and your workspace reverts instantly. Zero CLI friction.</p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Footer -->
+    <!-- FOOTER -->
     <footer class="footer">
-      <div class="footer-container">
-        <p>© 2026 ChronoCode. Open sourced under the MIT License.</p>
-        <p>Created by <a href="https://github.com/harshkhatri7" class="footer-link">Harsh Khatri</a></p>
+      <div class="container">
+        <div class="footer-inner">
+          <div class="footer-left">
+            <span>&copy; 2026 ChronoCode. Open Source MIT License.</span>
+          </div>
+          <div class="footer-links">
+            <a href="https://github.com/harshkhatri7" class="footer-link">Harsh Khatri</a>
+          </div>
+        </div>
       </div>
     </footer>
 
-    <!-- Toast Notification -->
-    <div id="toast" class="toast">Command copied to clipboard!</div>
+  </div>
 
-    <script>
-      lucide.createIcons();
+  <div id="toast" class="toast">Copied to clipboard!</div>
 
-      const demoData = [
-        {
-          header: "Clean up watcher logs",
-          code: `// START SERVERS
-const httpServer = createServer(app);
+  <script>
+    // ─── DEMO DATA ───
+    const demoData = [
+      { header: "Clean up watcher logs", code: `// START SERVERS\nconst httpServer = createServer(app);\n\nhttpServer.listen(config.portHttp, () => {\n  console.log(\`ChronoCode HTTP active at http://localhost:\${config.portHttp}\`);\n  console.log(\`Watcher heartbeats verified. [Operational]\`);\n});` },
+      { header: "Setup ws heartbeats", code: `// WebSocket Heartbeats\nwss.on('connection', (ws) => {\n  clients.add(ws);\n  console.log('Client connected to WebSocket pipeline');\n  \n  const pingInterval = setInterval(() => {\n    if (ws.readyState === 1) ws.send(JSON.stringify({ type: 'ping' }));\n  }, 30000);\n});` },
+      { header: "Add active window tracker", code: `// Active window tracker (Windows only)\nasync function startActiveWindowTracker() {\n  if (os.platform() !== 'win32') return;\n  const psScriptPath = path.join(config.chronoDir, 'active-window.ps1');\n  const psProc = spawn('powershell', ['-File', psScriptPath]);\n  \n  psProc.on('error', (err) => {\n    console.error('Window tracker failed:', err.message);\n  });\n}` },
+      { header: "Add Express endpoint", code: `// Health check endpoint\napp.get('/api/health', async (_req, res) => {\n  const history = await readHistory();\n  const diskUsage = await getDirSize(config.chronoDir);\n  res.json({\n    status: 'ok',\n    snapshotCount: history.length,\n    diskUsageBytes: diskUsage\n  });\n});` }
+    ];
 
-httpServer.listen(config.portHttp, () => {
-  console.log(\`ChronoCode HTTP server active at http://localhost:\${config.portHttp}\`);
-  console.log(\`Watcher heartbeats successfully verified. [Operational]\`);
-});`
-        },
-        {
-          header: "Setup ws heartbeats",
-          code: `// WebSocket Heartbeats
-wss.on('connection', (ws) => {
-  clients.add(ws);
-  console.log('Client connected to WebSocket pipeline');
-  
-  // Set up 30s heartbeat interval
-  const pingInterval = setInterval(() => {
-    if (ws.readyState === 1) ws.send(JSON.stringify({ type: 'ping' }));
-  }, 30000);
-});`
-        },
-        {
-          header: "Add active window tracker",
-          code: `// Active window tracker (Windows only)
-async function startActiveWindowTracker() {
-  if (os.platform() !== 'win32') return;
-  const psScriptPath = path.join(config.chronoDir, 'active-window.ps1');
-  const psProc = spawn('powershell', ['-File', psScriptPath]);
-  
-  psProc.on('error', (err) => {
-    console.error('Active window tracker failed to start:', err.message);
-  });
-}`
-        },
-        {
-          header: "Add Express endpoint",
-          code: `// Health check endpoint
-app.get('/api/health', async (_req, res) => {
-  const history = await readHistory();
-  const diskUsage = await getDirSize(config.chronoDir);
-  res.json({
-    status: 'ok',
-    snapshotCount: history.length,
-    diskUsageBytes: diskUsage
-  });
-});`
-        }
-      ];
+    function selectDemoNode(idx, btn) {
+      document.querySelectorAll('.node-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('demoHeader').textContent = demoData[idx].header;
+      document.getElementById('demoCode').textContent = demoData[idx].code;
+    }
 
-      function selectDemoNode(index, button) {
-        // Toggle active button
-        document.querySelectorAll('.node-btn').forEach(btn => btn.classList.remove('active'));
-        button.classList.add('active');
+    // Render demo nodes
+    const demoNodesEl = document.getElementById('demoNodes');
+    if (demoNodesEl) {
+      const times = ['10:42:15 AM', '10:39:10 AM', '10:35:48 AM', '10:31:02 AM'];
+      const descs = ['Clean up watcher logs', 'Setup ws heartbeats', 'Add active window tracker', 'Add Express endpoint'];
+      demoData.forEach((d, i) => {
+        const btn = document.createElement('button');
+        btn.className = 'node-btn' + (i === 0 ? ' active' : '');
+        btn.style.cssText = 'display:flex; align-items:flex-start; gap:10px; background:none; border:1px solid transparent; padding:10px 12px; border-radius:var(--radius-md); cursor:pointer; text-align:left; transition:all 0.15s; width:100%;';
+        btn.innerHTML = '<span style="width:7px;height:7px;background:var(--emerald);border-radius:50%;margin-top:5px;flex-shrink:0;box-shadow:0 0 6px var(--emerald);"></span><div style="display:flex;flex-direction:column;gap:1px;"><span style="font-size:10px;color:var(--text-400);font-family:JetBrains Mono,monospace;">' + times[i] + '</span><span style="font-size:12px;color:var(--text-200);font-weight:500;">' + descs[i] + '</span></div>';
+        btn.addEventListener('click', function() { selectDemoNode(i, this); });
+        demoNodesEl.appendChild(btn);
+      });
+      selectDemoNode(0, demoNodesEl.querySelector('.node-btn'));
+    }
 
-        // Update code display
-        document.getElementById('demoFileHeader').innerText = demoData[index].header;
-        document.getElementById('demoCodeDisplay').textContent = demoData[index].code;
-      }
+    // ─── SCROLL REVEAL ───
+    const reveals = document.querySelectorAll('.reveal');
+    if (reveals.length) {
+      const obs = new IntersectionObserver(entries => {
+        entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+      }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+      reveals.forEach(el => obs.observe(el));
+    }
 
-      function copyInstallCmd() {
-        navigator.clipboard.writeText("git clone https://github.com/harshkhatri7/ChronoCode.git");
-        const toast = document.getElementById('toast');
-        toast.classList.add('show');
-        setTimeout(() => toast.classList.remove('show'), 2000);
-      }
+    // ─── AMBIENT ORB ───
+    const orb = document.getElementById('orb');
+    if (orb) {
+      let mx = window.innerWidth / 2, my = window.innerHeight / 2;
+      let ox = mx, oy = my;
+      document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+      (function animOrb() {
+        ox += (mx - ox) * 0.06;
+        oy += (my - oy) * 0.06;
+        orb.style.left = ox + 'px';
+        orb.style.top = oy + 'px';
+        requestAnimationFrame(animOrb);
+      })();
+    }
 
-      // Initial Load
-      selectDemoNode(0, document.querySelector('.node-btn'));
-    </script>
-  </body>
+    // ─── COPY CMD ───
+    function copyCmd() {
+      navigator.clipboard.writeText('git clone https://github.com/harshkhatri7/ChronoCode.git');
+      const t = document.getElementById('toast');
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2000);
+    }
+  </script>
+</body>
 </html>
