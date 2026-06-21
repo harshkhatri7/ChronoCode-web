@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="https://raw.githubusercontent.com/harshkhatri7/ChronoCode/main/public/banner-v2.png" alt="ChronoCode Banner" width="100%" />
+<img src="assets/screenshots/banner.png" alt="ChronoCode Banner" width="100%" />
 
 # ChronoCode
 
@@ -27,7 +27,7 @@ ChronoCode is a **universal time-traveling development engine** that watches you
 
 > Built for the AI coding era. Zero Git configuration required.
 
-<img src="https://raw.githubusercontent.com/harshkhatri7/ChronoCode/main/public/screenshot.png" alt="ChronoCode Dashboard" width="100%" />
+<img src="assets/screenshots/screenshot.png" alt="ChronoCode Dashboard" width="100%" />
 
 ---
 
