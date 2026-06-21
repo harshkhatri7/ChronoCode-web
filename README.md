@@ -22,6 +22,12 @@
 
 <br />
 
+[![Windows](https://img.shields.io/badge/Windows-0078D4?style=for-the-badge&logo=windows&logoColor=white)](https://github.com/harshkhatri7/ChronoCode-web/releases/latest)
+[![macOS](https://img.shields.io/badge/macOS-000000?style=for-the-badge&logo=apple&logoColor=white)](https://github.com/harshkhatri7/ChronoCode-web/releases/latest)
+[![Linux](https://img.shields.io/badge/Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black)](https://github.com/harshkhatri7/ChronoCode-web/releases/latest)
+
+<br />
+
 [Documentation](https://chronocode.netlify.app/docs/) | [Download](https://chronocode.netlify.app/download.html) | [Support](https://chronocode.netlify.app/support.html) | [Report Issue](https://github.com/harshkhatri7/ChronoCode-web/issues)
 
 </div>
