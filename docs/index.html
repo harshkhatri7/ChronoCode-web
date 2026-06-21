@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ChronoCode — Documentation</title>
+  <link rel="icon" type="image/svg+xml" href="../assets/logo.svg" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
@@ -22,10 +23,15 @@
       <div class="navbar-inner">
         <a href="../index.html" class="nav-brand">
           <svg viewBox="0 0 512 512" fill="none" width="24" height="24">
-            <circle cx="256" cy="256" r="200" fill="none" stroke="#f0f2f5" stroke-width="24"/>
-            <line x1="256" y1="256" x2="256" y2="120" stroke="#f0f2f5" stroke-width="20" stroke-linecap="round"/>
-            <line x1="256" y1="256" x2="360" y2="200" stroke="#f0f2f5" stroke-width="14" stroke-linecap="round"/>
-            <circle cx="256" cy="256" r="16" fill="#f0f2f5"/>
+            <defs>
+              <linearGradient id="rg" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#6366f1"/>
+                <stop offset="50%" stop-color="#a78bfa"/>
+                <stop offset="100%" stop-color="#c5f21d"/>
+              </linearGradient>
+            </defs>
+            <circle cx="256" cy="256" r="220" stroke="url(#rg)" stroke-width="32" fill="none"/>
+            <line x1="256" y1="120" x2="256" y2="310" stroke="#c5f21d" stroke-width="28" stroke-linecap="round"/>
           </svg>
           ChronoCode
         </a>
