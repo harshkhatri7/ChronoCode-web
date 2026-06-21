@@ -428,12 +428,12 @@ img { max-width: 100%; display: block; }
 
 /* ─── HERO SECTION ─── */
 .hero {
-  min-height: 88vh;
+  min-height: 85vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   padding-top: 52px; /* navbar height */
-  padding-bottom: var(--sp-12);
+  padding-bottom: var(--sp-8);
   position: relative;
 }
 .hero-content {
@@ -467,7 +467,7 @@ img { max-width: 100%; display: block; }
   flex-wrap: wrap;
 }
 .hero-mockup {
-  margin-top: var(--sp-8);
+  margin-top: var(--sp-6);
   width: 100%;
   max-width: 920px;
   margin-left: auto;
@@ -632,10 +632,10 @@ img { max-width: 100%; display: block; }
 .tl-val.indigo { color: var(--indigo); }
 
 /* ─── SECTION TITLES ─── */
-.section { padding: var(--sp-16) 0; }
-.section-sm { padding: var(--sp-10) 0; }
+.section { padding: var(--sp-12) 0; }
+.section-sm { padding: var(--sp-8) 0; }
 .section-head {
-  margin-bottom: var(--sp-8);
+  margin-bottom: var(--sp-6);
   text-align: center;
 }
 .section-title {
@@ -883,7 +883,7 @@ img { max-width: 100%; display: block; }
 .footer {
   border-top: 1px solid var(--border-default);
   background: var(--surface-100);
-  padding: var(--sp-5) 0;
+  padding: var(--sp-4) 0;
 }
 .footer-inner {
   display: flex;
@@ -911,7 +911,7 @@ img { max-width: 100%; display: block; }
 
 /* ─── RESPONSIVE ─── */
 @media (max-width: 768px) {
-  .hero { min-height: auto; padding-top: 80px; padding-bottom: var(--sp-10); }
+  .hero { min-height: auto; padding-top: 72px; padding-bottom: var(--sp-6); }
   .hero-title { font-size: 28px; }
   .features-grid, .steps-grid, .download-grid, .support-grid { grid-template-columns: 1fr; }
   .quick-links { grid-template-columns: 1fr; }

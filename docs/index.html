@@ -20,7 +20,7 @@
     <!-- NAVBAR -->
     <header class="navbar">
       <div class="navbar-inner">
-        <a href="../web/index.html" class="nav-brand">
+        <a href="../index.html" class="nav-brand">
           <svg viewBox="0 0 512 512" fill="none" width="24" height="24">
             <circle cx="256" cy="256" r="200" fill="none" stroke="#f0f2f5" stroke-width="24"/>
             <line x1="256" y1="256" x2="256" y2="120" stroke="#f0f2f5" stroke-width="20" stroke-linecap="round"/>
@@ -33,7 +33,7 @@
           <a href="#features" class="nav-link">Features</a>
           <a href="#demo" class="nav-link">Interactive Demo</a>
           <a href="#quickstart" class="nav-link">Quick Start</a>
-          <a href="https://github.com/harshkhatri7/ChronoCode" class="nav-link">GitHub</a>
+          <a href="https://github.com/harshkhatri7/ChronoCode-web" class="nav-link">GitHub</a>
         </nav>
       </div>
     </header>
@@ -50,7 +50,7 @@
           <div class="hero-actions" style="flex-direction:column; align-items:center; gap:12px;">
             <a href="#demo" class="btn btn-primary">Try Interactive Demo</a>
             <div style="display:flex; align-items:center; gap:8px; background:var(--surface-200); border:1px solid var(--border-default); padding:8px 14px; border-radius:var(--radius-md);">
-              <code style="font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--lime);">git clone https://github.com/harshkhatri7/ChronoCode.git</code>
+              <code style="font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--lime);">git clone https://github.com/harshkhatri7/ChronoCode-web.git</code>
               <button onclick="copyCmd()" style="color:var(--text-400); padding:4px; transition:color 0.15s;" onmouseover="this.style.color='var(--text-100)'" onmouseout="this.style.color='var(--text-400)'">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
               </button>
@@ -134,7 +134,7 @@
             <span>&copy; 2026 ChronoCode. Open Source MIT License.</span>
           </div>
           <div class="footer-links">
-            <a href="https://github.com/harshkhatri7" class="footer-link">Harsh Khatri</a>
+            <a href="https://github.com/harshkhatri7/ChronoCode-web" class="footer-link">GitHub</a>
           </div>
         </div>
       </div>
@@ -202,7 +202,7 @@
 
     // ─── COPY CMD ───
     function copyCmd() {
-      navigator.clipboard.writeText('git clone https://github.com/harshkhatri7/ChronoCode.git');
+      navigator.clipboard.writeText('git clone https://github.com/harshkhatri7/ChronoCode-web.git');
       const t = document.getElementById('toast');
       t.classList.add('show');
       setTimeout(() => t.classList.remove('show'), 2000);
