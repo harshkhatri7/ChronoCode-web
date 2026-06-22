@@ -1,0 +1,15 @@
+{
+  "name": "chronocode-desktop",
+  "version": "3.0.0-beta.1",
+  "description": "ChronoCode — Automatic Code Versioning Desktop App",
+  "main": "electron-main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "set ELECTRON_DEV=1 && electron ."
+  },
+  "author": "Harsh Khatri",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^33.0.0"
+  }
+}
