@@ -1272,9 +1272,15 @@ const winMinBtn = document.getElementById('winMinBtn');
 const winMaxBtn = document.getElementById('winMaxBtn');
 
 if (window.electronAPI) {
-  if (winCloseBtn) winCloseBtn.addEventListener('click', () => window.electronAPI.close());
-  if (winMinBtn) winMinBtn.addEventListener('click', () => window.electronAPI.minimize());
-  if (winMaxBtn) winMaxBtn.addEventListener('click', () => window.electronAPI.maximize());
+  // On macOS, native traffic lights are shown — hide custom dots
+  if (window.electronAPI.platform === 'darwin') {
+    const winControls = document.querySelector('.window-controls');
+    if (winControls) winControls.style.display = 'none';
+  } else {
+    if (winCloseBtn) winCloseBtn.addEventListener('click', () => window.electronAPI.close());
+    if (winMinBtn) winMinBtn.addEventListener('click', () => window.electronAPI.minimize());
+    if (winMaxBtn) winMaxBtn.addEventListener('click', () => window.electronAPI.maximize());
+  }
 } else {
   // If not running in Electron, hide the window buttons
   const winControls = document.querySelector('.window-controls');

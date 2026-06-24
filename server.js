@@ -36,6 +36,7 @@ const config = {
   portHttp: parseInt(process.env.CHRONO_PORT_HTTP || '9998', 10),
   portWs: parseInt(process.env.CHRONO_PORT_WS || '9999', 10),
   chronoDir: process.env.CHRONO_DIR || defaultChronoDir,
+  projectDir: process.env.CHRONO_PROJECT_DIR || process.cwd(),
   maxFileSize: parseInt(process.env.CHRONO_MAX_FILE_SIZE || String(10 * 1024 * 1024), 10), // 10MB
   maxSnapshotSize: parseInt(process.env.CHRONO_MAX_SNAPSHOT_SIZE || String(50 * 1024 * 1024), 10), // 50MB
   rateLimitMs: parseInt(process.env.CHRONO_RATE_LIMIT_MS || '1000', 10), // 1s
@@ -164,9 +165,9 @@ function logAction(userId, action, details) {
 app.use('/api', authenticate);
 
 // Auto-detect project title
-let projectTitle = path.basename(process.cwd());
+let projectTitle = path.basename(config.projectDir);
 try {
-  const pkgData = fsSync.readFileSync(path.join(process.cwd(), 'package.json'), 'utf-8');
+  const pkgData = fsSync.readFileSync(path.join(config.projectDir, 'package.json'), 'utf-8');
   const pkg = JSON.parse(pkgData);
   if (pkg.name) projectTitle = pkg.name;
 } catch (_) {}
@@ -618,7 +619,7 @@ app.post('/api/restore', requirePro, async (req, res) => {
     isRestoring = true;
     for (const f of entry.files) {
       const src = path.join(config.chronoDir, 'snapshots', String(timestamp), f);
-      const dest = path.join(process.cwd(), f);
+      const dest = path.join(config.projectDir, f);
       await fs.mkdir(path.dirname(dest), { recursive: true });
       await fs.copyFile(src, dest);
     }
@@ -913,7 +914,7 @@ async function restoreSnapshot(timestamp, ws) {
 
     for (const relPath of entry.files) {
       const sourcePath = path.join(snapshotFolder, relPath);
-      const targetPath = path.join(process.cwd(), relPath);
+      const targetPath = path.join(config.projectDir, relPath);
       await fs.mkdir(path.dirname(targetPath), { recursive: true });
       await fs.copyFile(sourcePath, targetPath);
     }
@@ -1146,7 +1147,7 @@ async function createSnapshot(changedFile = '') {
         }
       }
     };
-    await scan(process.cwd());
+    await scan(config.projectDir);
 
     if (allFiles.length === 0) return;
 
@@ -1178,7 +1179,7 @@ async function createSnapshot(changedFile = '') {
 }
 
 function startFileWatcher() {
-  watcher = chokidar.watch(process.cwd(), {
+  watcher = chokidar.watch(config.projectDir, {
     ignored: (p) => isIgnored(p),
     persistent: true,
     ignoreInitial: true,
@@ -1194,8 +1195,10 @@ function startFileWatcher() {
 }
 startFileWatcher();
 
-// Export app for serverless wrappers
+// Export app + wss for Electron and serverless wrappers
 module.exports = app;
+module.exports._wss = wss;
+module.exports._config = config;
 
 if (require.main === module) {
   const server = createServer(app);

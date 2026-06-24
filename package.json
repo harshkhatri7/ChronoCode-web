@@ -3,14 +3,58 @@
   "version": "3.0.0-beta.1",
   "description": "ChronoCode — Automatic Code Versioning Desktop App",
   "main": "electron-main.js",
-  "scripts": {
-    "start": "electron .",
-    "dev": "set ELECTRON_DEV=1 && electron ."
-  },
   "author": "Harsh Khatri",
   "license": "MIT",
+  "scripts": {
+    "start": "electron .",
+    "dev": "cross-env ELECTRON_DEV=1 electron .",
+    "build": "electron-builder --publish never",
+    "build:win": "electron-builder --win --publish never",
+    "build:mac": "electron-builder --mac --publish never",
+    "build:linux": "electron-builder --linux --publish never"
+  },
+  "build": {
+    "appId": "com.chronocode.desktop",
+    "productName": "ChronoCode",
+    "directories": {
+      "output": "dist-electron"
+    },
+    "files": [
+      "electron-main.js",
+      "preload.js",
+      "server.js",
+      "db.js",
+      "assets/**/*",
+      "public/**/*",
+      "*.html",
+      ".env"
+    ],
+    "extraResources": [],
+    "win": {
+      "target": ["nsis", "portable"],
+      "icon": "assets/logo.png"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "shortcutName": "ChronoCode"
+    },
+    "mac": {
+      "target": ["dmg"],
+      "icon": "assets/logo.png",
+      "category": "public.app-category.developer-tools"
+    },
+    "linux": {
+      "target": ["AppImage", "deb"],
+      "icon": "assets/logo.png",
+      "category": "Development"
+    }
+  },
   "devDependencies": {
-    "electron": "^33.0.0"
+    "cross-env": "^7.0.3",
+    "electron": "^33.0.0",
+    "electron-builder": "^25.1.8"
   },
   "dependencies": {
     "chokidar": "^3.6.0",
