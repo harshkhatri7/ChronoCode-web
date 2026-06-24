@@ -16,6 +16,22 @@ document.addEventListener('DOMContentLoaded', () => {
     })();
   }
 
+  // ─── MOBILE HAMBURGER MENU ───
+  const hamburger = document.querySelector('.nav-hamburger');
+  const navLinks = document.querySelector('.nav-links');
+  if (hamburger && navLinks) {
+    hamburger.addEventListener('click', () => {
+      hamburger.classList.toggle('open');
+      navLinks.classList.toggle('open');
+    });
+    navLinks.querySelectorAll('.nav-link').forEach(link => {
+      link.addEventListener('click', () => {
+        hamburger.classList.remove('open');
+        navLinks.classList.remove('open');
+      });
+    });
+  }
+
   // ─── SCROLL REVEAL (IntersectionObserver) ───
   const reveals = document.querySelectorAll('.reveal');
   if (reveals.length) {

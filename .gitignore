@@ -4,3 +4,8 @@ out/
 .env
 .chrono/
 .chrono
+
+# Local Netlify folder
+.netlify
+
+.vercel

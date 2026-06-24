@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://chronocode.netlify.app/sitemap.xml
+Sitemap: https://chronocode-app.vercel.app/sitemap.xml
