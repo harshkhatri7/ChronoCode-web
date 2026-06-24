@@ -2,3 +2,5 @@ android-admin/
 .chrono/
 .git/
 node_modules/
+dist-electron/
+dist/
