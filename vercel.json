@@ -10,6 +10,10 @@
       "use": "@vercel/static"
     },
     {
+      "src": "assets/**/*",
+      "use": "@vercel/static"
+    },
+    {
       "src": "*.html",
       "use": "@vercel/static"
     },
