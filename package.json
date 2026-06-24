@@ -40,24 +40,27 @@
           "arch": ["x64"]
         }
       ],
-      "icon": "assets/logo.png",
+      "icon": "assets/logo.ico",
       "sign": false,
       "signAndEditExecutable": false
     },
     "nsis": {
-      "oneClick": false,
+      "oneClick": true,
       "perMachine": false,
-      "allowToChangeInstallationDirectory": true,
+      "allowElevation": false,
+      "allowToChangeInstallationDirectory": false,
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
       "shortcutName": "ChronoCode",
-      "installerIcon": "assets/logo.png",
-      "uninstallerIcon": "assets/logo.png",
-      "installerHeaderIcon": "assets/logo.png",
+      "installerIcon": "assets/logo.ico",
+      "uninstallerIcon": "assets/logo.ico",
+      "installerHeaderIcon": "assets/logo.ico",
       "deleteAppDataOnUninstall": false,
-      "upgradeBehavior": "install",
-      "runsAtStartup": false,
-      "menuCategory": true
+      "menuCategory": true,
+      "warningsAsErrors": false,
+      "runAfterFinish": true,
+      "include": "build/installer.nsh",
+      "artifactName": "ChronoCode-Setup-${version}.${ext}"
     },
     "mac": {
       "target": [
@@ -66,9 +69,10 @@
           "arch": ["x64", "arm64"]
         }
       ],
-      "icon": "assets/logo.png",
+      "icon": "assets/logo.ico",
       "category": "public.app-category.developer-tools",
-      "darkModeSupport": true
+      "darkModeSupport": true,
+      "artifactName": "ChronoCode-${version}-${arch}.${ext}"
     },
     "dmg": {
       "contents": [
@@ -94,7 +98,8 @@
       "icon": "assets/logo.png",
       "category": "Development",
       "synopsis": "Automatic Code Versioning Desktop App",
-      "description": "ChronoCode — The time-traveling development engine. Automatically records your file changes and creates version snapshots."
+      "description": "ChronoCode — The time-traveling development engine. Automatically records your file changes and creates version snapshots.",
+      "artifactName": "ChronoCode-${version}.${ext}"
     }
   },
   "devDependencies": {
