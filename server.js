@@ -256,7 +256,7 @@ function canSnapshot() {
 // REST API ROUTES
 // ─────────────────────────────────────────────
 
-// OAuth Mock/Consent endpoint
+// OAuth Mock/Consent endpoint (for sandbox/testing)
 app.post('/api/auth/google/mock', (req, res) => {
   const { email, name, picture, platformInfo } = req.body;
   if (!email) return res.status(400).json({ error: 'Missing email' });
@@ -288,6 +288,82 @@ app.post('/api/auth/google/mock', (req, res) => {
   activeSessions.set(token, email);
 
   res.json({ success: true, token, user });
+});
+
+// Real Google OAuth — verify ID token from Google Identity Services
+const https = require('https');
+
+app.post('/api/auth/google/verify', async (req, res) => {
+  const { credential, platformInfo } = req.body;
+  if (!credential) return res.status(400).json({ error: 'Missing credential' });
+
+  try {
+    const tokenData = await new Promise((resolve, reject) => {
+      https.get(`https://oauth2.googleapis.com/tokeninfo?id_token=${credential}`, (response) => {
+        let data = '';
+        response.on('data', chunk => { data += chunk; });
+        response.on('end', () => {
+          try {
+            const parsed = JSON.parse(data);
+            if (parsed.error_description) return reject(new Error(parsed.error_description));
+            resolve(parsed);
+          } catch (e) {
+            reject(new Error('Invalid token response'));
+          }
+        });
+      }).on('error', reject);
+    });
+
+    const email = tokenData.email;
+    const name = tokenData.name || email.split('@')[0];
+    const picture = tokenData.picture || '';
+    const emailVerified = tokenData.email_verified === 'true' || tokenData.email_verified === true;
+
+    if (!email) return res.status(400).json({ error: 'No email in token' });
+    if (!emailVerified) return res.status(403).json({ error: 'Email not verified by Google' });
+
+    // Verify audience matches our Client ID if configured
+    const expectedClientId = process.env.GOOGLE_CLIENT_ID;
+    if (expectedClientId && expectedClientId !== 'REPLACE_WITH_YOUR_GOOGLE_CLIENT_ID') {
+      if (tokenData.aud !== expectedClientId) {
+        return res.status(401).json({ error: 'invalid_audience', message: 'Token audience mismatch' });
+      }
+    }
+
+    let user = db.users.findOne({ email });
+    if (!user) {
+      const role = (email === 'admin@chronocode.com' || db.users.find().length === 0) ? 'admin' : 'free';
+      user = db.users.insert({
+        email,
+        name,
+        role,
+        status: 'active',
+        picture,
+        platformInfo: platformInfo || 'Google OAuth',
+        lastActive: Date.now()
+      });
+    } else {
+      if (user.status === 'banned') {
+        return res.status(403).json({ error: 'banned', message: 'Your account has been banned.' });
+      }
+      db.users.update({ email }, {
+        lastActive: Date.now(),
+        name: name || user.name,
+        picture: picture || user.picture,
+        platformInfo: platformInfo || user.platformInfo
+      });
+      user = db.users.findOne({ email });
+    }
+
+    const token = 'CC_SESSION_' + Buffer.from(email + ':' + Date.now()).toString('base64');
+    activeSessions.set(token, email);
+
+    logAction(email, 'LOGIN', `Google OAuth login from ${platformInfo || 'web'}`);
+    res.json({ success: true, token, user });
+  } catch (err) {
+    console.error('[Auth] Google token verification failed:', err.message);
+    res.status(401).json({ error: 'invalid_token', message: 'Google token verification failed' });
+  }
 });
 
 // Local session synchronization holder
