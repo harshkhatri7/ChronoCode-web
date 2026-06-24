@@ -1,12 +1,8 @@
-node_modules/
-dist/
-dist-electron/
-out/
-.env
-.chrono/
-.chrono
+# ChronoCode - Private Repository
+# Source code is not published here.
+# Visit https://chronocode-app.vercel.app for the live product.
 
-# Local Netlify folder
-.netlify
-
-.vercel
+*
+!index.html
+!README.md
+!.gitignore

@@ -1,249 +1,98 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ChronoCode — Automatic Code Versioning for Developers & AI Agents</title>
-  <link rel="icon" type="image/svg+xml" href="assets/logo.svg" />
-  <meta name="description" content="ChronoCode is a universal time-traveling development engine that provides automatic micro-versioning, real-time file telemetry, and instant restoration. Zero Git config required." />
-  <link rel="canonical" href="https://chronocode-app.vercel.app/" />
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://chronocode-app.vercel.app/" />
-  <meta property="og:title" content="ChronoCode — Automatic Code Versioning for Developers & AI Agents" />
-  <meta property="og:description" content="Time-traveling dev engine with automatic micro-versioning, real-time file telemetry, and instant restoration. Zero Git config required." />
-  <meta property="og:image" content="https://chronocode-app.vercel.app/assets/logo.svg" />
-  <meta property="og:site_name" content="ChronoCode" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="ChronoCode — Automatic Code Versioning for Developers & AI Agents" />
-  <meta name="twitter:description" content="Time-traveling dev engine with automatic micro-versioning, real-time file telemetry, and instant restoration." />
-  <meta name="twitter:image" content="https://chronocode-app.vercel.app/assets/logo.svg" />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css" />
-  <script>
-    // Sync active browser session to local desktop app on startup (Electron only)
-    const ccToken = localStorage.getItem('cc_token');
-    const isElectronNav = navigator.userAgent.toLowerCase().includes('electron');
-    if (ccToken && isElectronNav) {
-      fetch('/api/auth/me', {
-        headers: { 'Authorization': 'Bearer ' + ccToken }
-      })
-      .then(res => res.ok ? res.json() : Promise.reject())
-      .then(user => {
-        fetch('http://localhost:9998/api/auth/local-sync', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ token: ccToken, user })
-        }).catch(() => {});
-      })
-      .catch(() => {
-        localStorage.removeItem('cc_token');
-      });
+  <meta charset="UTF-8">
+  <meta http-equiv="refresh" content="0;url=https://chronocode-app.vercel.app/">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ChronoCode — Redirecting...</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: #06080a;
+      color: #f0f1f3;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
     }
-  </script>
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    "name": "ChronoCode",
-    "url": "https://chronocode-app.vercel.app/",
-    "description": "Time-traveling dev engine with automatic micro-versioning, real-time file telemetry, and instant restoration.",
-    "potentialAction": {
-      "@type": "SearchAction",
-      "target": "https://chronocode-app.vercel.app/support.html?q={search_term_string}",
-      "query-input": "required name=search_term_string"
+    .bg-grid {
+      position: fixed; inset: 0; z-index: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+      background-size: 60px 60px;
+      animation: gridMove 20s linear infinite;
     }
-  }
-  </script>
+    @keyframes gridMove { to { background-position: 60px 60px; } }
+    .orb { position: fixed; border-radius: 50%; filter: blur(80px); opacity: 0.3; }
+    .orb-1 { width: min(400px, 70vw); height: min(400px, 70vw); background: #3b82f6; top: -10%; left: -5%; animation: orbFloat 8s ease-in-out infinite alternate; }
+    .orb-2 { width: min(350px, 60vw); height: min(350px, 60vw); background: #6366f1; bottom: -10%; right: -5%; animation: orbFloat 8s ease-in-out infinite alternate-reverse; }
+    @keyframes orbFloat {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(30px, -30px) scale(1.1); }
+    }
+    .card {
+      position: relative; z-index: 10;
+      text-align: center;
+      padding: 48px 40px;
+      background: rgba(12, 14, 18, 0.75);
+      backdrop-filter: blur(40px) saturate(1.5);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 24px;
+      box-shadow: 0 0 80px rgba(59,130,246,0.06), 0 24px 48px rgba(0,0,0,0.5);
+      animation: cardIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      opacity: 0; transform: translateY(20px);
+      max-width: 420px; width: 90%;
+    }
+    @keyframes cardIn { to { opacity: 1; transform: translateY(0); } }
+    .card::before {
+      content: ''; position: absolute; inset: 0; border-radius: 24px;
+      background: linear-gradient(135deg, rgba(59,130,246,0.08), rgba(99,102,241,0.04), transparent 60%);
+      pointer-events: none;
+    }
+    svg { width: 64px; height: 64px; margin-bottom: 20px; filter: drop-shadow(0 0 20px rgba(59,130,246,0.3)); animation: pulse 3s ease-in-out infinite; }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); filter: drop-shadow(0 0 20px rgba(59,130,246,0.3)); }
+      50% { transform: scale(1.05); filter: drop-shadow(0 0 30px rgba(59,130,246,0.5)); }
+    }
+    h1 { font-size: 28px; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 8px; background: linear-gradient(135deg, #fff 30%, #8b8fa0); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .subtitle { font-size: 11px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: #3b82f6; margin-bottom: 20px; }
+    p { font-size: 14px; color: #6b7080; margin-bottom: 24px; line-height: 1.6; }
+    .spinner { display: inline-block; width: 20px; height: 20px; border: 2px solid rgba(255,255,255,0.15); border-top-color: #3b82f6; border-radius: 50%; animation: spin 0.8s linear infinite; margin-bottom: 16px; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    a { color: #3b82f6; text-decoration: none; font-weight: 600; transition: color 0.2s; }
+    a:hover { color: #60a5fa; text-decoration: underline; }
+    .version { font-size: 10px; color: #5c5f6e; letter-spacing: 1px; text-transform: uppercase; margin-top: 24px; }
+  </style>
 </head>
 <body>
-  <div class="bg-dots"></div>
   <div class="bg-grid"></div>
-  <div class="ambient-orb orb-indigo" id="orb"></div>
-  <div class="ambient-orb orb-lime"></div>
-
-  <div class="site-wrap">
-
-    <!-- NAVBAR -->
-    <header class="navbar">
-      <div class="navbar-inner">
-        <a href="index.html" class="nav-brand">
-          <img src="assets/logo.svg" alt="ChronoCode" />
-          ChronoCode
-        </a>
-        <nav class="nav-links">
-          <a href="#features" class="nav-link">Features</a>
-          <a href="#how" class="nav-link">How it Works</a>
-          <a href="download.html" class="nav-link">Downloads</a>
-          <a href="support.html" class="nav-link">Support</a>
-        </nav>
-        <button class="nav-hamburger" aria-label="Menu">
-          <span></span><span></span><span></span>
-        </button>
-        <div class="nav-cta">
-          <a href="download.html" class="btn-nav">Download</a>
-        </div>
-      </div>
-    </header>
-
-    <!-- HERO -->
-    <main>
-    <section class="hero">
-      <div class="container">
-        <div class="hero-content reveal">
-          <span class="tag tag-lime" style="margin-bottom:12px">
-            <svg class="tag-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-            Real-Time Telemetry Engine
-          </span>
-          <h1 class="hero-title">Time-traveling dev engine for builders & agents</h1>
-          <p class="hero-desc">
-            ChronoCode captures snapshots of your files on every save. Revert, diff, and track your coding velocity instantly with zero Git configuration.
-          </p>
-          <div class="hero-actions">
-            <a href="download.html" class="btn btn-primary">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-              Get ChronoCode
-            </a>
-            <a href="#features" class="btn btn-secondary">Explore Features</a>
-          </div>
-        </div>
-
-        <!-- MOCKUP -->
-        <div class="hero-mockup reveal">
-          <div class="mockup">
-            <div class="mockup-bar">
-              <div class="mockup-dots">
-                <span class="d-red"></span><span class="d-yellow"></span><span class="d-green"></span>
-              </div>
-              <span class="mockup-title">ChronoCode Telemetry Console</span>
-              <div class="mockup-status"><span class="dot"></span> PIPELINE ONLINE</div>
-            </div>
-            <div class="mockup-body">
-              <div class="mockup-pane">
-                <div class="pane-bar">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-                  workspace/app.js
-                </div>
-                <div class="pane-code">
-<pre><span class="kw">const</span> express = <span class="fn">require</span>(<span class="str">'express'</span>);
-<span class="kw">const</span> app = <span class="fn">express</span>();
-
-<span class="cmt">// ChronoCode tracks this live...</span>
-<span class="fn">app.get</span>(<span class="str">'/api'</span>, (req, res) =&gt; {
-  <span class="kw">const</span> time = <span class="kw">new</span> <span class="fn">Date</span>();
-<span class="add">+ res.json({ time: time.toISOString() });</span>
-});</pre>
-                </div>
-              </div>
-              <div class="mockup-pane">
-                <div class="pane-bar">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                  Timeline Tracker
-                </div>
-                <div class="pane-timeline">
-                  <div class="tl-nodes" id="mockNodes"></div>
-                  <div class="tl-detail">
-                    <div class="tl-row"><span class="tl-label">Active Process:</span><span class="tl-val lime" id="mockIde">Cursor IDE [Active]</span></div>
-                    <div class="tl-row"><span class="tl-label">Snapshot ID:</span><span class="tl-val indigo" id="mockId">CC-982103</span></div>
-                    <div class="tl-row"><span class="tl-label">Modified File:</span><span class="tl-val" id="mockFile">workspace/app.js</span></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- FEATURES -->
-    <section class="section-sm" id="features">
-      <div class="container">
-        <div class="section-head reveal">
-          <h2 class="section-title">Designed for modern workflows</h2>
-          <p class="section-desc">High-performance tracking to keep your code safe and your history clean.</p>
-        </div>
-        <div class="features-grid">
-          <div class="card-glass feature-card reveal">
-            <div class="feature-icon-wrap">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-            </div>
-            <h3 class="feature-title">Real-Time File Watcher</h3>
-            <p class="feature-desc">Low-level directory watcher captures modifications immediately on save. Zero config, zero lag.</p>
-          </div>
-          <div class="card-glass feature-card reveal">
-            <div class="feature-icon-wrap">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-            </div>
-            <h3 class="feature-title">Micro-Versioning Snapshots</h3>
-            <p class="feature-desc">Compressed local diff archives. Step backward or forward through time at millisecond scale.</p>
-          </div>
-          <div class="card-glass feature-card reveal">
-            <div class="feature-icon-wrap">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/></svg>
-            </div>
-            <h3 class="feature-title">Smart IDE Injection</h3>
-            <p class="feature-desc">Tracks your focus dynamically. Integrated with Cursor, VS Code, Zed, Windsurf, and more.</p>
-          </div>
-          <div class="card-glass feature-card reveal">
-            <div class="feature-icon-wrap">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-            </div>
-            <h3 class="feature-title">Anti-Crack Protection</h3>
-            <p class="feature-desc">Built-in JS obfuscation compiler keeps your workspace safe from unauthorized source leaks.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- HOW IT WORKS -->
-    <section class="section-sm" id="how">
-      <div class="container">
-        <div class="section-head reveal">
-          <h2 class="section-title">How ChronoCode works</h2>
-          <p class="section-desc">Three steps to unlock time travel in your workspace.</p>
-        </div>
-        <div class="steps-grid">
-          <div class="card-glass step-card reveal">
-            <span class="step-num">01</span>
-            <h4 class="step-title">Run the Telemetry Server</h4>
-            <p class="step-desc">Launch the desktop app or command script. The engine initializes local watch listeners instantly.</p>
-          </div>
-          <div class="card-glass step-card reveal">
-            <span class="step-num">02</span>
-            <h4 class="step-title">Write Code Normally</h4>
-            <p class="step-desc">Use any editor. ChronoCode intercepts saves and creates encrypted micro-backups.</p>
-          </div>
-          <div class="card-glass step-card reveal">
-            <span class="step-num">03</span>
-            <h4 class="step-title">Time Travel Instantly</h4>
-            <p class="step-desc">Open the dashboard to view side-by-side diffs and restore any previous workspace state.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    </main>
-
-    <!-- FOOTER -->
-    <footer class="footer">
-      <div class="container">
-        <div class="footer-inner">
-          <div class="footer-left">
-            <a href="index.html"><img src="assets/logo.svg" alt="ChronoCode" /></a>
-            <span>&copy; 2026 ChronoCode. Open Source MIT License.</span>
-          </div>
-          <div class="footer-links">
-            <a href="https://github.com/harshkhatri7/ChronoCode-web" target="_blank" class="footer-link">GitHub</a>
-            <a href="support.html" class="footer-link">Support</a>
-            <a href="download.html" class="footer-link">Downloads</a>
-          </div>
-        </div>
-      </div>
-    </footer>
-
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="card">
+    <svg viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="256" cy="256" r="200" fill="#0a0c10" stroke="#3b82f6" stroke-width="8" opacity="0.9"/>
+      <circle cx="256" cy="256" r="180" stroke="rgba(59,130,246,0.15)" stroke-width="1" fill="none"/>
+      <line x1="256" y1="256" x2="256" y2="110" stroke="#ffffff" stroke-width="14" stroke-linecap="round">
+        <animateTransform attributeName="transform" type="rotate" from="0 256 256" to="360 256 256" dur="60s" repeatCount="indefinite"/>
+      </line>
+      <line x1="256" y1="256" x2="370" y2="190" stroke="#3b82f6" stroke-width="8" stroke-linecap="round">
+        <animateTransform attributeName="transform" type="rotate" from="0 256 256" to="360 256 256" dur="3600s" repeatCount="indefinite"/>
+      </line>
+      <circle cx="256" cy="256" r="10" fill="#3b82f6">
+        <animate attributeName="r" values="10;12;10" dur="2s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="256" cy="256" r="6" fill="#ffffff"/>
+    </svg>
+    <h1>ChronoCode</h1>
+    <div class="subtitle">Time Travel Engine</div>
+    <div class="spinner"></div>
+    <p>Redirecting to <strong>chronocode-app.vercel.app</strong></p>
+    <p>If nothing happens, <a href="https://chronocode-app.vercel.app/">click here</a>.</p>
+    <div class="version">ChronoCode v1.0.0</div>
   </div>
-
-  <script src="app.js"></script>
 </body>
 </html>
