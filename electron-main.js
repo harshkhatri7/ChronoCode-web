@@ -1,31 +1,55 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 const http = require('http');
+const fs = require('fs');
 
 const isDev = process.env.ELECTRON_DEV === '1';
 let mainWindow = null;
+let httpServer = null;
+
+const DATA_DIR = path.join(require('os').homedir(), '.chronocode');
+const TOKEN_FILE = path.join(DATA_DIR, 'session.json');
+
+function loadSession() {
+  try {
+    if (fs.existsSync(TOKEN_FILE)) {
+      const raw = fs.readFileSync(TOKEN_FILE, 'utf-8');
+      return JSON.parse(raw);
+    }
+  } catch (_) {}
+  return null;
+}
+
+function saveSession(token, user) {
+  try {
+    fs.mkdirSync(DATA_DIR, { recursive: true });
+    fs.writeFileSync(TOKEN_FILE, JSON.stringify({ token, user }, null, 2), 'utf-8');
+  } catch (_) {}
+}
+
+function clearSession() {
+  try {
+    if (fs.existsSync(TOKEN_FILE)) fs.unlinkSync(TOKEN_FILE);
+  } catch (_) {}
+}
 
 // ─────────────────────────────────────────────
-// START SERVER + WAIT FOR READINESS
+// START SERVER
 // ─────────────────────────────────────────────
 function startServer() {
   return new Promise((resolve, reject) => {
-    process.env.ELECTRON_DATA_DIR = path.join(require('os').homedir(), '.chronocode');
-    const serverModule = require('./server.js');
-    const httpServer = http.createServer(serverModule);
+    const serverApp = require('./server.js');
+    const wss = require('./server.js')._wss;
+    httpServer = http.createServer(serverApp);
     const port = parseInt(process.env.CHRONO_PORT_HTTP || '9998', 10);
 
-    // Use the wss instance exported by server.js
-    if (serverModule._wss) {
+    if (wss) {
       httpServer.on('upgrade', (request, socket, head) => {
-        serverModule._wss.handleUpgrade(request, socket, head, (ws) => {
-          serverModule._wss.emit('connection', ws, request);
+        wss.handleUpgrade(request, socket, head, (ws) => {
+          wss.emit('connection', ws, request);
         });
       });
     }
-
-    const maxRetries = 50;
-    let retries = 0;
 
     function tryListen() {
       httpServer.listen(port, '0.0.0.0', () => {
@@ -35,26 +59,18 @@ function startServer() {
 
       httpServer.on('error', (err) => {
         if (err.code === 'EADDRINUSE') {
-          console.log(`[Electron] Port ${port} in use — server already running, connecting...`);
-          resolve(null); // Server already running externally
-        } else if (retries < maxRetries) {
-          retries++;
-          console.log(`[Electron] Server not ready (attempt ${retries}/${maxRetries}), retrying in 500ms...`);
-          setTimeout(tryListen, 500);
+          console.log(`[Electron] Port ${port} already in use, connecting to existing server`);
+          resolve(null);
         } else {
           reject(err);
         }
       });
     }
 
-    // Give the server module a moment to initialize (db, chokidar, etc.)
-    setTimeout(tryListen, 300);
+    setTimeout(tryListen, 200);
   });
 }
 
-// ─────────────────────────────────────────────
-// HEALTH CHECK — ensure HTTP server responds
-// ─────────────────────────────────────────────
 function waitForServer(url, maxAttempts = 30, intervalMs = 500) {
   return new Promise((resolve, reject) => {
     let attempts = 0;
@@ -64,7 +80,7 @@ function waitForServer(url, maxAttempts = 30, intervalMs = 500) {
         resolve(true);
       }).on('error', () => {
         if (++attempts >= maxAttempts) {
-          reject(new Error('Server did not become ready in time'));
+          reject(new Error('Server did not become ready'));
         } else {
           setTimeout(check, intervalMs);
         }
@@ -79,6 +95,7 @@ function waitForServer(url, maxAttempts = 30, intervalMs = 500) {
 // ─────────────────────────────────────────────
 function createWindow() {
   const iconPath = path.join(__dirname, 'assets', 'logo.png');
+  const hasIcon = fs.existsSync(iconPath);
 
   mainWindow = new BrowserWindow({
     width: 1280,
@@ -86,10 +103,10 @@ function createWindow() {
     minWidth: 900,
     minHeight: 600,
     title: 'ChronoCode',
-    icon: iconPath,
+    icon: hasIcon ? iconPath : undefined,
     backgroundColor: '#08090a',
     titleBarStyle: 'hidden',
-    frame: process.platform === 'darwin', // macOS gets native frame for traffic lights
+    frame: process.platform === 'darwin',
     webPreferences: {
       contextIsolation: true,
       nodeIntegration: false,
@@ -98,7 +115,12 @@ function createWindow() {
     },
   });
 
-  mainWindow.loadURL('http://localhost:9998/login.html');
+  const session = loadSession();
+  if (session && session.token) {
+    mainWindow.loadURL('http://localhost:9998/public/index.html');
+  } else {
+    mainWindow.loadURL('http://localhost:9998/login.html');
+  }
 
   if (!isDev) {
     mainWindow.webContents.on('devtools-opened', () => {
@@ -124,16 +146,34 @@ ipcMain.on('window-minimize', () => {
 
 ipcMain.on('window-maximize', () => {
   if (mainWindow) {
-    if (mainWindow.isMaximized()) {
-      mainWindow.unmaximize();
-    } else {
-      mainWindow.maximize();
-    }
+    if (mainWindow.isMaximized()) mainWindow.unmaximize();
+    else mainWindow.maximize();
   }
 });
 
 ipcMain.handle('window-is-maximized', () => {
   return mainWindow ? mainWindow.isMaximized() : false;
+});
+
+// ─────────────────────────────────────────────
+// IPC — SESSION MANAGEMENT
+// ─────────────────────────────────────────────
+ipcMain.handle('session-get', () => {
+  return loadSession();
+});
+
+ipcMain.on('session-save', (_event, token, user) => {
+  saveSession(token, user);
+  if (mainWindow) {
+    mainWindow.loadURL('http://localhost:9998/public/index.html');
+  }
+});
+
+ipcMain.on('session-clear', () => {
+  clearSession();
+  if (mainWindow) {
+    mainWindow.loadURL('http://localhost:9998/login.html');
+  }
 });
 
 // ─────────────────────────────────────────────
@@ -143,13 +183,12 @@ app.whenReady().then(async () => {
   try {
     console.log('[Electron] Starting ChronoCode server...');
     await startServer();
-    console.log('[Electron] Waiting for server health check...');
+    console.log('[Electron] Waiting for server health...');
     await waitForServer('http://localhost:9998/api/health');
-    console.log('[Electron] Server healthy — creating window');
+    console.log('[Electron] Server healthy — launching');
     createWindow();
   } catch (err) {
-    console.error('[Electron] Failed to start server:', err);
-    // Still create window — user can see error in UI
+    console.error('[Electron] Failed to start:', err);
     createWindow();
   }
 

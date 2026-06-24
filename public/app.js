@@ -1154,7 +1154,11 @@ let currentUser = null;
 async function checkAuthSession() {
   const token = localStorage.getItem('cc_token');
   if (!token) {
-    window.location.href = '../login.html';
+    if (window.electronAPI && window.electronAPI.clearSession) {
+      window.electronAPI.clearSession();
+    } else {
+      window.location.href = '../login.html';
+    }
     return;
   }
 
@@ -1165,16 +1169,19 @@ async function checkAuthSession() {
 
     if (res.status === 401 || res.status === 403) {
       localStorage.removeItem('cc_token');
-      window.location.href = '../login.html';
+      localStorage.removeItem('cc_user');
+      if (window.electronAPI && window.electronAPI.clearSession) {
+        window.electronAPI.clearSession();
+      } else {
+        window.location.href = '../login.html';
+      }
       return;
     }
 
     if (res.ok) {
       currentUser = await res.json();
       updateProfileUI();
-      // Track analytics page view
       trackAnalytics('pageview', window.location.pathname);
-      // Delayed connectWS after profile is fetched
       connectWS();
     }
   } catch (err) {
@@ -1256,7 +1263,12 @@ if (logoutBtn) {
       await fetch('/api/auth/local-logout', { method: 'POST' });
     } catch (_) {}
     localStorage.removeItem('cc_token');
-    window.location.href = '../login.html';
+    localStorage.removeItem('cc_user');
+    if (window.electronAPI && window.electronAPI.clearSession) {
+      window.electronAPI.clearSession();
+    } else {
+      window.location.href = '../login.html';
+    }
   });
 }
 

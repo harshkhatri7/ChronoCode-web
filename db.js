@@ -1,6 +1,10 @@
 const fs = require('fs');
 const path = require('path');
-const { MongoClient } = require('mongodb');
+
+let MongoClient = null;
+try {
+  MongoClient = require('mongodb').MongoClient;
+} catch (_) {}
 
 // MongoDB connection settings
 let mongoClient = null;
@@ -8,7 +12,7 @@ let mongoDb = null;
 let useMongo = false;
 
 const uri = process.env.MONGODB_URI;
-if (uri) {
+if (uri && MongoClient) {
   useMongo = true;
   mongoClient = new MongoClient(uri);
 }

@@ -32,11 +32,20 @@ if (isServerless) {
   defaultChronoDir = path.join(process.cwd(), '.chrono');
 }
 
+let defaultProjectDir;
+if (isServerless) {
+  defaultProjectDir = os.tmpdir();
+} else if (isElectron) {
+  defaultProjectDir = path.join(os.homedir(), 'ChronoCodeProjects');
+} else {
+  defaultProjectDir = process.cwd();
+}
+
 const config = {
   portHttp: parseInt(process.env.CHRONO_PORT_HTTP || '9998', 10),
   portWs: parseInt(process.env.CHRONO_PORT_WS || '9999', 10),
   chronoDir: process.env.CHRONO_DIR || defaultChronoDir,
-  projectDir: process.env.CHRONO_PROJECT_DIR || process.cwd(),
+  projectDir: process.env.CHRONO_PROJECT_DIR || defaultProjectDir,
   maxFileSize: parseInt(process.env.CHRONO_MAX_FILE_SIZE || String(10 * 1024 * 1024), 10), // 10MB
   maxSnapshotSize: parseInt(process.env.CHRONO_MAX_SNAPSHOT_SIZE || String(50 * 1024 * 1024), 10), // 50MB
   rateLimitMs: parseInt(process.env.CHRONO_RATE_LIMIT_MS || '1000', 10), // 1s
@@ -1179,26 +1188,31 @@ async function createSnapshot(changedFile = '') {
 }
 
 function startFileWatcher() {
-  watcher = chokidar.watch(config.projectDir, {
-    ignored: (p) => isIgnored(p),
-    persistent: true,
-    ignoreInitial: true,
-    awaitWriteFinish: { stabilityThreshold: 800, pollInterval: 100 }
-  });
+  try {
+    watcher = chokidar.watch(config.projectDir, {
+      ignored: (p) => isIgnored(p),
+      persistent: true,
+      ignoreInitial: true,
+      awaitWriteFinish: { stabilityThreshold: 800, pollInterval: 100 }
+    });
 
-  watcher.on('all', (event, filePath) => {
-    if (isRestoring) return;
-    if (event === 'change' || event === 'add' || event === 'unlink') {
-      createSnapshot(filePath);
-    }
-  });
+    watcher.on('all', (event, filePath) => {
+      if (isRestoring) return;
+      if (event === 'change' || event === 'add' || event === 'unlink') {
+        createSnapshot(filePath);
+      }
+    });
+    console.log(`[Watcher] Monitoring: ${config.projectDir}`);
+  } catch (err) {
+    console.error(`[Watcher] Failed to start on ${config.projectDir}:`, err.message);
+  }
 }
 startFileWatcher();
 
-// Export app + wss for Electron and serverless wrappers
+// Store references on app before exporting (avoids bundler TDZ issues)
+app._wss = wss;
+app._config = config;
 module.exports = app;
-module.exports._wss = wss;
-module.exports._config = config;
 
 if (require.main === module) {
   const server = createServer(app);

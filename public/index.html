@@ -13,7 +13,11 @@
     <script>
       const isElectron = navigator.userAgent.toLowerCase().includes('electron') || !!(window.process && window.process.type);
       if (isElectron && !localStorage.getItem('cc_token')) {
-        window.location.href = '../login.html';
+        if (window.electronAPI && window.electronAPI.clearSession) {
+          window.electronAPI.clearSession();
+        } else {
+          window.location.href = '../login.html';
+        }
       }
     </script>
   </head>

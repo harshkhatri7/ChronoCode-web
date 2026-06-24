@@ -26,8 +26,7 @@
       "db.js",
       "assets/**/*",
       "public/**/*",
-      "*.html",
-      ".env"
+      "*.html"
     ],
     "extraResources": [],
     "win": {

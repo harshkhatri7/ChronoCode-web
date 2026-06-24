@@ -6,4 +6,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
   minimize: () => ipcRenderer.send('window-minimize'),
   maximize: () => ipcRenderer.send('window-maximize'),
   isMaximized: () => ipcRenderer.invoke('window-is-maximized'),
+  getSession: () => ipcRenderer.invoke('session-get'),
+  saveSession: (token, user) => ipcRenderer.send('session-save', token, user),
+  clearSession: () => ipcRenderer.send('session-clear'),
 });
