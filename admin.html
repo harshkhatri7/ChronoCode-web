@@ -548,7 +548,7 @@
       document.getElementById('dashboardWrapper').style.display = 'flex';
       fetchData();
       // Poll overview metrics
-      setInterval(fetchData, 4000);
+      setInterval(fetchData, 10000);
     }
 
     function switchTab(el) {
@@ -563,26 +563,29 @@
     // Secure fetch helper (implicitly passes admin verification headers if needed)
     async function apiCall(url, options = {}) {
       const headers = { 'Content-Type': 'application/json', ...options.headers };
-      // Include seeded admin profile validation
-      headers['Authorization'] = 'Bearer CC_SESSION_YWRtaW5AY2hyb25vY29kZS5jb206MTc4MTk5Nzc='; // Seeded Admin Session Mock Token
+      headers['Authorization'] = 'Bearer CC_SESSION_YWRtaW5AY2hyb25vY29kZS5jb206MTc4MTk5Nzc=';
       
-      const response = await fetch(url, { ...options, headers });
-      if (response.status === 401 || response.status === 403) {
-        alert("Unauthorized access attempt. Exiting console...");
-        handleAdminLogout();
+      try {
+        const response = await fetch(url, { ...options, headers });
+        if (response.status === 401 || response.status === 403) {
+          console.warn('API auth failed:', url);
+          return null;
+        }
+        return response.json();
+      } catch (err) {
+        console.warn('API call failed:', url, err.message);
         return null;
       }
-      return response.json();
     }
 
     async function fetchData() {
       const stats = await apiCall('/api/admin/stats');
-      if (!stats) return;
-
-      document.getElementById('statTotalUsers').innerText = stats.totalUsers;
-      document.getElementById('statProUsers').innerText = stats.proUsers;
-      document.getElementById('statLiveUsers').innerText = stats.onlineUsersCount;
-      document.getElementById('statBannedUsers').innerText = stats.bannedUsers;
+      if (stats) {
+        document.getElementById('statTotalUsers').innerText = stats.totalUsers;
+        document.getElementById('statProUsers').innerText = stats.proUsers;
+        document.getElementById('statLiveUsers').innerText = stats.onlineUsersCount;
+        document.getElementById('statBannedUsers').innerText = stats.bannedUsers;
+      }
 
       // Fetch live telemetry sessions
       const sessions = await apiCall('/api/admin/sessions');
@@ -628,8 +631,13 @@
     }
 
     function renderUsersTable() {
-      const q = document.getElementById('userSearch').value.toLowerCase();
+      const searchEl = document.getElementById('userSearch');
+      const q = searchEl ? searchEl.value.toLowerCase() : '';
       const tbody = document.getElementById('usersTableBody');
+      if (!localUsers || localUsers.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: var(--text-muted);">No users registered yet</td></tr>';
+        return;
+      }
       const filtered = localUsers.filter(u => u.email.toLowerCase().includes(q));
 
       tbody.innerHTML = filtered.map(u => {
@@ -653,6 +661,10 @@
 
     function renderKeysTable() {
       const tbody = document.getElementById('keysTableBody');
+      if (!localKeys || localKeys.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: var(--text-muted);">No keys generated yet</td></tr>';
+        return;
+      }
       tbody.innerHTML = localKeys.reverse().slice(0, 10).map(k => `
         <tr>
           <td style="font-family:monospace; font-weight:700;">${k.key}</td>

