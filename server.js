@@ -20,10 +20,13 @@ const execAsync = promisify(exec);
 // ─────────────────────────────────────────────
 // CONFIGURATION (env-overridable)
 // ─────────────────────────────────────────────
+const isServerless = !!(process.env.VERCEL || process.env.NOW_REGION || process.env.LAMBDA_TASK_ROOT);
+const defaultChronoDir = isServerless ? path.join(os.tmpdir(), '.chrono') : path.join(process.cwd(), '.chrono');
+
 const config = {
   portHttp: parseInt(process.env.CHRONO_PORT_HTTP || '9998', 10),
   portWs: parseInt(process.env.CHRONO_PORT_WS || '9999', 10),
-  chronoDir: process.env.CHRONO_DIR || path.join(process.cwd(), '.chrono'),
+  chronoDir: process.env.CHRONO_DIR || defaultChronoDir,
   maxFileSize: parseInt(process.env.CHRONO_MAX_FILE_SIZE || String(10 * 1024 * 1024), 10), // 10MB
   maxSnapshotSize: parseInt(process.env.CHRONO_MAX_SNAPSHOT_SIZE || String(50 * 1024 * 1024), 10), // 50MB
   rateLimitMs: parseInt(process.env.CHRONO_RATE_LIMIT_MS || '1000', 10), // 1s
