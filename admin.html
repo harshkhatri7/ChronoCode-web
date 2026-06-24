@@ -2,738 +2,681 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Panel - ChronoCode</title>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>ChronoCode Admin Panel</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/lucide-static@latest/font/lucide.css">
   <style>
     :root {
-      --bg-dark: #090a0f;
-      --bg-card: rgba(17, 18, 25, 0.7);
-      --accent-blue: #3b82f6;
-      --accent-danger: #ef4444;
-      --accent-success: #10b981;
-      --accent-warning: #f59e0b;
-      --text-main: #f3f4f6;
-      --text-muted: #9ca3af;
-      --border-color: rgba(255, 255, 255, 0.08);
+      --bg: #050508;
+      --bg-card: rgba(12,13,20,0.85);
+      --bg-hover: rgba(255,255,255,0.04);
+      --blue: #6366f1;
+      --green: #22c55e;
+      --red: #ef4444;
+      --amber: #f59e0b;
+      --cyan: #06b6d4;
+      --text: #f0f2f5;
+      --muted: #6b7280;
+      --border: rgba(255,255,255,0.06);
+      --glow: 0 0 40px rgba(99,102,241,0.15);
     }
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Outfit', sans-serif;
-    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
     body {
-      background-color: var(--bg-dark);
-      background-image: radial-gradient(circle at 10% 20%, rgba(59, 130, 246, 0.05) 0%, transparent 50%), radial-gradient(circle at 90% 80%, rgba(99, 102, 241, 0.05) 0%, transparent 50%);
-      color: var(--text-main);
-      min-height: 100vh;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow: hidden;
     }
-    
-    /* Login Lock Screen styling */
+
+    /* ─── MOTION BACKGROUND ─── */
+    .bg-layer { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+    .bg-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(100px);
+      opacity: 0.4;
+      animation: float 20s ease-in-out infinite;
+    }
+    .bg-orb:nth-child(1) { width: 500px; height: 500px; background: rgba(99,102,241,0.12); top: -10%; left: 10%; animation-delay: 0s; }
+    .bg-orb:nth-child(2) { width: 400px; height: 400px; background: rgba(34,197,94,0.08); bottom: -15%; right: 5%; animation-delay: -7s; }
+    .bg-orb:nth-child(3) { width: 350px; height: 350px; background: rgba(6,182,212,0.08); top: 40%; left: 50%; animation-delay: -14s; }
+    @keyframes float {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      25% { transform: translate(40px, -30px) scale(1.05); }
+      50% { transform: translate(-20px, 50px) scale(0.95); }
+      75% { transform: translate(30px, 20px) scale(1.02); }
+    }
+    .bg-grid {
+      position: absolute; inset: 0;
+      background-image: linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+    .bg-scanline {
+      position: absolute; left: 0; width: 100%; height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(99,102,241,0.3), rgba(34,197,94,0.3), transparent);
+      animation: scan 8s linear infinite;
+    }
+    @keyframes scan {
+      0% { top: -2px; opacity: 0; }
+      5% { opacity: 1; }
+      95% { opacity: 1; }
+      100% { top: 100%; opacity: 0; }
+    }
+
+    .app-layer { position: relative; z-index: 1; height: 100vh; display: flex; flex-direction: column; }
+
+    /* ─── LOGIN ─── */
     .login-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: var(--bg-dark);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
+      position: fixed; inset: 0; z-index: 999;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--bg);
     }
-    .login-box {
-      width: 100%;
-      max-width: 400px;
+    .login-overlay.hidden { display: none; }
+    .login-card {
+      width: 90%; max-width: 380px;
       background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: 16px;
-      padding: 40px;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 48px 36px;
       text-align: center;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+      backdrop-filter: blur(20px);
+      box-shadow: var(--glow), 0 20px 60px rgba(0,0,0,0.6);
+      animation: fadeIn 0.5s ease;
     }
-    .login-box h2 {
-      font-size: 24px;
-      margin-bottom: 24px;
-      font-weight: 700;
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: none; } }
+    .login-card .logo-icon {
+      width: 56px; height: 56px; margin: 0 auto 20px;
+      background: linear-gradient(135deg, var(--blue), #4f46e5);
+      border-radius: 16px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px; color: #fff;
+      box-shadow: 0 4px 20px rgba(99,102,241,0.3);
     }
-    .form-group {
-      text-align: left;
-      margin-bottom: 16px;
+    .login-card h2 { font-size: 22px; font-weight: 800; margin-bottom: 6px; }
+    .login-card p { font-size: 13px; color: var(--muted); margin-bottom: 28px; }
+    .input-group { margin-bottom: 14px; text-align: left; }
+    .input-group label { display: block; font-size: 12px; font-weight: 600; color: var(--muted); margin-bottom: 6px; }
+    .input-group input {
+      width: 100%; padding: 12px 14px;
+      background: rgba(0,0,0,0.4); border: 1px solid var(--border);
+      border-radius: 10px; color: #fff; font-size: 14px; font-family: inherit;
+      transition: border-color 0.2s;
     }
-    .form-group label {
-      display: block;
-      font-size: 13px;
-      color: var(--text-muted);
-      margin-bottom: 6px;
-      font-weight: 600;
+    .input-group input:focus { outline: none; border-color: var(--blue); }
+    .btn-login {
+      width: 100%; padding: 13px; margin-top: 8px;
+      background: linear-gradient(135deg, var(--blue), #4f46e5);
+      color: #fff; border: none; border-radius: 10px;
+      font-size: 14px; font-weight: 700; cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
     }
-    .form-control {
-      width: 100%;
-      padding: 12px;
-      background: rgba(0,0,0,0.3);
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      color: #fff;
-      font-size: 14px;
+    .btn-login:hover { transform: translateY(-1px); box-shadow: 0 4px 20px rgba(99,102,241,0.4); }
+    .btn-login:active { transform: translateY(0); }
+    .login-error { color: var(--red); font-size: 12px; margin-top: 10px; display: none; }
+
+    /* ─── HEADER ─── */
+    .header {
+      height: 56px;
+      background: rgba(8,9,14,0.8);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 24px;
+      flex-shrink: 0;
     }
-    .form-control:focus {
-      outline: none;
-      border-color: var(--accent-blue);
+    .header-brand { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 16px; }
+    .header-brand .badge-admin {
+      background: linear-gradient(135deg, var(--blue), #4f46e5);
+      color: #fff; font-size: 10px; font-weight: 800;
+      padding: 3px 8px; border-radius: 6px; letter-spacing: 0.5px;
     }
-    .login-btn {
-      width: 100%;
-      padding: 14px;
-      background: var(--accent-blue);
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      font-weight: 600;
-      cursor: pointer;
-      margin-top: 8px;
-      transition: opacity 0.2s;
+    .btn-logout {
+      background: rgba(239,68,68,0.1); color: var(--red);
+      border: 1px solid rgba(239,68,68,0.2);
+      padding: 8px 16px; border-radius: 8px;
+      font-size: 12px; font-weight: 600; cursor: pointer;
+      display: flex; align-items: center; gap: 6px;
+      transition: all 0.2s;
     }
-    .login-btn:hover {
-      opacity: 0.9;
+    .btn-logout:hover { background: var(--red); color: #fff; }
+
+    /* ─── LAYOUT ─── */
+    .layout { display: flex; flex: 1; overflow: hidden; }
+    .sidebar {
+      width: 220px; flex-shrink: 0;
+      background: rgba(8,9,14,0.6);
+      border-right: 1px solid var(--border);
+      padding: 16px 10px;
+      display: flex; flex-direction: column; gap: 4px;
     }
-    
-    /* Admin dashboard layout */
-    .dashboard-wrapper {
-      display: none;
-      flex-direction: column;
-      min-height: 100vh;
+    .nav-item {
+      padding: 10px 14px; border-radius: 10px;
+      font-size: 13px; font-weight: 600; color: var(--muted);
+      cursor: pointer; display: flex; align-items: center; gap: 10px;
+      transition: all 0.15s; user-select: none;
     }
-    header {
-      background: var(--bg-card);
-      border-bottom: 1px solid var(--border-color);
-      padding: 16px 40px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+    .nav-item:hover { background: var(--bg-hover); color: var(--text); }
+    .nav-item.active { background: rgba(99,102,241,0.1); color: var(--blue); }
+    .nav-item i { font-size: 16px; }
+    .sidebar-footer { margin-top: auto; padding: 12px 14px; border-top: 1px solid var(--border); }
+    .sidebar-footer .version { font-size: 11px; color: var(--muted); }
+
+    .main { flex: 1; overflow-y: auto; padding: 28px; }
+    .main::-webkit-scrollbar { width: 6px; }
+    .main::-webkit-scrollbar-track { background: transparent; }
+    .main::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 3px; }
+
+    .tab { display: none; animation: fadeUp 0.3s ease; }
+    .tab.active { display: block; }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+    .tab-title { font-size: 22px; font-weight: 800; margin-bottom: 24px; }
+
+    /* ─── STAT CARDS ─── */
+    .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-bottom: 28px; }
+    .stat {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 14px; padding: 20px;
+      backdrop-filter: blur(12px);
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .stat:hover { border-color: rgba(255,255,255,0.1); transform: translateY(-2px); }
+    .stat-label { font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+    .stat-value { font-size: 28px; font-weight: 800; margin-top: 6px; }
+    .stat-icon { float: right; width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+    .stat-icon.blue { background: rgba(99,102,241,0.1); color: var(--blue); }
+    .stat-icon.green { background: rgba(34,197,94,0.1); color: var(--green); }
+    .stat-icon.amber { background: rgba(245,158,11,0.1); color: var(--amber); }
+    .stat-icon.red { background: rgba(239,68,68,0.1); color: var(--red); }
+    .stat-icon.cyan { background: rgba(6,182,212,0.1); color: var(--cyan); }
+
+    /* ─── TABLE ─── */
+    .table-wrap {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 14px; overflow: hidden;
       backdrop-filter: blur(12px);
     }
-    .header-logo {
-      font-size: 20px;
-      font-weight: 700;
-      color: #fff;
-      display: flex;
-      align-items: center;
-      gap: 10px;
+    .table-header { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; border-bottom: 1px solid var(--border); }
+    .table-header h3 { font-size: 14px; font-weight: 700; }
+    table { width: 100%; border-collapse: collapse; }
+    th { padding: 12px 16px; text-align: left; font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid var(--border); background: rgba(0,0,0,0.2); }
+    td { padding: 12px 16px; font-size: 13px; border-bottom: 1px solid var(--border); }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: rgba(255,255,255,0.015); }
+
+    /* ─── BADGES ─── */
+    .badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; border-radius: 6px; font-size: 11px; font-weight: 700; text-transform: uppercase; }
+    .badge-admin { background: rgba(99,102,241,0.15); color: var(--blue); }
+    .badge-pro { background: rgba(245,158,11,0.15); color: var(--amber); }
+    .badge-free { background: rgba(255,255,255,0.06); color: var(--muted); }
+    .badge-active { background: rgba(34,197,94,0.15); color: var(--green); }
+    .badge-banned { background: rgba(239,68,68,0.15); color: var(--red); }
+    .badge-online { background: rgba(34,197,94,0.15); color: var(--green); }
+    .badge-online::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+    /* ─── BUTTONS ─── */
+    .btn {
+      padding: 8px 14px; border-radius: 8px; font-size: 12px; font-weight: 600;
+      cursor: pointer; border: none; transition: all 0.15s;
+      display: inline-flex; align-items: center; gap: 6px;
     }
-    .header-logo span {
-      background: var(--accent-blue);
-      color: #fff;
-      font-size: 11px;
-      font-weight: 700;
-      padding: 2px 6px;
-      border-radius: 4px;
+    .btn-blue { background: var(--blue); color: #fff; }
+    .btn-blue:hover { background: #5558e8; }
+    .btn-green { background: rgba(34,197,94,0.15); color: var(--green); border: 1px solid rgba(34,197,94,0.2); }
+    .btn-green:hover { background: rgba(34,197,94,0.25); }
+    .btn-red { background: rgba(239,68,68,0.1); color: var(--red); border: 1px solid rgba(239,68,68,0.15); }
+    .btn-red:hover { background: rgba(239,68,68,0.2); }
+    .btn-ghost { background: rgba(255,255,255,0.05); color: var(--text); border: 1px solid var(--border); }
+    .btn-ghost:hover { background: rgba(255,255,255,0.08); }
+    .btn-sm { padding: 6px 10px; font-size: 11px; }
+
+    /* ─── FORMS ─── */
+    .form-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 14px; padding: 28px;
+      backdrop-filter: blur(12px); max-width: 500px;
     }
-    .logout-btn {
-      background: rgba(239, 68, 68, 0.1);
-      color: var(--accent-danger);
-      border: 1px solid rgba(239, 68, 68, 0.2);
-      padding: 8px 16px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-weight: 600;
-      font-size: 13px;
-      transition: all 0.2s;
+    .form-card h3 { font-size: 16px; font-weight: 700; margin-bottom: 20px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+    .form-field { margin-bottom: 14px; }
+    .form-field label { display: block; font-size: 12px; font-weight: 600; color: var(--muted); margin-bottom: 6px; }
+    .form-field input, .form-field select, .form-field textarea {
+      width: 100%; padding: 10px 12px;
+      background: rgba(0,0,0,0.3); border: 1px solid var(--border);
+      border-radius: 8px; color: #fff; font-size: 13px; font-family: inherit;
     }
-    .logout-btn:hover {
-      background: var(--accent-danger);
-      color: #fff;
+    .form-field input:focus, .form-field select:focus, .form-field textarea:focus {
+      outline: none; border-color: var(--blue);
     }
-    
-    .main-layout {
-      display: flex;
-      flex: 1;
+
+    /* ─── EMPTY STATE ─── */
+    .empty { text-align: center; padding: 40px 20px; color: var(--muted); }
+    .empty i { font-size: 32px; margin-bottom: 12px; display: block; opacity: 0.3; }
+    .empty p { font-size: 13px; }
+
+    /* ─── TOAST ─── */
+    .toast {
+      position: fixed; bottom: 24px; right: 24px; z-index: 9999;
+      padding: 14px 20px; border-radius: 12px;
+      font-size: 13px; font-weight: 600;
+      backdrop-filter: blur(16px);
+      transform: translateY(100px); opacity: 0;
+      transition: all 0.3s ease;
     }
-    .sidebar {
-      width: 260px;
-      background: rgba(17, 18, 25, 0.5);
-      border-right: 1px solid var(--border-color);
-      padding: 24px 16px;
-    }
-    .sidebar-menu {
-      list-style: none;
-    }
-    .menu-item {
-      padding: 12px 16px;
-      border-radius: 8px;
-      color: var(--text-muted);
-      cursor: pointer;
-      margin-bottom: 6px;
-      font-weight: 600;
-      font-size: 14px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      transition: all 0.2s;
-    }
-    .menu-item:hover {
-      background: rgba(255,255,255,0.03);
-      color: #fff;
-    }
-    .menu-item.active {
-      background: rgba(59, 130, 246, 0.1);
-      color: var(--accent-blue);
-    }
-    
-    .content-area {
-      flex: 1;
-      padding: 40px;
-      overflow-y: auto;
-    }
-    .tab-content {
-      display: none;
-    }
-    .tab-content.active {
-      display: block;
-    }
-    
-    /* Stats Grid */
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 24px;
-      margin-bottom: 40px;
-    }
-    .stat-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: 12px;
-      padding: 24px;
-      position: relative;
-    }
-    .stat-val {
-      font-size: 28px;
-      font-weight: 700;
-      margin-top: 8px;
-      color: #fff;
-    }
-    .stat-title {
-      font-size: 13px;
-      color: var(--text-muted);
-      font-weight: 600;
-    }
-    
-    /* Table styles */
-    .card-table {
-      width: 100%;
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: 12px;
-      border-collapse: collapse;
-      overflow: hidden;
-      margin-top: 16px;
-    }
-    .card-table th, .card-table td {
-      padding: 14px 20px;
-      text-align: left;
-      font-size: 14px;
-    }
-    .card-table th {
-      background: rgba(255,255,255,0.02);
-      font-weight: 600;
-      color: var(--text-muted);
-      border-bottom: 1px solid var(--border-color);
-    }
-    .card-table td {
-      border-bottom: 1px solid var(--border-color);
-      color: var(--text-main);
-    }
-    .card-table tr:last-child td {
-      border-bottom: none;
-    }
-    
-    /* Form styles inside dashboard */
-    .action-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 24px;
-    }
-    .dashboard-btn {
-      padding: 10px 20px;
-      border-radius: 6px;
-      font-weight: 600;
-      cursor: pointer;
-      border: 1px solid var(--border-color);
-      background: rgba(255,255,255,0.05);
-      color: #fff;
-      font-size: 13px;
-    }
-    .dashboard-btn.primary {
-      background: var(--accent-blue);
-      border: none;
-    }
-    .dashboard-btn.danger {
-      background: rgba(239, 68, 68, 0.15);
-      color: var(--accent-danger);
-      border-color: rgba(239, 68, 68, 0.2);
-    }
-    .dashboard-btn.success {
-      background: rgba(16, 185, 129, 0.15);
-      color: var(--accent-success);
-      border-color: rgba(16, 185, 129, 0.2);
-    }
-    
-    .badge {
-      display: inline-block;
-      padding: 2px 8px;
-      border-radius: 4px;
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-    }
-    .badge-admin { background: rgba(59, 130, 246, 0.2); color: var(--accent-blue); }
-    .badge-pro { background: rgba(251, 191, 36, 0.2); color: var(--accent-warning); }
-    .badge-free { background: rgba(255,255,255,0.08); color: var(--text-muted); }
-    .badge-active { background: rgba(16, 185, 129, 0.2); color: var(--accent-success); }
-    .badge-banned { background: rgba(239, 68, 68, 0.2); color: var(--accent-danger); }
-    
-    /* Panel Specific forms */
-    .form-box {
-      max-width: 600px;
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: 12px;
-      padding: 32px;
-      margin-top: 16px;
+    .toast.show { transform: translateY(0); opacity: 1; }
+    .toast-success { background: rgba(34,197,94,0.15); color: var(--green); border: 1px solid rgba(34,197,94,0.2); }
+    .toast-error { background: rgba(239,68,68,0.15); color: var(--red); border: 1px solid rgba(239,68,68,0.2); }
+
+    /* ─── MOBILE ─── */
+    @media (max-width: 768px) {
+      .sidebar { display: none; }
+      .stats { grid-template-columns: 1fr 1fr; }
+      .form-row { grid-template-columns: 1fr; }
+      .main { padding: 16px; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Sign In overlay -->
-  <div class="login-overlay" id="adminLoginOverlay">
-    <div class="login-box">
+  <!-- MOTION BACKGROUND -->
+  <div class="bg-layer">
+    <div class="bg-orb"></div>
+    <div class="bg-orb"></div>
+    <div class="bg-orb"></div>
+    <div class="bg-grid"></div>
+    <div class="bg-scanline"></div>
+  </div>
+
+  <!-- LOGIN -->
+  <div class="login-overlay" id="loginOverlay">
+    <div class="login-card">
+      <div class="logo-icon"><i class="icon-shield"></i></div>
       <h2>ChronoCode Admin</h2>
-      <form onsubmit="handleAdminLogin(event)">
-        <div class="form-group">
-          <label for="adminUser">Username</label>
-          <input type="text" id="adminUser" class="form-control" placeholder="Admin Username" required>
+      <p>Secure access to your control panel</p>
+      <form id="loginForm">
+        <div class="input-group">
+          <label>Username</label>
+          <input type="text" id="loginUser" placeholder="Enter username" autocomplete="off">
         </div>
-        <div class="form-group">
-          <label for="adminPass">Password</label>
-          <input type="password" id="adminPass" class="form-control" placeholder="••••••••" required>
+        <div class="input-group">
+          <label>Password</label>
+          <input type="password" id="loginPass" placeholder="Enter password">
         </div>
-        <button type="submit" class="login-btn">Secure Login</button>
+        <button type="submit" class="btn-login">Sign In</button>
+        <div class="login-error" id="loginError">Invalid credentials</div>
       </form>
     </div>
   </div>
 
-  <!-- Dashboard wrapper -->
-  <div class="dashboard-wrapper" id="dashboardWrapper">
-    <header>
-      <div class="header-logo">
-        ChronoCode Panel <span>ADMIN</span>
+  <!-- APP -->
+  <div class="app-layer" id="appLayer" style="display:none;">
+    <!-- HEADER -->
+    <div class="header">
+      <div class="header-brand">
+        <i class="icon-terminal" style="font-size:20px; color:var(--blue);"></i>
+        ChronoCode
+        <span class="badge-admin">ADMIN</span>
       </div>
-      <button class="logout-btn" onclick="handleAdminLogout()">Exit Console</button>
-    </header>
+      <button class="btn-logout" onclick="logout()"><i class="icon-log-out" style="font-size:14px;"></i> Logout</button>
+    </div>
 
-    <div class="main-layout">
-      <!-- Sidebar Navigation -->
+    <div class="layout">
+      <!-- SIDEBAR -->
       <nav class="sidebar">
-        <ul class="sidebar-menu">
-          <li class="menu-item active" data-tab="tabOverview" onclick="switchTab(this)">Overview</li>
-          <li class="menu-item" data-tab="tabUsers" onclick="switchTab(this)">Users Manager</li>
-          <li class="menu-item" data-tab="tabKeys" onclick="switchTab(this)">Activation Keys</li>
-          <li class="menu-item" data-tab="tabAnalytics" onclick="switchTab(this)">Telemetry Analytics</li>
-          <li class="menu-item" data-tab="tabNotifications" onclick="switchTab(this)">Notification Broadcaster</li>
-          <li class="menu-item" data-tab="tabLogs" onclick="switchTab(this)">Security Logs</li>
-        </ul>
+        <div class="nav-item active" data-tab="overview" onclick="switchTab(this)">
+          <i class="icon-layout-dashboard"></i> Overview
+        </div>
+        <div class="nav-item" data-tab="users" onclick="switchTab(this)">
+          <i class="icon-users"></i> Users
+        </div>
+        <div class="nav-item" data-tab="keys" onclick="switchTab(this)">
+          <i class="icon-key"></i> License Keys
+        </div>
+        <div class="nav-item" data-tab="analytics" onclick="switchTab(this)">
+          <i class="icon-bar-chart-3"></i> Analytics
+        </div>
+        <div class="nav-item" data-tab="broadcast" onclick="switchTab(this)">
+          <i class="icon-send"></i> Broadcast
+        </div>
+        <div class="nav-item" data-tab="logs" onclick="switchTab(this)">
+          <i class="icon-file-text"></i> Logs
+        </div>
+        <div class="sidebar-footer">
+          <div class="version">v3.0.0-beta.1</div>
+        </div>
       </nav>
 
-      <!-- Content Area -->
-      <main class="content-area">
-        
-        <!-- Tab: Overview -->
-        <div class="tab-content active" id="tabOverview">
-          <h2>Overview Dashboard</h2>
-          <br>
-          <div class="stats-grid">
-            <div class="stat-card">
-              <div class="stat-title">Total Users</div>
-              <div class="stat-val" id="statTotalUsers">0</div>
+      <!-- CONTENT -->
+      <div class="main" id="mainContent">
+
+        <!-- OVERVIEW -->
+        <div class="tab active" id="tab-overview">
+          <div class="tab-title">Dashboard Overview</div>
+          <div class="stats">
+            <div class="stat">
+              <div class="stat-icon blue"><i class="icon-users"></i></div>
+              <div class="stat-label">Total Users</div>
+              <div class="stat-value" id="sTotal">0</div>
             </div>
-            <div class="stat-card">
-              <div class="stat-title">Pro Members</div>
-              <div class="stat-val" id="statProUsers" style="color: var(--accent-warning);">0</div>
+            <div class="stat">
+              <div class="stat-icon amber"><i class="icon-crown"></i></div>
+              <div class="stat-label">Pro Members</div>
+              <div class="stat-value" style="color:var(--amber)" id="sPro">0</div>
             </div>
-            <div class="stat-card">
-              <div class="stat-title">Live Telemetry Sessions</div>
-              <div class="stat-val" id="statLiveUsers" style="color: var(--accent-success);">0</div>
+            <div class="stat">
+              <div class="stat-icon green"><i class="icon-activity"></i></div>
+              <div class="stat-label">Online Now</div>
+              <div class="stat-value" style="color:var(--green)" id="sOnline">0</div>
             </div>
-            <div class="stat-card">
-              <div class="stat-title">Banned Accounts</div>
-              <div class="stat-val" id="statBannedUsers" style="color: var(--accent-danger);">0</div>
+            <div class="stat">
+              <div class="stat-icon red"><i class="icon-ban"></i></div>
+              <div class="stat-label">Banned</div>
+              <div class="stat-value" style="color:var(--red)" id="sBanned">0</div>
+            </div>
+            <div class="stat">
+              <div class="stat-icon cyan"><i class="icon-dollar-sign"></i></div>
+              <div class="stat-label">Revenue</div>
+              <div class="stat-value" style="color:var(--cyan)" id="sRevenue">$0</div>
             </div>
           </div>
-
-          <h3>Active Client Sessions</h3>
-          <table class="card-table">
-            <thead>
-              <tr>
-                <th>User Email</th>
-                <th>Platform</th>
-                <th>Active Window File</th>
-                <th>Uptime Status</th>
-              </tr>
-            </thead>
-            <tbody id="liveSessionsTable">
-              <tr>
-                <td colspan="4" style="text-align: center; color: var(--text-muted);">No active clients linked to server</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <!-- Tab: Users -->
-        <div class="tab-content" id="tabUsers">
-          <div class="action-row">
-            <h2>User Management</h2>
-            <input type="text" id="userSearch" class="form-control" style="width: 250px;" placeholder="Search user email..." oninput="renderUsersTable()">
+          <div class="table-wrap">
+            <div class="table-header"><h3><i class="icon-rss" style="margin-right:6px;font-size:14px;"></i> Live Sessions</h3></div>
+            <table>
+              <thead><tr><th>User</th><th>Platform</th><th>Active File</th><th>Status</th></tr></thead>
+              <tbody id="sessionsBody"><tr><td colspan="4" class="empty"><i class="icon-wifi-off"></i><p>No active sessions</p></td></tr></tbody>
+            </table>
           </div>
-          <table class="card-table">
-            <thead>
-              <tr>
-                <th>Email</th>
-                <th>Name</th>
-                <th>Role</th>
-                <th>Uptime Status</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody id="usersTableBody"></tbody>
-          </table>
         </div>
 
-        <!-- Tab: Keys -->
-        <div class="tab-content" id="tabKeys">
-          <h2>Activation License Key Manager</h2>
-          <div class="grid" style="display: grid; grid-template-columns: 1fr 1.5fr; gap: 30px; margin-top: 20px;">
+        <!-- USERS -->
+        <div class="tab" id="tab-users">
+          <div class="tab-title">User Management</div>
+          <div class="table-wrap">
+            <div class="table-header">
+              <h3>All Users</h3>
+              <input type="text" id="userSearch" placeholder="Search email..." style="background:rgba(0,0,0,0.3);border:1px solid var(--border);border-radius:8px;padding:8px 12px;color:#fff;font-size:12px;width:220px;" oninput="renderUsers()">
+            </div>
+            <table>
+              <thead><tr><th>Email</th><th>Name</th><th>Role</th><th>Status</th><th>Actions</th></tr></thead>
+              <tbody id="usersBody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- KEYS -->
+        <div class="tab" id="tab-keys">
+          <div class="tab-title">License Key Manager</div>
+          <div style="display:grid; grid-template-columns: 1fr 1.8fr; gap: 20px;">
             <div>
-              <div class="form-box" style="width: 100%; margin-top: 0;">
-                <h3>Generate Pro License Keys</h3>
-                <br>
-                <form onsubmit="handleGenerateKeys(event)">
-                  <div class="form-group">
-                    <label for="keyCount">Quantity</label>
-                    <input type="number" id="keyCount" class="form-control" value="1" min="1" max="50">
+              <div class="form-card">
+                <h3><i class="icon-sparkles" style="margin-right:6px;font-size:16px;color:var(--amber);"></i> Generate Keys</h3>
+                <form id="keyForm">
+                  <div class="form-row">
+                    <div class="form-field">
+                      <label>Quantity</label>
+                      <input type="number" id="keyQty" value="1" min="1" max="50">
+                    </div>
+                    <div class="form-field">
+                      <label>Expiry (Days)</label>
+                      <input type="number" id="keyExpiry" value="30" min="1">
+                    </div>
                   </div>
-                  <div class="form-group">
-                    <label for="keyExpiry">Expiration (Days)</label>
-                    <input type="number" id="keyExpiry" class="form-control" value="30" min="1">
-                  </div>
-                  <button type="submit" class="dashboard-btn primary" style="width: 100%;">Create Keys</button>
+                  <button type="submit" class="btn btn-blue" style="width:100%;justify-content:center;padding:12px;"><i class="icon-plus" style="font-size:14px;"></i> Generate</button>
                 </form>
               </div>
             </div>
             <div>
-              <h3>Active & Redeemed Keys</h3>
-              <table class="card-table" style="margin-top: 10px;">
-                <thead>
-                  <tr>
-                    <th>Key Code</th>
-                    <th>Status</th>
-                    <th>Expires</th>
-                    <th>Redeemed By</th>
-                  </tr>
-                </thead>
-                <tbody id="keysTableBody"></tbody>
-              </table>
+              <div class="table-wrap">
+                <div class="table-header"><h3><i class="icon-key" style="margin-right:6px;font-size:14px;"></i> All Keys</h3></div>
+                <table>
+                  <thead><tr><th>Key</th><th>Status</th><th>Expires</th><th>Redeemed By</th><th>Actions</th></tr></thead>
+                  <tbody id="keysBody"></tbody>
+                </table>
+              </div>
             </div>
           </div>
         </div>
 
-        <!-- Tab: Analytics -->
-        <div class="tab-content" id="tabAnalytics">
-          <h2>Telemetry Analytics</h2>
-          <br>
-          <div class="grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
-            <div>
-              <h3>Client Platforms</h3>
-              <table class="card-table">
-                <thead><tr><th>OS Name</th><th>Record Count</th></tr></thead>
-                <tbody id="analyticsPlatforms"></tbody>
-              </table>
+        <!-- ANALYTICS -->
+        <div class="tab" id="tab-analytics">
+          <div class="tab-title">Telemetry Analytics</div>
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <div class="table-wrap">
+              <div class="table-header"><h3>Platforms</h3></div>
+              <table><thead><tr><th>OS</th><th>Count</th></tr></thead><tbody id="platBody"></tbody></table>
             </div>
-            <div>
-              <h3>User Browsers</h3>
-              <table class="card-table">
-                <thead><tr><th>Browser</th><th>Record Count</th></tr></thead>
-                <tbody id="analyticsBrowsers"></tbody>
-              </table>
+            <div class="table-wrap">
+              <div class="table-header"><h3>Browsers</h3></div>
+              <table><thead><tr><th>Browser</th><th>Count</th></tr></thead><tbody id="browBody"></tbody></table>
             </div>
           </div>
         </div>
 
-        <!-- Tab: Notifications -->
-        <div class="tab-content" id="tabNotifications">
-          <h2>Notification Broadcaster</h2>
-          <div class="form-box">
-            <form onsubmit="handleSendBroadcast(event)">
-              <div class="form-group">
-                <label for="notifTitle">Title</label>
-                <input type="text" id="notifTitle" class="form-control" placeholder="System Alert Title" required>
+        <!-- BROADCAST -->
+        <div class="tab" id="tab-broadcast">
+          <div class="tab-title">Notification Broadcaster</div>
+          <div class="form-card">
+            <h3><i class="icon-send" style="margin-right:6px;font-size:16px;color:var(--blue);"></i> Send Notification</h3>
+            <form id="broadcastForm">
+              <div class="form-field">
+                <label>Title</label>
+                <input type="text" id="notifTitle" placeholder="Notification title" required>
               </div>
-              <div class="form-group">
-                <label for="notifMessage">Message Body</label>
-                <textarea id="notifMessage" class="form-control" style="height: 100px; resize: none;" placeholder="Enter system alert message detail..." required></textarea>
+              <div class="form-field">
+                <label>Message</label>
+                <textarea id="notifMsg" rows="4" placeholder="Write your message..." required style="resize:none;"></textarea>
               </div>
-              <div class="form-group">
-                <label for="notifTarget">Target Audience</label>
-                <select id="notifTarget" class="form-control">
-                  <option value="all">All Users</option>
-                  <option value="pro">Pro Users Only</option>
-                </select>
+              <div class="form-field">
+                <label>Target</label>
+                <select id="notifTarget"><option value="all">All Users</option><option value="pro">Pro Users Only</option></select>
               </div>
-              <button type="submit" class="dashboard-btn primary" style="width: 100%;">Dispatch Notification</button>
+              <button type="submit" class="btn btn-blue" style="width:100%;justify-content:center;padding:12px;"><i class="icon-send" style="font-size:14px;"></i> Dispatch</button>
             </form>
           </div>
         </div>
 
-        <!-- Tab: Logs -->
-        <div class="tab-content" id="tabLogs">
-          <h2>Security & System Logs</h2>
-          <table class="card-table">
-            <thead>
-              <tr>
-                <th>Timestamp</th>
-                <th>User</th>
-                <th>Action</th>
-                <th>Details</th>
-              </tr>
-            </thead>
-            <tbody id="logsTableBody"></tbody>
-          </table>
+        <!-- LOGS -->
+        <div class="tab" id="tab-logs">
+          <div class="tab-title">Security Logs</div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Time</th><th>User</th><th>Action</th><th>Details</th></tr></thead>
+              <tbody id="logsBody"></tbody>
+            </table>
+          </div>
         </div>
 
-      </main>
+      </div>
     </div>
   </div>
 
-  <script>
-    let localUsers = [];
-    let localKeys = [];
-    
-    // Check if session token exists
-    if (localStorage.getItem('cc_admin_session') === 'active') {
-      showDashboard();
-    }
+  <!-- TOAST -->
+  <div class="toast" id="toast"></div>
 
-    function handleAdminLogin(e) {
+  <script>
+    const API_BASE = '';
+    const ADMIN_TOKEN = 'CC_SESSION_YWRtaW5AY2hyb25vY29kZS5jb206MTc4MTk5Nzc=';
+    let pollTimer = null;
+    let localUsers = [], localKeys = [];
+
+    // ─── INIT ───
+    (function init() {
+      if (localStorage.getItem('cc_admin_session') === 'active') enterDashboard();
+    })();
+
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
       e.preventDefault();
-      const u = document.getElementById('adminUser').value;
-      const p = document.getElementById('adminPass').value;
-      
+      var u = document.getElementById('loginUser').value;
+      var p = document.getElementById('loginPass').value;
       if (u === 'Harsh111' && p === 'Abcd@001') {
         localStorage.setItem('cc_admin_session', 'active');
-        showDashboard();
+        document.getElementById('loginError').style.display = 'none';
+        enterDashboard();
       } else {
-        alert("Incorrect security credentials.");
+        document.getElementById('loginError').style.display = 'block';
       }
-    }
+    });
 
-    function handleAdminLogout() {
-      localStorage.removeItem('cc_admin_session');
-      document.getElementById('adminLoginOverlay').style.display = 'flex';
-      document.getElementById('dashboardWrapper').style.display = 'none';
-    }
-
-    function showDashboard() {
-      document.getElementById('adminLoginOverlay').style.display = 'none';
-      document.getElementById('dashboardWrapper').style.display = 'flex';
+    function enterDashboard() {
+      document.getElementById('loginOverlay').classList.add('hidden');
+      document.getElementById('appLayer').style.display = 'flex';
       fetchData();
-      // Poll overview metrics
-      setInterval(fetchData, 10000);
+      if (pollTimer) clearInterval(pollTimer);
+      pollTimer = setInterval(fetchData, 12000);
+    }
+
+    function logout() {
+      localStorage.removeItem('cc_admin_session');
+      if (pollTimer) clearInterval(pollTimer);
+      document.getElementById('appLayer').style.display = 'none';
+      document.getElementById('loginOverlay').classList.remove('hidden');
     }
 
     function switchTab(el) {
-      document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active'));
-      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-      
+      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
       el.classList.add('active');
-      const tabId = el.getAttribute('data-tab');
-      document.getElementById(tabId).classList.add('active');
+      document.getElementById('tab-' + el.dataset.tab).classList.add('active');
     }
 
-    // Secure fetch helper (implicitly passes admin verification headers if needed)
-    async function apiCall(url, options = {}) {
-      const headers = { 'Content-Type': 'application/json', ...options.headers };
-      headers['Authorization'] = 'Bearer CC_SESSION_YWRtaW5AY2hyb25vY29kZS5jb206MTc4MTk5Nzc=';
-      
+    function toast(msg, type) {
+      var t = document.getElementById('toast');
+      t.textContent = msg;
+      t.className = 'toast toast-' + type + ' show';
+      setTimeout(function() { t.classList.remove('show'); }, 3000);
+    }
+
+    // ─── API ───
+    async function api(url, opts) {
       try {
-        const response = await fetch(url, { ...options, headers });
-        if (response.status === 401 || response.status === 403) {
-          console.warn('API auth failed:', url);
-          return null;
-        }
-        return response.json();
-      } catch (err) {
-        console.warn('API call failed:', url, err.message);
-        return null;
-      }
+        var headers = { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + ADMIN_TOKEN };
+        if (opts && opts.headers) Object.assign(headers, opts.headers);
+        var r = await fetch(API_BASE + url, Object.assign({}, opts || {}, { headers: headers }));
+        if (r.status === 401 || r.status === 403) { console.warn('Auth failed:', url); return null; }
+        return r.json();
+      } catch(e) { console.warn('API error:', url, e.message); return null; }
     }
 
+    // ─── FETCH DATA ───
     async function fetchData() {
-      const stats = await apiCall('/api/admin/stats');
-      if (stats) {
-        document.getElementById('statTotalUsers').innerText = stats.totalUsers;
-        document.getElementById('statProUsers').innerText = stats.proUsers;
-        document.getElementById('statLiveUsers').innerText = stats.onlineUsersCount;
-        document.getElementById('statBannedUsers').innerText = stats.bannedUsers;
-      }
+      try {
+        var stats = await api('/api/admin/stats');
+        if (stats) {
+          document.getElementById('sTotal').textContent = stats.totalUsers || 0;
+          document.getElementById('sPro').textContent = stats.proUsers || 0;
+          document.getElementById('sOnline').textContent = stats.onlineUsersCount || 0;
+          document.getElementById('sBanned').textContent = stats.bannedUsers || 0;
+          document.getElementById('sRevenue').textContent = '$' + (stats.revenue || 0);
+        }
 
-      // Fetch live telemetry sessions
-      const sessions = await apiCall('/api/admin/sessions');
-      const liveBody = document.getElementById('liveSessionsTable');
-      if (sessions && sessions.length > 0) {
-        liveBody.innerHTML = sessions.map(s => `
-          <tr>
-            <td>${s.email}</td>
-            <td><span class="badge badge-free">${s.platform}</span></td>
-            <td style="font-family: monospace;">${s.activeFile}</td>
-            <td><span class="badge badge-active">CONNECTED</span></td>
-          </tr>
-        `).join('');
-      } else {
-        liveBody.innerHTML = `<tr><td colspan="4" style="text-align: center; color: var(--text-muted);">No active clients linked to server</td></tr>`;
-      }
+        var sessions = await api('/api/admin/sessions');
+        var sb = document.getElementById('sessionsBody');
+        if (sessions && sessions.length > 0) {
+          sb.innerHTML = sessions.map(function(s) {
+            return '<tr><td>' + esc(s.email) + '</td><td><span class="badge badge-free">' + esc(s.platform) + '</span></td><td style="font-family:monospace;font-size:12px;">' + esc(s.activeFile || '-') + '</td><td><span class="badge badge-online">Online</span></td></tr>';
+          }).join('');
+        } else {
+          sb.innerHTML = '<tr><td colspan="4" class="empty"><i class="icon-wifi-off"></i><p>No active sessions</p></td></tr>';
+        }
 
-      // Fetch users
-      localUsers = await apiCall('/api/admin/users') || [];
-      renderUsersTable();
+        localUsers = await api('/api/admin/users') || [];
+        renderUsers();
 
-      // Fetch keys
-      localKeys = await apiCall('/api/admin/keys') || [];
-      renderKeysTable();
+        localKeys = await api('/api/admin/keys') || [];
+        renderKeys();
 
-      // Fetch Analytics
-      const analytics = await apiCall('/api/admin/analytics');
-      if (analytics) {
-        renderAnalytics(analytics);
-      }
+        var analytics = await api('/api/admin/analytics');
+        if (analytics) renderAnalytics(analytics);
 
-      // Fetch logs
-      const logs = await apiCall('/api/admin/logs') || [];
-      const logsBody = document.getElementById('logsTableBody');
-      logsBody.innerHTML = logs.reverse().slice(0, 15).map(l => `
-        <tr>
-          <td style="font-size:12px; color:var(--text-muted);">${new Date(l.timestamp).toLocaleString()}</td>
-          <td>${l.userId}</td>
-          <td><span class="badge badge-free">${l.action}</span></td>
-          <td style="font-size:13px;">${l.details}</td>
-        </tr>
-      `).join('');
+        var logs = await api('/api/admin/logs') || [];
+        var lb = document.getElementById('logsBody');
+        if (logs.length > 0) {
+          lb.innerHTML = logs.reverse().slice(0, 20).map(function(l) {
+            return '<tr><td style="font-size:12px;color:var(--muted);white-space:nowrap;">' + new Date(l.timestamp).toLocaleString() + '</td><td>' + esc(l.userId) + '</td><td><span class="badge badge-free">' + esc(l.action) + '</span></td><td style="font-size:12px;">' + esc(l.details) + '</td></tr>';
+          }).join('');
+        } else {
+          lb.innerHTML = '<tr><td colspan="4" class="empty"><i class="icon-file-text"></i><p>No logs yet</p></td></tr>';
+        }
+      } catch(e) { console.error('fetchData error:', e); }
     }
 
-    function renderUsersTable() {
-      const searchEl = document.getElementById('userSearch');
-      const q = searchEl ? searchEl.value.toLowerCase() : '';
-      const tbody = document.getElementById('usersTableBody');
-      if (!localUsers || localUsers.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: var(--text-muted);">No users registered yet</td></tr>';
-        return;
-      }
-      const filtered = localUsers.filter(u => u.email.toLowerCase().includes(q));
+    function esc(s) { var d = document.createElement('div'); d.textContent = s || ''; return d.innerHTML; }
 
-      tbody.innerHTML = filtered.map(u => {
-        const isBanned = u.status === 'banned';
-        const isPro = u.role === 'pro';
-        return `
-          <tr>
-            <td>${u.email}</td>
-            <td>${u.name}</td>
-            <td><span class="badge badge-${u.role}">${u.role}</span></td>
-            <td><span class="badge badge-${u.status}">${u.status}</span></td>
-            <td>
-              <button class="dashboard-btn success" onclick="setUserRole('${u.email}', '${isPro ? 'free' : 'pro'}')">${isPro ? 'Demote to Free' : 'Promote to Pro'}</button>
-              <button class="dashboard-btn danger" onclick="toggleUserBan('${u.email}', '${isBanned ? 'active' : 'banned'}')">${isBanned ? 'Unban' : 'Ban'}</button>
-              <button class="dashboard-btn danger" style="background:none; border:none;" onclick="deleteUser('${u.email}')">Delete</button>
-            </td>
-          </tr>
-        `;
+    // ─── USERS ───
+    function renderUsers() {
+      var q = (document.getElementById('userSearch').value || '').toLowerCase();
+      var tb = document.getElementById('usersBody');
+      var list = localUsers.filter(function(u) { return u.email.toLowerCase().includes(q); });
+      if (list.length === 0) { tb.innerHTML = '<tr><td colspan="5" class="empty"><i class="icon-users"></i><p>No users found</p></td></tr>'; return; }
+      tb.innerHTML = list.map(function(u) {
+        var isPro = u.role === 'pro';
+        var isBanned = u.status === 'banned';
+        return '<tr><td>' + esc(u.email) + '</td><td>' + esc(u.name) + '</td><td><span class="badge badge-' + u.role + '">' + u.role + '</span></td><td><span class="badge badge-' + u.status + '">' + u.status + '</span></td><td style="white-space:nowrap;"><button class="btn btn-green btn-sm" onclick="toggleRole(\'' + esc(u.email) + '\',\'' + (isPro ? 'free' : 'pro') + '\')">' + (isPro ? 'Demote' : 'Promote') + '</button> <button class="btn btn-red btn-sm" onclick="toggleBan(\'' + esc(u.email) + '\',\'' + (isBanned ? 'active' : 'banned') + '\')">' + (isBanned ? 'Unban' : 'Ban') + '</button> <button class="btn btn-red btn-sm" onclick="delUser(\'' + esc(u.email) + '\')"><i class="icon-trash-2" style="font-size:12px;"></i></button></td></tr>';
       }).join('');
     }
 
-    function renderKeysTable() {
-      const tbody = document.getElementById('keysTableBody');
-      if (!localKeys || localKeys.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: var(--text-muted);">No keys generated yet</td></tr>';
-        return;
-      }
-      tbody.innerHTML = localKeys.reverse().slice(0, 10).map(k => `
-        <tr>
-          <td style="font-family:monospace; font-weight:700;">${k.key}</td>
-          <td><span class="badge badge-${k.status}">${k.status}</span></td>
-          <td style="font-size:12px;">${new Date(k.expiresAt).toLocaleDateString()}</td>
-          <td>${k.redeemedBy || '--'}</td>
-        </tr>
-      `).join('');
+    async function toggleRole(email, role) {
+      await api('/api/admin/users/role', { method: 'POST', body: JSON.stringify({ email: email, role: role }) });
+      toast('Role updated', 'success'); fetchData();
+    }
+    async function toggleBan(email, status) {
+      await api('/api/admin/users/ban', { method: 'POST', body: JSON.stringify({ email: email, status: status }) });
+      toast('User ' + status, 'success'); fetchData();
+    }
+    async function delUser(email) {
+      if (!confirm('Delete ' + email + '?')) return;
+      await api('/api/admin/users/' + encodeURIComponent(email), { method: 'DELETE' });
+      toast('User deleted', 'success'); fetchData();
     }
 
+    // ─── KEYS ───
+    document.getElementById('keyForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      var qty = document.getElementById('keyQty').value;
+      var exp = document.getElementById('keyExpiry').value;
+      await api('/api/admin/keys/generate', { method: 'POST', body: JSON.stringify({ count: qty, expiresDays: exp }) });
+      toast(qty + ' key(s) generated', 'success'); fetchData();
+    });
+
+    function renderKeys() {
+      var tb = document.getElementById('keysBody');
+      if (!localKeys || localKeys.length === 0) { tb.innerHTML = '<tr><td colspan="5" class="empty"><i class="icon-key"></i><p>No keys yet</p></td></tr>'; return; }
+      tb.innerHTML = localKeys.slice(0, 30).map(function(k) {
+        return '<tr><td style="font-family:monospace;font-weight:700;font-size:12px;">' + esc(k.key) + '</td><td><span class="badge badge-' + k.status + '">' + k.status + '</span></td><td style="font-size:12px;">' + new Date(k.expiresAt).toLocaleDateString() + '</td><td>' + esc(k.redeemedBy || '--') + '</td><td><button class="btn btn-red btn-sm" onclick="delKey(\'' + esc(k.key) + '\')"><i class="icon-trash-2" style="font-size:12px;"></i> Delete</button></td></tr>';
+      }).join('');
+    }
+
+    async function delKey(key) {
+      if (!confirm('Delete key ' + key + '?')) return;
+      await api('/api/admin/keys/' + encodeURIComponent(key), { method: 'DELETE' });
+      toast('Key deleted', 'success'); fetchData();
+    }
+
+    // ─── ANALYTICS ───
     function renderAnalytics(a) {
-      const platBody = document.getElementById('analyticsPlatforms');
-      platBody.innerHTML = Object.entries(a.platforms).map(([k, v]) => `<tr><td>${k}</td><td>${v}</td></tr>`).join('');
-
-      const browBody = document.getElementById('analyticsBrowsers');
-      browBody.innerHTML = Object.entries(a.browsers).map(([k, v]) => `<tr><td>${k}</td><td>${v}</td></tr>`).join('');
+      var pb = document.getElementById('platBody');
+      var bb = document.getElementById('browBody');
+      var pEntries = Object.entries(a.platforms || {});
+      var bEntries = Object.entries(a.browsers || {});
+      pb.innerHTML = pEntries.length ? pEntries.map(function(e) { return '<tr><td>' + esc(e[0]) + '</td><td>' + e[1] + '</td></tr>'; }).join('') : '<tr><td colspan="2" class="empty"><p>No data</p></td></tr>';
+      bb.innerHTML = bEntries.length ? bEntries.map(function(e) { return '<tr><td>' + esc(e[0]) + '</td><td>' + e[1] + '</td></tr>'; }).join('') : '<tr><td colspan="2" class="empty"><p>No data</p></td></tr>';
     }
 
-    async function setUserRole(email, role) {
-      await apiCall('/api/admin/users/role', {
-        method: 'POST',
-        body: JSON.stringify({ email, role })
-      });
-      fetchData();
-    }
-
-    async function toggleUserBan(email, status) {
-      await apiCall('/api/admin/users/ban', {
-        method: 'POST',
-        body: JSON.stringify({ email, status })
-      });
-      fetchData();
-    }
-
-    async function deleteUser(email) {
-      if (!confirm(`Are you sure you want to delete ${email}?`)) return;
-      await apiCall(`/api/admin/users/${email}`, {
-        method: 'DELETE'
-      });
-      fetchData();
-    }
-
-    async function handleGenerateKeys(e) {
+    // ─── BROADCAST ───
+    document.getElementById('broadcastForm').addEventListener('submit', async function(e) {
       e.preventDefault();
-      const count = document.getElementById('keyCount').value;
-      const expiresDays = document.getElementById('keyExpiry').value;
-      
-      await apiCall('/api/admin/keys/generate', {
-        method: 'POST',
-        body: JSON.stringify({ count, expiresDays })
-      });
-      fetchData();
-    }
-
-    async function handleSendBroadcast(e) {
-      e.preventDefault();
-      const title = document.getElementById('notifTitle').value;
-      const message = document.getElementById('notifMessage').value;
-      const target = document.getElementById('notifTarget').value;
-      
-      await apiCall('/api/admin/notifications', {
-        method: 'POST',
-        body: JSON.stringify({ title, message, target })
-      });
-      alert("Broadcast dispatched successfully!");
+      var title = document.getElementById('notifTitle').value;
+      var message = document.getElementById('notifMsg').value;
+      var target = document.getElementById('notifTarget').value;
+      await api('/api/admin/notifications', { method: 'POST', body: JSON.stringify({ title: title, message: message, target: target }) });
+      toast('Notification sent!', 'success');
       document.getElementById('notifTitle').value = '';
-      document.getElementById('notifMessage').value = '';
-      fetchData();
-    }
+      document.getElementById('notifMsg').value = '';
+    });
   </script>
 </body>
 </html>

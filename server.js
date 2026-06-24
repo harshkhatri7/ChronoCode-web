@@ -483,8 +483,8 @@ app.post('/api/admin/keys/status', requireAdmin, (req, res) => {
 
 app.delete('/api/admin/keys/:id', requireAdmin, (req, res) => {
   const id = req.params.id;
-  db.keys.delete({ id });
-  logAction(req.user.email, 'DELETE_KEY', `Deleted key ID: ${id}`);
+  db.keys.delete({ key: id });
+  logAction(req.user.email, 'DELETE_KEY', `Deleted key: ${id}`);
   res.json({ success: true });
 });
 
