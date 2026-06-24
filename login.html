@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign In - ChronoCode</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #08090a;
+      --bg-card: rgba(18, 19, 22, 0.7);
+      --accent-blue: #3b82f6;
+      --text-main: #f4f4f7;
+      --text-muted: #8e909a;
+      --border-color: rgba(255, 255, 255, 0.08);
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Outfit', sans-serif;
+    }
+    body {
+      background-color: var(--bg-dark);
+      background-image: radial-gradient(circle at 50% -20%, #1e293b 0%, var(--bg-dark) 70%);
+      color: var(--text-main);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+    .login-container {
+      width: 100%;
+      max-width: 440px;
+      padding: 24px;
+      z-index: 10;
+    }
+    .login-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      padding: 40px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+      text-align: center;
+      position: relative;
+    }
+    .login-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #3b82f6, #6366f1);
+      border-radius: 20px 20px 0 0;
+    }
+    .logo-container {
+      margin-bottom: 30px;
+    }
+    .logo-text {
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      background: linear-gradient(135deg, #fff 40%, var(--text-muted));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .logo-sub {
+      color: var(--accent-blue);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-top: 4px;
+    }
+    .welcome-text {
+      margin-bottom: 30px;
+    }
+    .welcome-text h1 {
+      font-size: 22px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .welcome-text p {
+      color: var(--text-muted);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .auth-btn {
+      width: 100%;
+      padding: 14px 20px;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      transition: all 0.2s ease;
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--text-main);
+      margin-bottom: 16px;
+    }
+    .auth-btn:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.15);
+      transform: translateY(-1px);
+    }
+    .auth-btn img {
+      width: 18px;
+      height: 18px;
+    }
+    .divider {
+      display: flex;
+      align-items: center;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 12px;
+      margin: 24px 0;
+    }
+    .divider::before, .divider::after {
+      content: '';
+      flex: 1;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .divider:not(:empty)::before {
+      margin-right: 16px;
+    }
+    .divider:not(:empty)::after {
+      margin-left: 16px;
+    }
+    .form-group {
+      text-align: left;
+      margin-bottom: 16px;
+    }
+    .form-group label {
+      display: block;
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+    .form-control {
+      width: 100%;
+      padding: 12px 16px;
+      background: rgba(0,0,0,0.2);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      color: var(--text-main);
+      font-size: 14px;
+      transition: border-color 0.2s ease;
+    }
+    .form-control:focus {
+      outline: none;
+      border-color: var(--accent-blue);
+    }
+    .submit-btn {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, #3b82f6, #2563eb);
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .submit-btn:hover {
+      filter: brightness(1.1);
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+    }
+    .footer-text {
+      margin-top: 30px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .footer-text a {
+      color: var(--accent-blue);
+      text-decoration: none;
+    }
+    .footer-text a:hover {
+      text-decoration: underline;
+    }
+    
+    @keyframes pulse {
+      0% { transform: scale(0.9); opacity: 0.5; }
+      50% { transform: scale(1.2); opacity: 1; }
+      100% { transform: scale(0.9); opacity: 0.5; }
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <div class="login-card">
+      <div class="logo-container">
+        <div class="logo-text">ChronoCode</div>
+        <div class="logo-sub">Time Travel Engine</div>
+      </div>
+      
+      <div class="welcome-text">
+        <h1 id="welcomeTitle">Welcome Back</h1>
+        <p id="welcomeDesc">Sign in to synchronize your coding telemetry, access bookmarks, and compare version states.</p>
+      </div>
+
+      <!-- Standard Web Authentication Controls -->
+      <div id="webAuthContainer">
+        <!-- Google Sign In Button -->
+        <button class="auth-btn" id="googleSignInBtn">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="Google Logo">
+          Sign in with Google
+        </button>
+
+        <div class="divider">Developer Sandbox</div>
+
+        <!-- Mock Tester Sandbox Form -->
+        <form id="sandboxForm" onsubmit="handleSandboxLogin(event)">
+          <div class="form-group">
+            <label for="mockEmail">Sandbox Testing Email</label>
+            <input type="email" id="mockEmail" class="form-control" placeholder="user@example.com" required value="developer@chronocode.com">
+          </div>
+          <button type="submit" class="submit-btn">Enter Sandbox Mode</button>
+        </form>
+      </div>
+
+      <!-- Electron App Session Synchronization UI -->
+      <div id="electronAuthContainer" style="display: none;">
+        <button class="auth-btn" id="electronBrowserLoginBtn" style="background: var(--accent-blue); color: #fff; border: none; font-size: 16px; margin-bottom: 20px;">
+          Log In via Web Browser
+        </button>
+        <div style="font-size: 13px; color: var(--text-muted); display: flex; align-items: center; justify-content: center; gap: 8px;">
+          <span style="display: inline-block; width: 8px; height: 8px; background: var(--accent-blue); border-radius: 50%; animation: pulse 1.5s infinite;"></span>
+          Waiting for authentication from browser...
+        </div>
+      </div>
+
+      <div class="footer-text">
+        Want to manage the platform? <a href="/admin.html">Admin Portal</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Detect Electron window environment
+    const isElectron = navigator.userAgent.toLowerCase().includes('electron') || !!(window.process && window.process.type);
+
+    // Verify if already logged in, redirect to versioning dashboard or marketing page
+    const existingToken = localStorage.getItem('cc_token');
+    if (existingToken) {
+      window.location.href = isElectron ? 'public/index.html' : 'index.html';
+    }
+
+    if (isElectron) {
+      // Toggle Electron UI elements
+      document.getElementById('webAuthContainer').style.display = 'none';
+      document.getElementById('electronAuthContainer').style.display = 'block';
+      document.getElementById('welcomeTitle').innerText = "Activate Desktop App";
+      document.getElementById('welcomeDesc').innerText = "To login inside the application, click below to authenticate securely using your default web browser.";
+
+      // Electron Sign In trigger
+      document.getElementById('electronBrowserLoginBtn').addEventListener('click', () => {
+        // Open standard web login (default to Netlify production or current host origin fallback)
+        const targetUrl = 'https://chronocode-web.netlify.app/login.html';
+        window.open(targetUrl);
+      });
+
+      // Poll local Express server for active synchronized session
+      async function pollLocalSession() {
+        try {
+          const res = await fetch('/api/auth/local-status');
+          if (res.ok) {
+            const data = await res.json();
+            if (data && data.token) {
+              localStorage.setItem('cc_token', data.token);
+              window.location.href = 'public/index.html';
+              return;
+            }
+          }
+        } catch (_) {}
+        setTimeout(pollLocalSession, 1500);
+      }
+      pollLocalSession();
+
+    } else {
+      // Google Sign-In Simulator for web browsers
+      document.getElementById('googleSignInBtn').addEventListener('click', () => {
+        const email = prompt("Enter Google Account Email for simulation:", "developer@chronocode.com");
+        if (!email) return;
+        const name = prompt("Enter Name:", email.split('@')[0]);
+        submitAuth({ email, name });
+      });
+    }
+
+    function handleSandboxLogin(e) {
+      e.preventDefault();
+      const email = document.getElementById('mockEmail').value;
+      submitAuth({ email, name: email.split('@')[0] });
+    }
+
+    async function submitAuth({ email, name }) {
+      const osName = window.navigator.userAgent.includes('Windows') ? 'Windows' : (window.navigator.userAgent.includes('Mac') ? 'macOS' : 'Linux');
+      try {
+        const response = await fetch('/api/auth/google/mock', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email,
+            name,
+            platformInfo: osName
+          })
+        });
+
+        const data = await response.json();
+        if (response.ok && data.success) {
+          localStorage.setItem('cc_token', data.token);
+          
+          // Auto-sync active token to local server if it is running on host machine
+          try {
+            await fetch('http://localhost:9998/api/auth/local-sync', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ token: data.token, user: data.user })
+            });
+          } catch (_) {}
+          
+          window.location.href = 'index.html';
+        } else {
+          alert(`Auth Error: ${data.message || 'Verification failed'}`);
+        }
+      } catch (err) {
+        alert(`Network Error: ${err.message}`);
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 320" fill="none">
+  <!-- Clock icon left -->
+  <g transform="translate(160, 160)">
+    <circle cx="0" cy="0" r="100" fill="none" stroke="#ffffff" stroke-width="14" stroke-linecap="round"/>
+    <line x1="0" y1="0" x2="0" y2="-65" stroke="#ffffff" stroke-width="12" stroke-linecap="round"/>
+    <line x1="0" y1="0" x2="45" y2="-35" stroke="#ffffff" stroke-width="7" stroke-linecap="round"/>
+    <circle cx="0" cy="0" r="8" fill="#ffffff"/>
+  </g>
+
+  <!-- Title -->
+  <text x="310" y="175" font-family="Inter, system-ui, sans-serif" font-size="80" font-weight="900" fill="#ffffff" letter-spacing="-4">ChronoCode</text>
+  <text x="312" y="215" font-family="Inter, system-ui, sans-serif" font-size="20" font-weight="500" fill="#828790" letter-spacing="1">TIME-TRAVELING DEV ENGINE</text>
+</svg>

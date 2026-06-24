@@ -1,6 +1,9 @@
 const { app, BrowserWindow } = require('electron');
 const path = require('path');
 
+// Launch the local SaaS Express + WebSocket server
+require('./server.js');
+
 const isDev = process.env.ELECTRON_DEV === '1';
 
 function createWindow() {
@@ -17,7 +20,8 @@ function createWindow() {
     },
   });
 
-  mainWindow.loadFile('index.html');
+  // Load the central login gateway first
+  mainWindow.loadURL('http://localhost:9998/login.html');
 
   if (!isDev) {
     mainWindow.webContents.on('devtools-opened', () => {

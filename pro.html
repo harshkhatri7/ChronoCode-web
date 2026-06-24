@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ChronoCode Pro - Upgrade</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #08090a;
+      --bg-card: rgba(18, 19, 22, 0.7);
+      --accent-blue: #3b82f6;
+      --accent-gold: #fbbf24;
+      --text-main: #f4f4f7;
+      --text-muted: #8e909a;
+      --border-color: rgba(255, 255, 255, 0.08);
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Outfit', sans-serif;
+    }
+    body {
+      background-color: var(--bg-dark);
+      background-image: radial-gradient(circle at 50% -20%, #1e1e24 0%, var(--bg-dark) 80%);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+    }
+    .container {
+      width: 100%;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    .header h1 {
+      font-size: 36px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      margin-bottom: 12px;
+      background: linear-gradient(135deg, #fff 50%, var(--text-muted));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .header p {
+      color: var(--text-muted);
+      font-size: 16px;
+    }
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 24px;
+      transition: color 0.2s ease;
+    }
+    .back-btn:hover {
+      color: var(--accent-blue);
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-bottom: 40px;
+    }
+    @media (max-width: 768px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .plan-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+    .plan-card.premium {
+      border-color: var(--accent-gold);
+    }
+    .plan-card.premium::after {
+      content: 'POPULAR';
+      position: absolute;
+      top: -12px;
+      right: 20px;
+      background: var(--accent-gold);
+      color: #000;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: 20px;
+    }
+    .plan-name {
+      font-size: 20px;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+    .plan-card.premium .plan-name {
+      color: var(--accent-gold);
+    }
+    .plan-price {
+      font-size: 32px;
+      font-weight: 800;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: baseline;
+    }
+    .plan-price span {
+      font-size: 14px;
+      color: var(--text-muted);
+      font-weight: 400;
+      margin-left: 4px;
+    }
+    .plan-desc {
+      color: var(--text-muted);
+      font-size: 14px;
+      margin-bottom: 24px;
+      min-height: 40px;
+    }
+    .features-list {
+      list-style: none;
+      margin-bottom: 32px;
+      flex: 1;
+    }
+    .feature-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      margin-bottom: 12px;
+      color: var(--text-main);
+    }
+    .feature-item.disabled {
+      color: var(--text-muted);
+      text-decoration: line-through;
+    }
+    .feature-item svg {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+    }
+    .feature-item.disabled svg {
+      color: var(--text-muted);
+    }
+    .feature-item.enabled svg {
+      color: var(--accent-blue);
+    }
+    .plan-card.premium .feature-item.enabled svg {
+      color: var(--accent-gold);
+    }
+    .action-btn {
+      width: 100%;
+      padding: 14px;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: center;
+      text-decoration: none;
+      display: block;
+      border: 1px solid var(--border-color);
+      background: rgba(255,255,255,0.03);
+      color: var(--text-main);
+    }
+    .action-btn:hover {
+      background: rgba(255,255,255,0.08);
+    }
+    .action-btn.primary {
+      background: linear-gradient(135deg, #fbbf24, #d97706);
+      color: #000;
+      border: none;
+    }
+    .action-btn.primary:hover {
+      filter: brightness(1.1);
+      box-shadow: 0 4px 12px rgba(251, 191, 36, 0.3);
+    }
+    .activation-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 32px;
+      text-align: center;
+    }
+    .activation-card h2 {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+    .activation-card p {
+      color: var(--text-muted);
+      font-size: 14px;
+      margin-bottom: 20px;
+    }
+    .activation-form {
+      display: flex;
+      gap: 12px;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+    @media (max-width: 576px) {
+      .activation-form {
+        flex-direction: column;
+      }
+    }
+    .activation-input {
+      flex: 1;
+      padding: 12px 16px;
+      background: rgba(0,0,0,0.3);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      color: var(--text-main);
+      font-size: 15px;
+      text-transform: uppercase;
+    }
+    .activation-input:focus {
+      outline: none;
+      border-color: var(--accent-blue);
+    }
+    .activation-btn {
+      padding: 12px 24px;
+      background: var(--accent-blue);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+    .activation-btn:hover {
+      background: #2563eb;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="index.html" class="back-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="14" height="14"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+      Back to Dashboard
+    </a>
+
+    <div class="header">
+      <h1>Upgrade to ChronoCode Pro</h1>
+      <p>Elevate your code travel experience with advanced bookmarks, version recoveries, and diff analyzers.</p>
+    </div>
+
+    <div class="grid">
+      <!-- Free Plan Card -->
+      <div class="plan-card">
+        <div class="plan-name">Starter Plan</div>
+        <div class="plan-price">$0<span>/ Lifetime</span></div>
+        <div class="plan-desc">Essential version tracking metrics for single directory projects.</div>
+        <ul class="features-list">
+          <li class="feature-item enabled">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Automatic micro-versioning snapshots
+          </li>
+          <li class="feature-item enabled">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Background telemetry watchers
+          </li>
+          <li class="feature-item enabled">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Git branch integrations
+          </li>
+          <li class="feature-item disabled">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            Restore project to version snapshots
+          </li>
+          <li class="feature-item disabled">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            Advanced diff timeline analyzer
+          </li>
+        </ul>
+        <button class="action-btn" disabled>Current Active Plan</button>
+      </div>
+
+      <!-- Pro Plan Card -->
+      <div class="plan-card premium">
+        <div class="plan-name">Pro License</div>
+        <div class="plan-price">$29<span>/ Lifetime Key</span></div>
+        <div class="plan-desc">Unlimited restoration capability, diff comparing tools, and team reports.</div>
+        <ul class="features-list">
+          <li class="feature-item enabled">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Everything in Starter Plan
+          </li>
+          <li class="feature-item enabled">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Restore project to version snapshots
+          </li>
+          <li class="feature-item enabled">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Advanced diff timeline analyzer
+          </li>
+          <li class="feature-item enabled">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Backup exports & imports
+          </li>
+          <li class="feature-item enabled">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Gold priority premium support
+          </li>
+        </ul>
+        <button class="action-btn primary" id="buyProBtn">Buy Pro via WhatsApp</button>
+      </div>
+    </div>
+
+    <!-- Activation Card -->
+    <div class="activation-card">
+      <h2>Have an Activation Key?</h2>
+      <p>Enter your unique one-time activation license key below to promote your account instantly.</p>
+      <form class="activation-form" onsubmit="handleRedeem(event)">
+        <input type="text" id="licenseKeyInput" class="activation-input" placeholder="CC-XXXXXX-XXXXXX" required>
+        <button type="submit" class="activation-btn">Redeem Key</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const token = localStorage.getItem('cc_token');
+
+    // WhatsApp Direct Checkout Link setup
+    document.getElementById('buyProBtn').addEventListener('click', () => {
+      const email = token ? "my account" : "my guest email";
+      const baseMsg = `Hello! I would like to purchase a ChronoCode Pro Lifetime License Key. My registered account email is: ${email}`;
+      const url = `https://wa.me/918239324003?text=${encodeURIComponent(baseMsg)}`;
+      window.open(url, '_blank');
+    });
+
+    // Activation Key Submission
+    async function handleRedeem(e) {
+      e.preventDefault();
+      if (!token) {
+        alert("Please sign in first to redeem a license key.");
+        window.location.href = 'login.html';
+        return;
+      }
+
+      const keyVal = document.getElementById('licenseKeyInput').value.trim();
+      try {
+        const response = await fetch('/api/keys/redeem', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({ key: keyVal })
+        });
+
+        const data = await response.json();
+        if (response.ok && data.success) {
+          alert("Success! Your account has been upgraded to Pro. Reloading dashboard...");
+          window.location.href = 'index.html';
+        } else {
+          alert(`Redemption Error: ${data.message || 'Invalid or expired key'}`);
+        }
+      } catch (err) {
+        alert(`Network Error: ${err.message}`);
+      }
+    }
+  </script>
+</body>
+</html>

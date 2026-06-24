@@ -1,0 +1,7 @@
+Welcome to the ChronoCode V3 manual test!
+This is a test file designed to verify that the file-watching pipeline and real-time dashboard update properly.
+We are checking:
+1. File watching event detection
+2. Snapshot generation in the .chrono folder
+3. WebSocket pipeline broadcast to the active frontend UI
+5. Real-time active window telemetry and interactive tab dashboards.
