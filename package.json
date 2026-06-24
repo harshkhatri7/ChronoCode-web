@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "ChronoCode — Automatic Code Versioning Desktop App",
   "main": "electron-main.js",
-  "author": "Harsh Khatri",
+  "author": "Harsh Khatri <harsh@chronocode.app>",
   "license": "MIT",
   "scripts": {
     "start": "electron .",
@@ -69,7 +69,7 @@
           "arch": ["x64", "arm64"]
         }
       ],
-      "icon": "assets/logo.ico",
+      "icon": "assets/logo.png",
       "category": "public.app-category.developer-tools",
       "darkModeSupport": true,
       "artifactName": "ChronoCode-${version}-${arch}.${ext}"
