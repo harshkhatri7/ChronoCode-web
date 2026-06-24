@@ -21,7 +21,16 @@ const execAsync = promisify(exec);
 // CONFIGURATION (env-overridable)
 // ─────────────────────────────────────────────
 const isServerless = !!(process.env.VERCEL || process.env.NOW_REGION || process.env.LAMBDA_TASK_ROOT);
-const defaultChronoDir = isServerless ? path.join(os.tmpdir(), '.chrono') : path.join(process.cwd(), '.chrono');
+const isElectron = !!(process.versions.electron || process.defaultApp);
+
+let defaultChronoDir;
+if (isServerless) {
+  defaultChronoDir = path.join(os.tmpdir(), '.chrono');
+} else if (isElectron) {
+  defaultChronoDir = path.join(os.homedir(), '.chronocode');
+} else {
+  defaultChronoDir = path.join(process.cwd(), '.chrono');
+}
 
 const config = {
   portHttp: parseInt(process.env.CHRONO_PORT_HTTP || '9998', 10),
