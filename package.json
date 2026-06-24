@@ -13,6 +13,7 @@
     "electron": "^33.0.0"
   },
   "dependencies": {
+    "dotenv": "^17.4.2",
     "mongodb": "^7.3.0",
     "serverless-http": "^4.0.0"
   }
