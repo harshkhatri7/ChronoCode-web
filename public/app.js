@@ -270,7 +270,9 @@ function updateActiveWindowUI(activeWindow) {
 // ─────────────────────────────────────────────
 function connectWS() {
   const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-  socket = new WebSocket(`${protocol}//${window.location.host}`);
+  const emailParam = currentUser ? encodeURIComponent(currentUser.email) : 'anonymous';
+  const platformParam = window.navigator.userAgent.includes('Windows') ? 'Windows' : (window.navigator.userAgent.includes('Mac') ? 'macOS' : 'Linux');
+  socket = new WebSocket(`${protocol}//${window.location.host}?email=${emailParam}&platform=${platformParam}`);
 
   socket.onopen = () => {
     statusBadge.classList.add('online');
@@ -728,7 +730,10 @@ async function openFilePreview(timestamp, filePath) {
   addNotification(`Fetching file snapshot preview: ${filePath}`, 'action');
 
   try {
-    const res = await fetch(`/api/file-content?timestamp=${timestamp}&path=${encodeURIComponent(filePath)}`);
+    const token = localStorage.getItem('cc_token');
+    const res = await fetch(`/api/file-content?timestamp=${timestamp}&path=${encodeURIComponent(filePath)}`, {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
     if (!res.ok) throw new Error(`Failed to load file content (${res.status})`);
     const text = await res.text();
     codeContent.innerText = text;
@@ -743,6 +748,7 @@ async function openFilePreview(timestamp, filePath) {
 // DIFF VIEWER
 // ─────────────────────────────────────────────
 async function openDiffForFile(filePath) {
+  if (!checkProPermission('Diffing versions')) return;
   const visible = getVisibleHistory();
   if (visible.length < 2) {
     showToast('Need at least 2 snapshots to diff', 'info');
@@ -771,7 +777,10 @@ async function openDiffForFile(filePath) {
   diffModal.classList.add('open');
 
   try {
-    const res = await fetch(`/api/diff?from=${previous.timestamp}&to=${current.timestamp}&path=${encodeURIComponent(filePath)}`);
+    const token = localStorage.getItem('cc_token');
+    const res = await fetch(`/api/diff?from=${previous.timestamp}&to=${current.timestamp}&path=${encodeURIComponent(filePath)}`, {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
     if (!res.ok) throw new Error(`Diff request failed (${res.status})`);
     const data = await res.json();
 
@@ -803,9 +812,13 @@ async function openDiffForFile(filePath) {
 // EXPORT / IMPORT
 // ─────────────────────────────────────────────
 async function exportTimeline() {
+  if (!checkProPermission('Exporting timeline data')) return;
   showToast('Preparing export...', 'action');
   try {
-    const res = await fetch('/api/export');
+    const token = localStorage.getItem('cc_token');
+    const res = await fetch('/api/export', {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
     if (!res.ok) throw new Error('Export failed');
     const blob = await res.blob();
     const url = URL.createObjectURL(blob);
@@ -822,13 +835,18 @@ async function exportTimeline() {
 }
 
 async function importTimeline(file) {
+  if (!checkProPermission('Importing timeline data')) return;
   showToast('Importing timeline data...', 'action');
   try {
     const text = await file.text();
     const bundle = JSON.parse(text);
+    const token = localStorage.getItem('cc_token');
     const res = await fetch('/api/import', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
       body: JSON.stringify(bundle),
     });
     if (!res.ok) throw new Error('Import request failed');
@@ -844,6 +862,7 @@ async function importTimeline(file) {
 // CLEANUP
 // ─────────────────────────────────────────────
 async function runCleanup() {
+  if (!checkProPermission('Running database cleanup')) return;
   const maxAge = document.getElementById('cleanupMaxAge').value;
   const maxCount = document.getElementById('cleanupMaxCount').value;
 
@@ -860,9 +879,13 @@ async function runCleanup() {
   if (!ok) return;
 
   try {
+    const token = localStorage.getItem('cc_token');
     const res = await fetch('/api/cleanup', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
       body: JSON.stringify(body),
     });
     if (!res.ok) throw new Error('Cleanup failed');
@@ -933,6 +956,7 @@ saveNoteBtn.addEventListener('click', () => {
 
 // Delete
 deleteBtnEl.addEventListener('click', async () => {
+  if (!checkProPermission('Deleting snapshots')) return;
   const visible = getVisibleHistory();
   const currentEvent = visible[activeIndex];
   if (!currentEvent) return;
@@ -947,6 +971,7 @@ deleteBtnEl.addEventListener('click', async () => {
 
 // Restore
 restoreBtnEl.addEventListener('click', async () => {
+  if (!checkProPermission('Restoring snapshots')) return;
   const visible = getVisibleHistory();
   const currentEvent = visible[activeIndex];
   if (!currentEvent) return;
@@ -977,6 +1002,7 @@ document.getElementById('runCleanupBtn').addEventListener('click', runCleanup);
 
 // Compare button
 document.getElementById('compareBtn').addEventListener('click', async () => {
+  if (!checkProPermission('Comparing snapshots')) return;
   const visible = getVisibleHistory();
   if (visible.length < 2) {
     showToast('Need at least 2 snapshots to compare', 'info');
@@ -1003,9 +1029,12 @@ document.getElementById('compareBtn').addEventListener('click', async () => {
   diffModal.classList.add('open');
 
   let allHtml = '';
+  const token = localStorage.getItem('cc_token');
   for (const filePath of shared) {
     try {
-      const res = await fetch(`/api/diff?from=${previous.timestamp}&to=${current.timestamp}&path=${encodeURIComponent(filePath)}`);
+      const res = await fetch(`/api/diff?from=${previous.timestamp}&to=${current.timestamp}&path=${encodeURIComponent(filePath)}`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
       if (!res.ok) continue;
       const data = await res.json();
       if (!data.diff || data.diff.length === 0) continue;
@@ -1118,10 +1147,124 @@ document.addEventListener('keydown', () => {
 });
 
 // ─────────────────────────────────────────────
+// SAAS SESSION MANAGEMENT & USER PROFILE
+// ─────────────────────────────────────────────
+let currentUser = null;
+
+async function checkAuthSession() {
+  const token = localStorage.getItem('cc_token');
+  if (!token) {
+    window.location.href = '../login.html';
+    return;
+  }
+
+  try {
+    const res = await fetch('/api/auth/me', {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+
+    if (res.status === 401 || res.status === 403) {
+      localStorage.removeItem('cc_token');
+      window.location.href = '../login.html';
+      return;
+    }
+
+    if (res.ok) {
+      currentUser = await res.json();
+      updateProfileUI();
+      // Track analytics page view
+      trackAnalytics('pageview', window.location.pathname);
+      // Delayed connectWS after profile is fetched
+      connectWS();
+    }
+  } catch (err) {
+    console.error('Session validation failed:', err);
+  }
+}
+
+function updateProfileUI() {
+  if (!currentUser) return;
+  
+  const userAvatar = document.getElementById('userAvatar');
+  const userName = document.getElementById('userName');
+  const userRoleBadge = document.getElementById('userRoleBadge');
+  const upgradeBtn = document.getElementById('upgradeBtn');
+  
+  if (userAvatar && currentUser.picture) {
+    userAvatar.src = currentUser.picture;
+  }
+  if (userName) {
+    userName.textContent = currentUser.name || currentUser.email;
+    userName.title = currentUser.email;
+  }
+  if (userRoleBadge) {
+    userRoleBadge.textContent = currentUser.role.toUpperCase();
+    if (currentUser.role === 'pro' || currentUser.role === 'admin') {
+      userRoleBadge.style.color = '#3b82f6';
+      if (upgradeBtn) upgradeBtn.style.display = 'none'; // Hide upgrade button for pro/admin
+    } else {
+      userRoleBadge.style.color = '#8e909d';
+      if (upgradeBtn) upgradeBtn.style.display = 'inline-block';
+    }
+  }
+}
+
+function checkProPermission(actionName = 'This feature') {
+  if (!currentUser) return false;
+  if (currentUser.role === 'pro' || currentUser.role === 'admin') {
+    return true;
+  }
+  
+  showConfirm('Upgrade to Pro Required', `${actionName} is a premium feature. Upgrade to Pro to unlock advanced time-travel capabilities.`)
+    .then(ok => {
+      if (ok) {
+        window.location.href = '../pro.html';
+      }
+    });
+  return false;
+}
+
+// Client-side analytics logger helper
+async function trackAnalytics(type, path, featureName = '') {
+  const token = localStorage.getItem('cc_token');
+  try {
+    const osName = window.navigator.userAgent.includes('Windows') ? 'Windows' : (window.navigator.userAgent.includes('Mac') ? 'macOS' : 'Linux');
+    const browserName = window.navigator.userAgent.includes('Firefox') ? 'Firefox' : (window.navigator.userAgent.includes('Chrome') ? 'Chrome' : 'Safari');
+    await fetch('/api/analytics/track', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        type,
+        path,
+        platform: osName,
+        browser: browserName,
+        device: 'desktop',
+        featureName
+      })
+    });
+  } catch (_) {}
+}
+
+// Hook up logout button
+const logoutBtn = document.getElementById('logoutBtn');
+if (logoutBtn) {
+  logoutBtn.addEventListener('click', async () => {
+    try {
+      await fetch('/api/auth/local-logout', { method: 'POST' });
+    } catch (_) {}
+    localStorage.removeItem('cc_token');
+    window.location.href = '../login.html';
+  });
+}
+
+// ─────────────────────────────────────────────
 // INIT
 // ─────────────────────────────────────────────
 setupNavigation();
-connectWS();
+checkAuthSession();
 
 // Electron Window Controls binding
 const winCloseBtn = document.getElementById('winCloseBtn');

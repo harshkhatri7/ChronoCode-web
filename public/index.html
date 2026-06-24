@@ -142,6 +142,21 @@
                 <li class="nav-item italic-empty">No bookmarked states</li>
               </ul>
             </div>
+
+            <!-- User Profile Widget -->
+            <div class="sidebar-section profile-widget" id="profileWidget" style="margin-top: auto; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 16px;">
+              <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+                <img id="userAvatar" src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=80&h=80" alt="Avatar" style="width: 36px; height: 36px; border-radius: 50%; border: 1.5px solid rgba(255,255,255,0.15);" />
+                <div style="display: flex; flex-direction: column; overflow: hidden;">
+                  <span id="userName" style="font-size: 13.5px; font-weight: 600; color: #f4f4f9; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Loading User...</span>
+                  <span id="userRoleBadge" class="badge-role-free" style="font-size: 10px; font-weight: 700; text-transform: uppercase; color: #8e909d;">Free Tier</span>
+                </div>
+              </div>
+              <div style="display: flex; gap: 8px;">
+                <a href="../pro.html" id="upgradeBtn" class="action-btn" style="flex: 1; text-align: center; text-decoration: none; padding: 6px; font-size: 11px; background: linear-gradient(135deg, #3b82f6, #1d4ed8); color: #fff; border-radius: 6px; font-weight: 600; display: inline-block;">Go Pro</a>
+                <button id="logoutBtn" class="action-btn" style="padding: 6px 10px; font-size: 11px; background: rgba(255,255,255,0.05); color: #f4f4f9; border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; cursor: pointer;">Logout</button>
+              </div>
+            </div>
           </aside>
 
           <!-- CENTER PANEL -->
