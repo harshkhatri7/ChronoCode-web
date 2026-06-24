@@ -11,5 +11,9 @@
   "license": "MIT",
   "devDependencies": {
     "electron": "^33.0.0"
+  },
+  "dependencies": {
+    "mongodb": "^7.3.0",
+    "serverless-http": "^4.0.0"
   }
 }

@@ -84,6 +84,7 @@ app.use('/public', express.static(path.join(__dirname, 'public')));
 // SAAS DATABASE & AUTH MIDDLEWARES
 // ─────────────────────────────────────────────
 const db = require('./db')(config.chronoDir);
+app.set('db', db);
 
 // Simple token-based session memory
 const activeSessions = new Map(); // token -> user email
@@ -1171,17 +1172,19 @@ function startFileWatcher() {
 }
 startFileWatcher();
 
-// ─────────────────────────────────────────────
-// START HTTP & WEBSOCKET ENGINE
-// ─────────────────────────────────────────────
-const server = createServer(app);
+// Export app for serverless wrappers
+module.exports = app;
 
-server.on('upgrade', (request, socket, head) => {
-  wss.handleUpgrade(request, socket, head, (ws) => {
-    wss.emit('connection', ws, request);
+if (require.main === module) {
+  const server = createServer(app);
+
+  server.on('upgrade', (request, socket, head) => {
+    wss.handleUpgrade(request, socket, head, (ws) => {
+      wss.emit('connection', ws, request);
+    });
   });
-});
 
-server.listen(config.portHttp, '0.0.0.0', () => {
-  console.log(`[ChronoCode Server] Running on http://localhost:${config.portHttp}`);
-});
+  server.listen(config.portHttp, '0.0.0.0', () => {
+    console.log(`[ChronoCode Server] Running on http://localhost:${config.portHttp}`);
+  });
+}

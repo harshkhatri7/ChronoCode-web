@@ -1,21 +1,55 @@
 const fs = require('fs');
 const path = require('path');
+const { MongoClient } = require('mongodb');
+
+// MongoDB connection settings
+let mongoClient = null;
+let mongoDb = null;
+let useMongo = false;
+
+const uri = process.env.MONGODB_URI;
+if (uri) {
+  useMongo = true;
+  mongoClient = new MongoClient(uri);
+}
 
 class JSONCollection {
-  constructor(filePath) {
+  constructor(name, filePath) {
+    this.name = name;
     this.filePath = filePath;
     this.data = [];
-    this.load();
+    this.loadPromise = this.load();
   }
 
-  load() {
+  async load() {
+    if (useMongo) {
+      try {
+        if (!mongoDb) {
+          await mongoClient.connect();
+          mongoDb = mongoClient.db();
+          console.log('[Database] Connected to MongoDB Atlas');
+        }
+        const collection = mongoDb.collection(this.name);
+        const docs = await collection.find({}).toArray();
+        this.data = docs;
+        console.log(`[Database] Loaded ${this.data.length} docs from MongoDB: ${this.name}`);
+      } catch (err) {
+        console.error(`[Database] Error connecting/loading MongoDB, falling back to local storage:`, err);
+        this.loadLocal();
+      }
+    } else {
+      this.loadLocal();
+    }
+  }
+
+  loadLocal() {
     try {
       if (fs.existsSync(this.filePath)) {
         const fileContent = fs.readFileSync(this.filePath, 'utf-8');
         this.data = JSON.parse(fileContent);
       } else {
         this.data = [];
-        this.save();
+        this.saveLocal();
       }
     } catch (err) {
       console.error(`Error loading database file ${this.filePath}:`, err);
@@ -24,6 +58,24 @@ class JSONCollection {
   }
 
   save() {
+    if (useMongo && mongoDb) {
+      const collection = mongoDb.collection(this.name);
+      // Overwrite the MongoDB collection in background to sync changes
+      collection.deleteMany({}).then(() => {
+        if (this.data.length > 0) {
+          collection.insertMany(this.data).catch(err => {
+            console.error(`[Database] Error inserting into MongoDB for ${this.name}:`, err);
+          });
+        }
+      }).catch(err => {
+        console.error(`[Database] Error syncing MongoDB for ${this.name}:`, err);
+      });
+    } else {
+      this.saveLocal();
+    }
+  }
+
+  saveLocal() {
     try {
       const dir = path.dirname(this.filePath);
       if (!fs.existsSync(dir)) {
@@ -36,7 +88,6 @@ class JSONCollection {
   }
 
   find(query = {}) {
-    this.load();
     return this.data.filter(item => {
       for (const key in query) {
         if (item[key] !== query[key]) return false;
@@ -46,7 +97,6 @@ class JSONCollection {
   }
 
   findOne(query = {}) {
-    this.load();
     return this.data.find(item => {
       for (const key in query) {
         if (item[key] !== query[key]) return false;
@@ -56,7 +106,6 @@ class JSONCollection {
   }
 
   insert(doc) {
-    this.load();
     const newDoc = { id: Math.random().toString(36).substring(2, 9), ...doc, createdAt: Date.now() };
     this.data.push(newDoc);
     this.save();
@@ -64,7 +113,6 @@ class JSONCollection {
   }
 
   update(query, updateDoc) {
-    this.load();
     let updatedCount = 0;
     this.data = this.data.map(item => {
       let matches = true;
@@ -87,7 +135,6 @@ class JSONCollection {
   }
 
   delete(query) {
-    this.load();
     const initialLength = this.data.length;
     this.data = this.data.filter(item => {
       for (const key in query) {
@@ -105,16 +152,25 @@ class JSONCollection {
 
 class Database {
   constructor(dbDir) {
-    this.users = new JSONCollection(path.join(dbDir, 'users.json'));
-    this.keys = new JSONCollection(path.join(dbDir, 'keys.json'));
-    this.analytics = new JSONCollection(path.join(dbDir, 'analytics.json'));
-    this.notifications = new JSONCollection(path.join(dbDir, 'notifications.json'));
-    this.logs = new JSONCollection(path.join(dbDir, 'logs.json'));
-    this.initDefaults();
+    this.users = new JSONCollection('users', path.join(dbDir, 'users.json'));
+    this.keys = new JSONCollection('keys', path.join(dbDir, 'keys.json'));
+    this.analytics = new JSONCollection('analytics', path.join(dbDir, 'analytics.json'));
+    this.notifications = new JSONCollection('notifications', path.join(dbDir, 'notifications.json'));
+    this.logs = new JSONCollection('logs', path.join(dbDir, 'logs.json'));
+    
+    // Seed default admin once all collections load
+    Promise.all([
+      this.users.loadPromise,
+      this.keys.loadPromise,
+      this.analytics.loadPromise,
+      this.notifications.loadPromise,
+      this.logs.loadPromise
+    ]).then(() => {
+      this.initDefaults();
+    });
   }
 
   initDefaults() {
-    // Seed default admin if none exists
     const adminExists = this.users.findOne({ role: 'admin' });
     if (!adminExists) {
       this.users.insert({
