@@ -30,24 +30,71 @@
     ],
     "extraResources": [],
     "win": {
-      "target": ["nsis", "portable"],
-      "icon": "assets/logo.png"
+      "target": [
+        {
+          "target": "nsis",
+          "arch": ["x64"]
+        },
+        {
+          "target": "portable",
+          "arch": ["x64"]
+        }
+      ],
+      "icon": "assets/logo.png",
+      "sign": false,
+      "signAndEditExecutable": false
     },
     "nsis": {
       "oneClick": false,
+      "perMachine": false,
       "allowToChangeInstallationDirectory": true,
       "createDesktopShortcut": true,
-      "shortcutName": "ChronoCode"
+      "createStartMenuShortcut": true,
+      "shortcutName": "ChronoCode",
+      "installerIcon": "assets/logo.png",
+      "uninstallerIcon": "assets/logo.png",
+      "installerHeaderIcon": "assets/logo.png",
+      "deleteAppDataOnUninstall": false,
+      "upgradeBehavior": "install",
+      "runsAtStartup": false,
+      "menuCategory": true
     },
     "mac": {
-      "target": ["dmg"],
+      "target": [
+        {
+          "target": "dmg",
+          "arch": ["x64", "arm64"]
+        }
+      ],
       "icon": "assets/logo.png",
-      "category": "public.app-category.developer-tools"
+      "category": "public.app-category.developer-tools",
+      "darkModeSupport": true
+    },
+    "dmg": {
+      "contents": [
+        { "x": 130, "y": 220 },
+        { "x": 410, "y": 220, "type": "link", "path": "/Applications" }
+      ]
     },
     "linux": {
-      "target": ["AppImage", "deb"],
+      "target": [
+        {
+          "target": "AppImage",
+          "arch": ["x64"]
+        },
+        {
+          "target": "deb",
+          "arch": ["x64"]
+        },
+        {
+          "target": "rpm",
+          "arch": ["x64"]
+        }
+      ],
       "icon": "assets/logo.png",
-      "category": "Development"
+      "category": "Development",
+      "synopsis": "Automatic Code Versioning Desktop App",
+      "description": "ChronoCode — The time-traveling development engine. Automatically records your file changes and creates version snapshots."
     }
   },
   "devDependencies": {
