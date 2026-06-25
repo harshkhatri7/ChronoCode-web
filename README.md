@@ -17,7 +17,6 @@
 [![Windows](https://img.shields.io/badge/Windows-0078D4?style=for-the-badge&logo=windows&logoColor=white)](https://chronocode-app.vercel.app/download.html)
 [![macOS](https://img.shields.io/badge/macOS-000000?style=for-the-badge&logo=apple&logoColor=white)](https://chronocode-app.vercel.app/download.html)
 [![Linux](https://img.shields.io/badge/Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black)](https://chronocode-app.vercel.app/download.html)
-[![Android](https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white)](https://chronocode-app.vercel.app/download.html)
 
 <br />
 
@@ -56,11 +55,6 @@ ChronoCode is a **universal time-traveling development engine** that watches you
 | **macOS** | [Download .dmg](https://chronocode-app.vercel.app/download.html) |
 | **Linux** | [Download .AppImage](https://chronocode-app.vercel.app/download.html) |
 
-### Mobile
-
-| Platform | Link |
-|----------|------|
-| **Android Admin** | [Download APK](https://chronocode-app.vercel.app/public/chronocode-admin-debug.apk) |
 
 ---
 
