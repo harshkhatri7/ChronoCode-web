@@ -1,0 +1,205 @@
+﻿<!DOCTYPE html>
+<html lang="en" class="select-none">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ChronoCode â€” Update Required</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      body {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: var(--color-onyx);
+        margin: 0;
+      }
+      .update-card {
+        background-color: var(--color-charcoal);
+        border: 1px solid var(--color-graphite);
+        border-radius: 12px;
+        padding: 40px;
+        max-width: 480px;
+        width: 90%;
+        text-align: center;
+        box-shadow: var(--shadow-md), var(--shadow-inset);
+        z-index: 10;
+        position: relative;
+      }
+      .update-logo-wrapper {
+        margin-bottom: 24px;
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background-color: var(--color-obsidian);
+        border: 1px solid var(--color-steel);
+        position: relative;
+      }
+      .update-logo-wrapper svg {
+        width: 44px;
+        height: 44px;
+      }
+      .update-title {
+        font-family: var(--font-display);
+        font-size: 24px;
+        font-weight: 700;
+        color: var(--color-snow);
+        margin-bottom: 12px;
+        letter-spacing: -0.02em;
+      }
+      .update-description {
+        font-size: 13px;
+        color: var(--color-fog);
+        line-height: 1.5;
+        margin-bottom: 28px;
+      }
+      .version-badge-container {
+        display: flex;
+        justify-content: center;
+        gap: 16px;
+        margin-bottom: 32px;
+      }
+      .version-badge {
+        background-color: var(--color-obsidian);
+        border: 1px solid var(--color-graphite);
+        border-radius: 8px;
+        padding: 8px 16px;
+        flex: 1;
+        max-width: 140px;
+      }
+      .version-badge-label {
+        font-size: 9px;
+        font-weight: 600;
+        color: var(--color-slate);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 4px;
+        display: block;
+      }
+      .version-badge-val {
+        font-family: var(--font-mono);
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--color-snow);
+      }
+      .version-badge-val.new-version {
+        color: var(--color-acid-lime);
+      }
+      .btn-primary-action {
+        width: 100%;
+        background-color: var(--color-snow);
+        color: var(--color-onyx);
+        border: none;
+        border-radius: 8px;
+        padding: 12px 24px;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        text-decoration: none;
+        transition: all 0.15s ease;
+      }
+      .btn-primary-action:hover {
+        background-color: var(--color-acid-lime);
+      }
+      .btn-secondary-action {
+        display: inline-block;
+        margin-top: 16px;
+        font-size: 11px;
+        color: var(--color-slate);
+        text-decoration: none;
+        transition: color 0.15s ease;
+        cursor: pointer;
+      }
+      .btn-secondary-action:hover {
+        color: var(--color-snow);
+      }
+      /* Custom frameless close button in top right */
+      .quit-app-btn {
+        position: absolute;
+        top: 16px;
+        right: 16px;
+        background: transparent;
+        border: none;
+        color: var(--color-slate);
+        font-size: 20px;
+        cursor: pointer;
+        transition: color 0.15s ease;
+      }
+      .quit-app-btn:hover {
+        color: var(--color-crimson);
+      }
+    </style>
+  </head>
+  <body class="bg-[#08090a] text-[#f7f8f8] font-sans antialiased relative">
+    
+    <div class="grid-backdrop"></div>
+    <div class="ambient-orb"></div>
+
+    <div class="update-card glass">
+      <button class="quit-app-btn" id="quitAppBtn" title="Quit ChronoCode">&times;</button>
+      
+      <div class="update-logo-wrapper">
+        <svg viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="256" cy="256" r="200" fill="none" stroke="#ffffff" stroke-width="20" stroke-linecap="round"/>
+          <line x1="256" y1="256" x2="256" y2="110" stroke="#ffffff" stroke-width="16" stroke-linecap="round"/>
+          <line x1="256" y1="256" x2="370" y2="190" stroke="#ffffff" stroke-width="10" stroke-linecap="round"/>
+          <circle cx="256" cy="256" r="12" fill="#ffffff"/>
+        </svg>
+      </div>
+
+      <h1 class="update-title">Update Required</h1>
+      <p class="update-description">
+        A new version of ChronoCode is available. To keep using ChronoCode, you must update to the latest release.
+      </p>
+
+      <div class="version-badge-container">
+        <div class="version-badge">
+          <span class="version-badge-label">Installed</span>
+          <span class="version-badge-val" id="localVer">3.0.0</span>
+        </div>
+        <div class="version-badge">
+          <span class="version-badge-label">Latest</span>
+          <span class="version-badge-val new-version" id="remoteVer">---</span>
+        </div>
+      </div>
+
+      <a id="downloadBtn" class="btn-primary-action" href="https://github.com/harshkhatri7/ChronoCode" target="_blank">
+        Get Latest Version
+      </a>
+      
+      <a class="btn-secondary-action" id="quitLink">Quit Application</a>
+    </div>
+
+    <script>
+      // Extract versions from URL parameters
+      const params = new URLSearchParams(window.location.search);
+      const local = params.get('local') || '1.0.0';
+      const remote = params.get('remote') || 'Unknown';
+      
+      document.getElementById('localVer').textContent = local;
+      document.getElementById('remoteVer').textContent = remote;
+      
+      // Setup IPC handlers to close window
+      const closeApp = () => {
+        if (window.electronAPI && typeof window.electronAPI.close === 'function') {
+          window.electronAPI.close();
+        } else {
+          window.close();
+        }
+      };
+      document.getElementById('quitAppBtn').addEventListener('click', closeApp);
+      document.getElementById('quitLink').addEventListener('click', closeApp);
+    </script>
+  </body>
+</html>

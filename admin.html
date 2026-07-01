@@ -1,0 +1,949 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ChronoCode Admin Panel</title>
+  <link rel="icon" type="image/svg+xml" href="assets/logo.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/lucide-static@latest/font/lucide.css">
+  <style>
+    :root {
+      --bg: #050508;
+      --bg-card: rgba(12,13,20,0.85);
+      --bg-hover: rgba(255,255,255,0.04);
+      --blue: #6366f1;
+      --green: #22c55e;
+      --red: #ef4444;
+      --amber: #f59e0b;
+      --cyan: #06b6d4;
+      --text: #f0f2f5;
+      --muted: #6b7280;
+      --border: rgba(255,255,255,0.06);
+      --glow: 0 0 40px rgba(99,102,241,0.15);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow: hidden;
+    }
+
+    /* â”€â”€â”€ MOTION BACKGROUND â”€â”€â”€ */
+    .bg-layer { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+    .bg-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(100px);
+      opacity: 0.4;
+      animation: float 20s ease-in-out infinite;
+    }
+    .bg-orb:nth-child(1) { width: 500px; height: 500px; background: rgba(99,102,241,0.12); top: -10%; left: 10%; animation-delay: 0s; }
+    .bg-orb:nth-child(2) { width: 400px; height: 400px; background: rgba(34,197,94,0.08); bottom: -15%; right: 5%; animation-delay: -7s; }
+    .bg-orb:nth-child(3) { width: 350px; height: 350px; background: rgba(6,182,212,0.08); top: 40%; left: 50%; animation-delay: -14s; }
+    @keyframes float {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      25% { transform: translate(40px, -30px) scale(1.05); }
+      50% { transform: translate(-20px, 50px) scale(0.95); }
+      75% { transform: translate(30px, 20px) scale(1.02); }
+    }
+    .bg-grid {
+      position: absolute; inset: 0;
+      background-image: linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+    .bg-scanline {
+      position: absolute; left: 0; width: 100%; height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(99,102,241,0.3), rgba(34,197,94,0.3), transparent);
+      animation: scan 8s linear infinite;
+    }
+    @keyframes scan {
+      0% { top: -2px; opacity: 0; }
+      5% { opacity: 1; }
+      95% { opacity: 1; }
+      100% { top: 100%; opacity: 0; }
+    }
+
+    .app-layer { position: relative; z-index: 1; height: 100vh; display: flex; flex-direction: column; }
+
+    /* â”€â”€â”€ LOGIN â”€â”€â”€ */
+    .login-overlay {
+      position: fixed; inset: 0; z-index: 999;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--bg);
+    }
+    .login-overlay.hidden { display: none; }
+    .login-card {
+      width: 90%; max-width: 380px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 48px 36px;
+      text-align: center;
+      backdrop-filter: blur(20px);
+      box-shadow: var(--glow), 0 20px 60px rgba(0,0,0,0.6);
+      animation: fadeIn 0.5s ease;
+    }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: none; } }
+    .login-card .logo-icon {
+      width: 56px; height: 56px; margin: 0 auto 20px;
+      background: linear-gradient(135deg, var(--blue), #4f46e5);
+      border-radius: 16px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px; color: #fff;
+      box-shadow: 0 4px 20px rgba(99,102,241,0.3);
+    }
+    .login-card h2 { font-size: 22px; font-weight: 800; margin-bottom: 6px; }
+    .login-card p { font-size: 13px; color: var(--muted); margin-bottom: 28px; }
+    .input-group { margin-bottom: 14px; text-align: left; }
+    .input-group label { display: block; font-size: 12px; font-weight: 600; color: var(--muted); margin-bottom: 6px; }
+    .input-group input {
+      width: 100%; padding: 12px 14px;
+      background: rgba(0,0,0,0.4); border: 1px solid var(--border);
+      border-radius: 10px; color: #fff; font-size: 14px; font-family: inherit;
+      transition: border-color 0.2s;
+    }
+    .input-group input:focus { outline: none; border-color: var(--blue); }
+    .btn-login {
+      width: 100%; padding: 13px; margin-top: 8px;
+      background: linear-gradient(135deg, var(--blue), #4f46e5);
+      color: #fff; border: none; border-radius: 10px;
+      font-size: 14px; font-weight: 700; cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn-login:hover { transform: translateY(-1px); box-shadow: 0 4px 20px rgba(99,102,241,0.4); }
+    .btn-login:active { transform: translateY(0); }
+    .login-error { color: var(--red); font-size: 12px; margin-top: 10px; display: none; }
+
+    /* â”€â”€â”€ HEADER â”€â”€â”€ */
+    .header {
+      height: 56px;
+      background: rgba(8,9,14,0.8);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 24px;
+      flex-shrink: 0;
+    }
+    .header-brand { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 16px; }
+    .header-brand .badge-admin {
+      background: linear-gradient(135deg, var(--blue), #4f46e5);
+      color: #fff; font-size: 10px; font-weight: 800;
+      padding: 3px 8px; border-radius: 6px; letter-spacing: 0.5px;
+    }
+    .btn-logout {
+      background: rgba(239,68,68,0.1); color: var(--red);
+      border: 1px solid rgba(239,68,68,0.2);
+      padding: 8px 16px; border-radius: 8px;
+      font-size: 12px; font-weight: 600; cursor: pointer;
+      display: flex; align-items: center; gap: 6px;
+      transition: all 0.2s;
+    }
+    .btn-logout:hover { background: var(--red); color: #fff; }
+
+    /* â”€â”€â”€ LAYOUT â”€â”€â”€ */
+    .layout { display: flex; flex: 1; overflow: hidden; }
+    .sidebar {
+      width: 220px; flex-shrink: 0;
+      background: rgba(8,9,14,0.6);
+      border-right: 1px solid var(--border);
+      padding: 16px 10px;
+      display: flex; flex-direction: column; gap: 4px;
+    }
+    .nav-item {
+      padding: 10px 14px; border-radius: 10px;
+      font-size: 13px; font-weight: 600; color: var(--muted);
+      cursor: pointer; display: flex; align-items: center; gap: 10px;
+      transition: all 0.15s; user-select: none;
+    }
+    .nav-item:hover { background: var(--bg-hover); color: var(--text); }
+    .nav-item.active { background: rgba(99,102,241,0.1); color: var(--blue); }
+    .nav-item i { font-size: 16px; }
+    .sidebar-footer { margin-top: auto; padding: 12px 14px; border-top: 1px solid var(--border); }
+    .sidebar-footer .version { font-size: 11px; color: var(--muted); }
+
+    .main { flex: 1; overflow-y: auto; padding: 28px; }
+    .main::-webkit-scrollbar { width: 6px; }
+    .main::-webkit-scrollbar-track { background: transparent; }
+    .main::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 3px; }
+
+    .tab { display: none; animation: fadeUp 0.3s ease; }
+    .tab.active { display: block; }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+    .tab-title { font-size: 22px; font-weight: 800; margin-bottom: 24px; }
+
+    /* â”€â”€â”€ STAT CARDS â”€â”€â”€ */
+    .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-bottom: 28px; }
+    .stat {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 14px; padding: 20px;
+      backdrop-filter: blur(12px);
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .stat:hover { border-color: rgba(255,255,255,0.1); transform: translateY(-2px); }
+    .stat-label { font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+    .stat-value { font-size: 28px; font-weight: 800; margin-top: 6px; }
+    .stat-icon { float: right; width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+    .stat-icon.blue { background: rgba(99,102,241,0.1); color: var(--blue); }
+    .stat-icon.green { background: rgba(34,197,94,0.1); color: var(--green); }
+    .stat-icon.amber { background: rgba(245,158,11,0.1); color: var(--amber); }
+    .stat-icon.red { background: rgba(239,68,68,0.1); color: var(--red); }
+    .stat-icon.cyan { background: rgba(6,182,212,0.1); color: var(--cyan); }
+
+    /* â”€â”€â”€ TABLE â”€â”€â”€ */
+    .table-wrap {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 14px; overflow: hidden;
+      backdrop-filter: blur(12px);
+    }
+    .table-wrap table { min-width: 600px; }
+    .table-header { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; border-bottom: 1px solid var(--border); flex-wrap: wrap; gap: 8px; }
+    .table-header h3 { font-size: 14px; font-weight: 700; }
+    table { width: 100%; border-collapse: collapse; }
+    th { padding: 12px 16px; text-align: left; font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid var(--border); background: rgba(0,0,0,0.2); white-space: nowrap; }
+    td { padding: 12px 16px; font-size: 13px; border-bottom: 1px solid var(--border); }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: rgba(255,255,255,0.015); }
+
+    /* â”€â”€â”€ BADGES â”€â”€â”€ */
+    .badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; border-radius: 6px; font-size: 11px; font-weight: 700; text-transform: uppercase; }
+    .badge-admin { background: rgba(99,102,241,0.15); color: var(--blue); }
+    .badge-pro { background: rgba(245,158,11,0.15); color: var(--amber); }
+    .badge-free { background: rgba(255,255,255,0.06); color: var(--muted); }
+    .badge-active { background: rgba(34,197,94,0.15); color: var(--green); }
+    .badge-banned { background: rgba(239,68,68,0.15); color: var(--red); }
+    .badge-online { background: rgba(34,197,94,0.15); color: var(--green); }
+    .badge-online::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+    /* â”€â”€â”€ BUTTONS â”€â”€â”€ */
+    .btn {
+      padding: 8px 14px; border-radius: 8px; font-size: 12px; font-weight: 600;
+      cursor: pointer; border: none; transition: all 0.15s;
+      display: inline-flex; align-items: center; gap: 6px;
+    }
+    .btn-blue { background: var(--blue); color: #fff; }
+    .btn-blue:hover { background: #5558e8; }
+    .btn-green { background: rgba(34,197,94,0.15); color: var(--green); border: 1px solid rgba(34,197,94,0.2); }
+    .btn-green:hover { background: rgba(34,197,94,0.25); }
+    .btn-red { background: rgba(239,68,68,0.1); color: var(--red); border: 1px solid rgba(239,68,68,0.15); }
+    .btn-red:hover { background: rgba(239,68,68,0.2); }
+    .btn-ghost { background: rgba(255,255,255,0.05); color: var(--text); border: 1px solid var(--border); }
+    .btn-ghost:hover { background: rgba(255,255,255,0.08); }
+    .btn-sm { padding: 6px 10px; font-size: 11px; }
+
+    /* â”€â”€â”€ FORMS â”€â”€â”€ */
+    .form-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 14px; padding: 28px;
+      backdrop-filter: blur(12px); max-width: 500px;
+    }
+    .form-card h3 { font-size: 16px; font-weight: 700; margin-bottom: 20px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+    .form-field { margin-bottom: 14px; }
+    .form-field label { display: block; font-size: 12px; font-weight: 600; color: var(--muted); margin-bottom: 6px; }
+    .form-field input, .form-field select, .form-field textarea {
+      width: 100%; padding: 10px 12px;
+      background: rgba(0,0,0,0.3); border: 1px solid var(--border);
+      border-radius: 8px; color: #fff; font-size: 13px; font-family: inherit;
+    }
+    .form-field input:focus, .form-field select:focus, .form-field textarea:focus {
+      outline: none; border-color: var(--blue);
+    }
+
+    /* â”€â”€â”€ EMPTY STATE â”€â”€â”€ */
+    .empty { text-align: center; padding: 40px 20px; color: var(--muted); }
+    .empty i { font-size: 32px; margin-bottom: 12px; display: block; opacity: 0.3; }
+    .empty p { font-size: 13px; }
+
+    /* â”€â”€â”€ TOAST â”€â”€â”€ */
+    .toast {
+      position: fixed; bottom: 24px; right: 24px; z-index: 9999;
+      padding: 14px 20px; border-radius: 12px;
+      font-size: 13px; font-weight: 600;
+      backdrop-filter: blur(16px);
+      transform: translateY(100px); opacity: 0;
+      transition: all 0.3s ease;
+    }
+    .toast.show { transform: translateY(0); opacity: 1; }
+    .toast-success { background: rgba(34,197,94,0.15); color: var(--green); border: 1px solid rgba(34,197,94,0.2); }
+    .toast-error { background: rgba(239,68,68,0.15); color: var(--red); border: 1px solid rgba(239,68,68,0.2); }
+
+    /* â”€â”€â”€ MOBILE â”€â”€â”€ */
+    @media (max-width: 768px) {
+      .sidebar { display: none; }
+      .stats { grid-template-columns: 1fr 1fr; }
+      .form-row { grid-template-columns: 1fr; }
+      .main { padding: 16px; }
+      .login-card { padding: 32px 20px; }
+      .table-header { padding: 12px 14px; }
+      th { padding: 8px 10px; font-size: 10px; }
+      td { padding: 8px 10px; font-size: 12px; }
+      .admin-grid-2col { grid-template-columns: 1fr !important; }
+      .admin-grid-equal { grid-template-columns: 1fr !important; }
+    }
+    @media (max-width: 480px) {
+      .stats { grid-template-columns: 1fr; }
+      .login-card { width: 95%; padding: 24px 16px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- MOTION BACKGROUND -->
+  <div class="bg-layer">
+    <div class="bg-orb"></div>
+    <div class="bg-orb"></div>
+    <div class="bg-orb"></div>
+    <div class="bg-grid"></div>
+    <div class="bg-scanline"></div>
+  </div>
+
+  <!-- LOGIN -->
+  <div class="login-overlay" id="loginOverlay">
+    <div class="login-card">
+      <div class="logo-icon"><i class="icon-shield"></i></div>
+      <h2>ChronoCode Admin</h2>
+      <p>Secure access to your control panel</p>
+      <form id="loginForm">
+        <div class="input-group">
+          <label>Password</label>
+          <input type="password" id="loginPass" placeholder="Enter admin password" autocomplete="current-password">
+        </div>
+        <button type="submit" class="btn-login">Sign In</button>
+        <div class="login-error" id="loginError">Invalid password</div>
+      </form>
+    </div>
+  </div>
+
+  <!-- APP -->
+  <div class="app-layer" id="appLayer" style="display:none;">
+    <!-- HEADER -->
+    <div class="header">
+      <div class="header-brand">
+        <i class="icon-terminal" style="font-size:20px; color:var(--blue);"></i>
+        ChronoCode
+        <span class="badge-admin">ADMIN</span>
+      </div>
+      <button class="btn-logout" onclick="logout()"><i class="icon-log-out" style="font-size:14px;"></i> Logout</button>
+    </div>
+
+    <div class="layout">
+      <!-- SIDEBAR -->
+      <nav class="sidebar">
+        <div class="nav-item active" data-tab="overview" onclick="switchTab(this)">
+          <i class="icon-layout-dashboard"></i> Overview
+        </div>
+        <div class="nav-item" data-tab="users" onclick="switchTab(this)">
+          <i class="icon-users"></i> Users
+        </div>
+        <div class="nav-item" data-tab="keys" onclick="switchTab(this)">
+          <i class="icon-key"></i> License Keys
+        </div>
+        <div class="nav-item" data-tab="plans" onclick="switchTab(this)">
+          <i class="icon-gem"></i> Subscriptions
+        </div>
+        <div class="nav-item" data-tab="analytics" onclick="switchTab(this)">
+          <i class="icon-bar-chart-3"></i> Analytics
+        </div>
+        <div class="nav-item" data-tab="broadcast" onclick="switchTab(this)">
+          <i class="icon-send"></i> Broadcast
+        </div>
+        <div class="nav-item" data-tab="logs" onclick="switchTab(this)">
+          <i class="icon-file-text"></i> Logs
+        </div>
+        <div class="sidebar-footer">
+          <div class="version">v1.0.0</div>
+        </div>
+      </nav>
+
+      <!-- CONTENT -->
+      <div class="main" id="mainContent">
+
+        <!-- OVERVIEW -->
+        <div class="tab active" id="tab-overview">
+          <div class="tab-title">Dashboard Overview</div>
+          <div class="stats">
+            <div class="stat">
+              <div class="stat-icon blue"><i class="icon-users"></i></div>
+              <div class="stat-label">Total Users</div>
+              <div class="stat-value" id="sTotal">0</div>
+            </div>
+            <div class="stat">
+              <div class="stat-icon amber"><i class="icon-crown"></i></div>
+              <div class="stat-label">Pro Members</div>
+              <div class="stat-value" style="color:var(--amber)" id="sPro">0</div>
+            </div>
+            <div class="stat">
+              <div class="stat-icon green"><i class="icon-activity"></i></div>
+              <div class="stat-label">Online Now</div>
+              <div class="stat-value" style="color:var(--green)" id="sOnline">0</div>
+            </div>
+            <div class="stat">
+              <div class="stat-icon red"><i class="icon-ban"></i></div>
+              <div class="stat-label">Banned</div>
+              <div class="stat-value" style="color:var(--red)" id="sBanned">0</div>
+            </div>
+            <div class="stat">
+              <div class="stat-icon cyan"><i class="icon-dollar-sign"></i></div>
+              <div class="stat-label">Revenue</div>
+              <div class="stat-value" style="color:var(--cyan)" id="sRevenue">$0</div>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <div class="table-header"><h3><i class="icon-rss" style="margin-right:6px;font-size:14px;"></i> Live Sessions</h3></div>
+            <table>
+              <thead><tr><th>User</th><th>Platform</th><th>Active File</th><th>Status</th></tr></thead>
+              <tbody id="sessionsBody"><tr><td colspan="4" class="empty"><i class="icon-wifi-off"></i><p>No active sessions</p></td></tr></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- USERS -->
+        <div class="tab" id="tab-users">
+          <div class="tab-title">User Management</div>
+          <div class="table-wrap">
+            <div class="table-header">
+              <h3>All Users</h3>
+              <input type="text" id="userSearch" placeholder="Search email..." style="background:rgba(0,0,0,0.3);border:1px solid var(--border);border-radius:8px;padding:8px 12px;color:#fff;font-size:12px;width:220px;" oninput="renderUsers()">
+            </div>
+            <table>
+              <thead><tr><th>Email</th><th>Name</th><th>Role</th><th>Status</th><th>Actions</th></tr></thead>
+              <tbody id="usersBody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- KEYS -->
+        <div class="tab" id="tab-keys">
+          <div class="tab-title">License Key Manager</div>
+          <div style="display:grid; grid-template-columns: 1fr 1.8fr; gap: 20px;" class="admin-grid-2col">
+            <div>
+              <div class="form-card">
+                <h3><i class="icon-sparkles" style="margin-right:6px;font-size:16px;color:var(--amber);"></i> Generate Keys</h3>
+                <form id="keyForm">
+                  <div class="form-row">
+                    <div class="form-field">
+                      <label>Quantity</label>
+                      <input type="number" id="keyQty" value="1" min="1" max="50">
+                    </div>
+                    <div class="form-field">
+                      <label>Key Expiry (Days)</label>
+                      <input type="number" id="keyExpiry" value="30" min="1">
+                    </div>
+                  </div>
+                  <div class="form-field">
+                    <label>Key Type</label>
+                    <select id="keyType" onchange="toggleKeyTypeFields()">
+                      <option value="subscription">Standard Subscription Key</option>
+                      <option value="custom">Custom Features Key</option>
+                    </select>
+                  </div>
+                  <div class="form-field" id="planLinkField">
+                    <label>Link to Plan</label>
+                    <select id="keyPlanId">
+                      <!-- Dynamically filled -->
+                    </select>
+                  </div>
+                  <div id="customFeaturesField" style="display:none; background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 8px; padding: 12px; margin-bottom: 14px;">
+                    <label style="display:block; font-size:11px; font-weight:600; color:var(--muted); margin-bottom:8px; text-transform:uppercase;">Custom Plan Features</label>
+                    <div style="display:grid; grid-template-columns: 1fr; gap: 8px;">
+                      <label style="display:flex; align-items:center; gap:8px; font-size:12px; cursor:pointer;">
+                        <input type="checkbox" id="keyFeatRestore" checked style="width:14px; height:14px; cursor:pointer;"> Restore Snapshot
+                      </label>
+                      <label style="display:flex; align-items:center; gap:8px; font-size:12px; cursor:pointer;">
+                        <input type="checkbox" id="keyFeatDiff" checked style="width:14px; height:14px; cursor:pointer;"> Diff Timeline Analyzer
+                      </label>
+                      <label style="display:flex; align-items:center; gap:8px; font-size:12px; cursor:pointer;">
+                        <input type="checkbox" id="keyFeatExport" checked style="width:14px; height:14px; cursor:pointer;"> Backup Export/Import
+                      </label>
+                      <label style="display:flex; align-items:center; gap:8px; font-size:12px; cursor:pointer;">
+                        <input type="checkbox" id="keyFeatCleanup" checked style="width:14px; height:14px; cursor:pointer;"> Snapshot Auto-Cleanup
+                      </label>
+                    </div>
+                    <div class="form-field" style="margin-top:12px; margin-bottom:0;">
+                      <label>Redeem Subscription Duration (Days)</label>
+                      <input type="number" id="keyDurationDays" value="30" min="1">
+                    </div>
+                  </div>
+                  <button type="submit" class="btn btn-blue" style="width:100%;justify-content:center;padding:12px;"><i class="icon-plus" style="font-size:14px;"></i> Generate</button>
+                </form>
+              </div>
+            </div>
+            <div>
+              <div class="table-wrap">
+                <div class="table-header"><h3><i class="icon-key" style="margin-right:6px;font-size:14px;"></i> All Keys</h3></div>
+                <table>
+                  <thead><tr><th>Key</th><th>Status</th><th>Expires</th><th>Redeemed By</th><th>Actions</th></tr></thead>
+                  <tbody id="keysBody"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SUBSCRIPTIONS -->
+        <div class="tab" id="tab-plans">
+          <div class="tab-title">Subscription Plans</div>
+          <div style="display:grid; grid-template-columns: 1fr 1.8fr; gap: 20px;" class="admin-grid-2col">
+            <div>
+              <div class="form-card">
+                <h3><i class="icon-gem" style="margin-right:6px;font-size:16px;color:var(--blue);"></i> Save Plan</h3>
+                <form id="planForm" onsubmit="handlePlanSubmit(event)">
+                  <input type="hidden" id="planFormMode" value="create">
+                  <div class="form-field">
+                    <label>Plan ID (Lowercase, no spaces)</label>
+                    <input type="text" id="planId" placeholder="e.g. premium" required>
+                  </div>
+                  <div class="form-field">
+                    <label>Plan Name</label>
+                    <input type="text" id="planName" placeholder="e.g. Premium Subscription" required>
+                  </div>
+                  <div class="form-row">
+                    <div class="form-field">
+                      <label>Duration Display</label>
+                      <input type="text" id="planDuration" placeholder="e.g. Monthly" required>
+                    </div>
+                    <div class="form-field">
+                      <label>Original Price ($)</label>
+                      <input type="number" id="planPrice" value="0" min="0" step="any">
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <div class="form-field">
+                      <label>Discounted Price ($)</label>
+                      <input type="number" id="planDiscountedPrice" value="0" min="0" step="any">
+                    </div>
+                    <div class="form-field">
+                      <label>Discount Off Text</label>
+                      <input type="text" id="planDiscountOff" placeholder="e.g. 20% OFF (optional)">
+                    </div>
+                  </div>
+                  <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 8px; padding: 12px; margin-bottom: 14px;">
+                    <label style="display:block; font-size:11px; font-weight:600; color:var(--muted); margin-bottom:8px; text-transform:uppercase;">Enabled Features</label>
+                    <div style="display:grid; grid-template-columns: 1fr; gap: 8px;">
+                      <label style="display:flex; align-items:center; gap:8px; font-size:12px; cursor:pointer;">
+                        <input type="checkbox" id="featRestore" style="width:14px; height:14px; cursor:pointer;"> Restore Snapshot
+                      </label>
+                      <label style="display:flex; align-items:center; gap:8px; font-size:12px; cursor:pointer;">
+                        <input type="checkbox" id="featDiff" style="width:14px; height:14px; cursor:pointer;"> Diff Timeline Analyzer
+                      </label>
+                      <label style="display:flex; align-items:center; gap:8px; font-size:12px; cursor:pointer;">
+                        <input type="checkbox" id="featExport" style="width:14px; height:14px; cursor:pointer;"> Backup Export/Import
+                      </label>
+                      <label style="display:flex; align-items:center; gap:8px; font-size:12px; cursor:pointer;">
+                        <input type="checkbox" id="featCleanup" style="width:14px; height:14px; cursor:pointer;"> Snapshot Auto-Cleanup
+                      </label>
+                    </div>
+                  </div>
+                  <button type="submit" class="btn btn-blue" style="width:100%;justify-content:center;padding:12px;"><i class="icon-save" style="font-size:14px;"></i> Save Plan</button>
+                  <button type="button" id="btnCancelPlanEdit" class="btn btn-ghost btn-sm" style="width:100%;justify-content:center;margin-top:8px;display:none;" onclick="cancelPlanEdit()">Cancel Edit</button>
+                </form>
+              </div>
+            </div>
+            <div>
+              <div class="table-wrap">
+                <div class="table-header"><h3><i class="icon-list" style="margin-right:6px;font-size:14px;"></i> Active Plans</h3></div>
+                <table>
+                  <thead><tr><th>ID</th><th>Name</th><th>Duration</th><th>Price</th><th>Discounted</th><th>Features</th><th>Actions</th></tr></thead>
+                  <tbody id="plansBody"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ANALYTICS -->
+        <div class="tab" id="tab-analytics">
+          <div class="tab-title">Telemetry Analytics</div>
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 20px;" class="admin-grid-equal">
+            <div class="table-wrap">
+              <div class="table-header"><h3>Platforms</h3></div>
+              <table><thead><tr><th>OS</th><th>Count</th></tr></thead><tbody id="platBody"></tbody></table>
+            </div>
+            <div class="table-wrap">
+              <div class="table-header"><h3>Browsers</h3></div>
+              <table><thead><tr><th>Browser</th><th>Count</th></tr></thead><tbody id="browBody"></tbody></table>
+            </div>
+          </div>
+        </div>
+
+        <!-- BROADCAST -->
+        <div class="tab" id="tab-broadcast">
+          <div class="tab-title">Notification Broadcaster</div>
+          <div class="form-card">
+            <h3><i class="icon-send" style="margin-right:6px;font-size:16px;color:var(--blue);"></i> Send Notification</h3>
+            <form id="broadcastForm">
+              <div class="form-field">
+                <label>Title</label>
+                <input type="text" id="notifTitle" placeholder="Notification title" required>
+              </div>
+              <div class="form-field">
+                <label>Message</label>
+                <textarea id="notifMsg" rows="4" placeholder="Write your message..." required style="resize:none;"></textarea>
+              </div>
+              <div class="form-field">
+                <label>Target</label>
+                <select id="notifTarget"><option value="all">All Users</option><option value="pro">Pro Users Only</option></select>
+              </div>
+              <button type="submit" class="btn btn-blue" style="width:100%;justify-content:center;padding:12px;"><i class="icon-send" style="font-size:14px;"></i> Dispatch</button>
+            </form>
+          </div>
+        </div>
+
+        <!-- LOGS -->
+        <div class="tab" id="tab-logs">
+          <div class="tab-title">Security Logs</div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Time</th><th>User</th><th>Action</th><th>Details</th></tr></thead>
+              <tbody id="logsBody"></tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const API_BASE = '/api/admin';
+    let adminSessionToken = localStorage.getItem('cc_admin_session_token') || null;
+    let pollTimer = null;
+    let localUsers = [], localKeys = [], localPlans = [];
+
+    // Detect if running on Vercel (cloud) or local
+    const isCloud = window.location.hostname.includes('vercel.app') || window.location.hostname.includes('chronocode');
+
+    // â”€â”€â”€ INIT â”€â”€â”€
+    (function init() {
+      if (localStorage.getItem('cc_admin_session') === 'active' && adminSessionToken) enterDashboard();
+    })();
+
+    document.getElementById('loginForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      var p = document.getElementById('loginPass').value;
+      try {
+        var r = await fetch(API_BASE + '/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ password: p })
+        });
+        var data = await r.json();
+        if (data && data.success && data.token) {
+          adminSessionToken = data.token;
+          localStorage.setItem('cc_admin_session_token', data.token);
+          localStorage.setItem('cc_admin_session', 'active');
+          document.getElementById('loginError').style.display = 'none';
+          enterDashboard();
+        } else {
+          document.getElementById('loginError').style.display = 'block';
+        }
+      } catch(ex) {
+        document.getElementById('loginError').style.display = 'block';
+      }
+    });
+
+    function enterDashboard() {
+      document.getElementById('loginOverlay').classList.add('hidden');
+      document.getElementById('appLayer').style.display = 'flex';
+      fetchData();
+      if (pollTimer) clearInterval(pollTimer);
+      pollTimer = setInterval(fetchData, 15000);
+    }
+
+    function logout() {
+      localStorage.removeItem('cc_admin_session');
+      localStorage.removeItem('cc_admin_session_token');
+      adminSessionToken = null;
+      if (pollTimer) clearInterval(pollTimer);
+      document.getElementById('appLayer').style.display = 'none';
+      document.getElementById('loginOverlay').classList.remove('hidden');
+    }
+
+    function switchTab(el) {
+      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      el.classList.add('active');
+      document.getElementById('tab-' + el.dataset.tab).classList.add('active');
+    }
+
+    function toast(msg, type) {
+      var t = document.getElementById('toast');
+      t.textContent = msg;
+      t.className = 'toast toast-' + type + ' show';
+      setTimeout(function() { t.classList.remove('show'); }, 3000);
+    }
+
+    // â”€â”€â”€ API â”€â”€â”€
+    async function api(url, opts) {
+      try {
+        var headers = { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + adminSessionToken };
+        if (opts && opts.headers) Object.assign(headers, opts.headers);
+        var r = await fetch(API_BASE + url, Object.assign({}, opts || {}, { headers: headers }));
+        if (r.status === 401 || r.status === 403) { console.warn('Auth failed:', url); return null; }
+        return r.json();
+      } catch(e) { console.warn('API error:', url, e.message); return null; }
+    }
+
+    // â”€â”€â”€ FETCH DATA â”€â”€â”€
+    async function fetchData() {
+      try {
+        var stats = await api('/stats');
+        if (stats) {
+          document.getElementById('sTotal').textContent = stats.totalUsers || 0;
+          document.getElementById('sPro').textContent = stats.proUsers || 0;
+          document.getElementById('sOnline').textContent = stats.onlineUsersCount || 0;
+          document.getElementById('sBanned').textContent = stats.bannedUsers || 0;
+          document.getElementById('sRevenue').textContent = '$' + (stats.revenue || 0);
+        }
+
+        var sessions = await api('/sessions');
+        var sb = document.getElementById('sessionsBody');
+        if (sessions && sessions.length > 0) {
+          sb.innerHTML = sessions.map(function(s) {
+            return '<tr><td>' + esc(s.email) + '</td><td><span class="badge badge-free">' + esc(s.platform) + '</span></td><td style="font-family:monospace;font-size:12px;">' + esc(s.activeFile || '-') + '</td><td><span class="badge badge-online">Online</span></td></tr>';
+          }).join('');
+        } else {
+          sb.innerHTML = '<tr><td colspan="4" class="empty"><i class="icon-wifi-off"></i><p>No active sessions</p></td></tr>';
+        }
+
+        localUsers = await api('/users') || [];
+        renderUsers();
+
+        localKeys = await api('/keys') || [];
+        renderKeys();
+
+        localPlans = await api('/plans') || [];
+        renderPlans();
+        updatePlanDropdowns();
+
+        var logs = await api('/logs') || [];
+        var lb = document.getElementById('logsBody');
+        if (logs.length > 0) {
+          lb.innerHTML = logs.slice(0, 20).map(function(l) {
+            return '<tr><td style="font-size:12px;color:var(--muted);white-space:nowrap;">' + new Date(l.timestamp).toLocaleString() + '</td><td>' + esc(l.userId) + '</td><td><span class="badge badge-free">' + esc(l.action) + '</span></td><td style="font-size:12px;">' + esc(l.details) + '</td></tr>';
+          }).join('');
+        } else {
+          lb.innerHTML = '<tr><td colspan="4" class="empty"><i class="icon-file-text"></i><p>No logs yet</p></td></tr>';
+        }
+      } catch(e) { console.error('fetchData error:', e); }
+    }
+
+    function esc(s) { var d = document.createElement('div'); d.textContent = s || ''; return d.innerHTML; }
+
+    // â”€â”€â”€ USERS â”€â”€â”€
+    function renderUsers() {
+      var q = (document.getElementById('userSearch').value || '').toLowerCase();
+      var tb = document.getElementById('usersBody');
+      var list = localUsers.filter(function(u) { return u.email.toLowerCase().includes(q); });
+      if (list.length === 0) { tb.innerHTML = '<tr><td colspan="5" class="empty"><i class="icon-users"></i><p>No users found</p></td></tr>'; return; }
+      tb.innerHTML = list.map(function(u) {
+        var isPro = u.role === 'pro';
+        var isBanned = u.status === 'banned';
+        return '<tr><td>' + esc(u.email) + '</td><td>' + esc(u.name) + '</td><td><span class="badge badge-' + u.role + '">' + u.role + '</span></td><td><span class="badge badge-' + u.status + '">' + u.status + '</span></td><td style="white-space:nowrap;"><button class="btn btn-green btn-sm" onclick="toggleRole(\'' + esc(u.email) + '\',\'' + (isPro ? 'free' : 'pro') + '\')">' + (isPro ? 'Demote' : 'Promote') + '</button> <button class="btn btn-red btn-sm" onclick="toggleBan(\'' + esc(u.email) + '\',\'' + (isBanned ? 'active' : 'banned') + '\')">' + (isBanned ? 'Unban' : 'Ban') + '</button> <button class="btn btn-red btn-sm" onclick="delUser(\'' + esc(u.email) + '\')"><i class="icon-trash-2" style="font-size:12px;"></i></button></td></tr>';
+      }).join('');
+    }
+
+    async function toggleRole(email, role) {
+      await api('/users/role', { method: 'POST', body: JSON.stringify({ email: email, role: role }) });
+      toast('Role updated', 'success'); fetchData();
+    }
+    async function toggleBan(email, status) {
+      await api('/users/ban', { method: 'POST', body: JSON.stringify({ email: email, status: status }) });
+      toast('User ' + status, 'success'); fetchData();
+    }
+    async function delUser(email) {
+      if (!confirm('Delete ' + email + '?')) return;
+      await api('/users/' + encodeURIComponent(email), { method: 'DELETE' });
+      toast('User deleted', 'success'); fetchData();
+    }
+
+    // â”€â”€â”€ KEYS â”€â”€â”€
+    window.toggleKeyTypeFields = function() {
+      var type = document.getElementById('keyType').value;
+      if (type === 'custom') {
+        document.getElementById('planLinkField').style.display = 'none';
+        document.getElementById('customFeaturesField').style.display = 'block';
+      } else {
+        document.getElementById('planLinkField').style.display = 'block';
+        document.getElementById('customFeaturesField').style.display = 'none';
+      }
+    }
+
+    document.getElementById('keyForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      var qty = document.getElementById('keyQty').value;
+      var exp = document.getElementById('keyExpiry').value;
+      var type = document.getElementById('keyType').value;
+      var planId = document.getElementById('keyPlanId').value;
+      
+      var features = {
+        restoreSnapshot: document.getElementById('keyFeatRestore').checked,
+        diffSnapshot: document.getElementById('keyFeatDiff').checked,
+        exportSnapshot: document.getElementById('keyFeatExport').checked,
+        cleanupSnapshot: document.getElementById('keyFeatCleanup').checked,
+        maxFileSize: 104857600,
+        maxSnapshotSize: 524288000
+      };
+      var durationDays = document.getElementById('keyDurationDays').value;
+
+      await api('/keys/generate', { 
+        method: 'POST', 
+        body: JSON.stringify({ 
+          count: parseInt(qty), 
+          expiresDays: parseInt(exp),
+          type: type,
+          planId: planId,
+          features: type === 'custom' ? features : {},
+          durationDays: parseInt(durationDays)
+        }) 
+      });
+      toast(qty + ' key(s) generated', 'success'); fetchData();
+    });
+
+    function renderKeys() {
+      var tb = document.getElementById('keysBody');
+      if (!localKeys || localKeys.length === 0) { tb.innerHTML = '<tr><td colspan="5" class="empty"><i class="icon-key"></i><p>No keys yet</p></td></tr>'; return; }
+      tb.innerHTML = localKeys.slice(0, 30).map(function(k) {
+        var keyDetails = '';
+        if (k.type === 'custom') {
+          keyDetails = ' <span style="font-size:10px;background:rgba(255,193,7,0.15);color:#ffc107;padding:2px 6px;border-radius:4px;margin-left:4px;">Custom</span>';
+        } else if (k.planId) {
+          keyDetails = ' <span style="font-size:10px;background:rgba(33,150,243,0.15);color:#2196f3;padding:2px 6px;border-radius:4px;margin-left:4px;">' + esc(k.planId) + '</span>';
+        }
+        return '<tr><td style="font-family:monospace;font-weight:700;font-size:12px;">' + esc(k.key) + keyDetails + '</td><td><span class="badge badge-' + k.status + '">' + k.status + '</span></td><td style="font-size:12px;">' + new Date(k.expiresAt).toLocaleDateString() + '</td><td>' + esc(k.redeemedBy || '--') + '</td><td><button class="btn btn-red btn-sm" onclick="delKey(\'' + esc(k.key) + '\')"><i class="icon-trash-2" style="font-size:12px;"></i> Delete</button></td></tr>';
+      }).join('');
+    }
+
+    async function delKey(key) {
+      if (!confirm('Delete key ' + key + '?')) return;
+      await api('/keys/' + encodeURIComponent(key), { method: 'DELETE' });
+      toast('Key deleted', 'success'); fetchData();
+    }
+
+    // â”€â”€â”€ PLANS â”€â”€â”€
+    function renderPlans() {
+      var tb = document.getElementById('plansBody');
+      if (!localPlans || localPlans.length === 0) {
+        tb.innerHTML = '<tr><td colspan="7" class="empty"><i class="icon-gem"></i><p>No subscription plans yet</p></td></tr>';
+        return;
+      }
+      tb.innerHTML = localPlans.map(function(p) {
+        var feats = p.features || {};
+        var featList = [];
+        if (feats.restoreSnapshot) featList.push('Restore');
+        if (feats.diffSnapshot) featList.push('Diff');
+        if (feats.exportSnapshot) featList.push('Export/Import');
+        if (feats.cleanupSnapshot) featList.push('Auto-Cleanup');
+        return '<tr><td>' + esc(p.id) + '</td><td>' + esc(p.name) + '</td><td>' + esc(p.duration) + '</td><td>$' + p.price + '</td><td>$' + p.discountedPrice + '</td><td style="font-size:11px;color:var(--muted);">' + esc(featList.join(', ') || 'None') + '</td><td><button class="btn btn-blue btn-sm" onclick="editPlan(\'' + esc(p.id) + '\')">Edit</button> <button class="btn btn-red btn-sm" onclick="deletePlan(\'' + esc(p.id) + '\')">Del</button></td></tr>';
+      }).join('');
+    }
+
+    function updatePlanDropdowns() {
+      var select = document.getElementById('keyPlanId');
+      if (select) {
+        select.innerHTML = localPlans.map(function(p) {
+          return '<option value="' + esc(p.id) + '">' + esc(p.name) + ' (' + esc(p.id) + ')</option>';
+        }).join('');
+      }
+    }
+
+    window.editPlan = function(id) {
+      var plan = localPlans.find(p => p.id === id);
+      if (!plan) return;
+      document.getElementById('planFormMode').value = 'edit';
+      document.getElementById('planId').value = plan.id;
+      document.getElementById('planId').disabled = true;
+      document.getElementById('planName').value = plan.name;
+      document.getElementById('planDuration').value = plan.duration;
+      document.getElementById('planPrice').value = plan.price;
+      document.getElementById('planDiscountedPrice').value = plan.discountedPrice;
+      document.getElementById('planDiscountOff').value = plan.discountOff || '';
+      
+      var feats = plan.features || {};
+      document.getElementById('featRestore').checked = !!feats.restoreSnapshot;
+      document.getElementById('featDiff').checked = !!feats.diffSnapshot;
+      document.getElementById('featExport').checked = !!feats.exportSnapshot;
+      document.getElementById('featCleanup').checked = !!feats.cleanupSnapshot;
+
+      document.getElementById('btnCancelPlanEdit').style.display = 'inline-flex';
+    }
+
+    window.cancelPlanEdit = function() {
+      document.getElementById('planFormMode').value = 'create';
+      document.getElementById('planId').value = '';
+      document.getElementById('planId').disabled = false;
+      document.getElementById('planForm').reset();
+      document.getElementById('btnCancelPlanEdit').style.display = 'none';
+    }
+
+    window.handlePlanSubmit = async function(e) {
+      e.preventDefault();
+      var mode = document.getElementById('planFormMode').value;
+      var id = document.getElementById('planId').value;
+      var name = document.getElementById('planName').value;
+      var duration = document.getElementById('planDuration').value;
+      var price = parseFloat(document.getElementById('planPrice').value || 0);
+      var discountedPrice = parseFloat(document.getElementById('planDiscountedPrice').value || 0);
+      var discountOff = document.getElementById('planDiscountOff').value;
+
+      var features = {
+        restoreSnapshot: document.getElementById('featRestore').checked,
+        diffSnapshot: document.getElementById('featDiff').checked,
+        exportSnapshot: document.getElementById('featExport').checked,
+        cleanupSnapshot: document.getElementById('featCleanup').checked,
+        maxFileSize: mode === 'edit' ? (localPlans.find(p => p.id === id)?.features?.maxFileSize || 104857600) : 104857600,
+        maxSnapshotSize: mode === 'edit' ? (localPlans.find(p => p.id === id)?.features?.maxSnapshotSize || 524288000) : 524288000
+      };
+
+      var body = { id, name, duration, price, discountedPrice, discountOff, features };
+
+      var res;
+      if (mode === 'edit') {
+        res = await api('/plans/' + encodeURIComponent(id), { method: 'PUT', body: JSON.stringify(body) });
+      } else {
+        res = await api('/plans', { method: 'POST', body: JSON.stringify(body) });
+      }
+
+      if (res && res.success) {
+        toast('Plan saved successfully', 'success');
+        cancelPlanEdit();
+        fetchData();
+      } else {
+        toast('Error saving plan: ' + (res ? res.error : 'unknown'), 'error');
+      }
+    }
+
+    window.deletePlan = async function(id) {
+      if (!confirm('Are you sure you want to delete plan: ' + id + '?')) return;
+      var res = await api('/plans/' + encodeURIComponent(id), { method: 'DELETE' });
+      if (res && res.success) {
+        toast('Plan deleted', 'success');
+        fetchData();
+      } else {
+        toast('Error deleting plan', 'error');
+      }
+    }
+
+    // â”€â”€â”€ BROADCAST â”€â”€â”€
+    document.getElementById('broadcastForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      var title = document.getElementById('notifTitle').value;
+      var message = document.getElementById('notifMsg').value;
+      var target = document.getElementById('notifTarget').value;
+      await api('/notifications', { method: 'POST', body: JSON.stringify({ title: title, message: message, target: target }) });
+      toast('Notification sent!', 'success');
+      document.getElementById('notifTitle').value = '';
+      document.getElementById('notifMsg').value = '';
+    });
+  </script>
+</body>
+</html>

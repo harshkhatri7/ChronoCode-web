@@ -1,0 +1,254 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ChronoCode Documentation â€” Setup, API Reference & Guides</title>
+  <link rel="icon" type="image/svg+xml" href="../assets/logo.svg" />
+  <meta name="description" content="ChronoCode documentation: get started with automatic code versioning, explore the API reference, interactive demos, and configuration guides." />
+  <link rel="canonical" href="https://chronocode-ai.vercel.app/docs/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://chronocode-ai.vercel.app/docs/" />
+  <meta property="og:title" content="ChronoCode Documentation â€” Setup, API Reference & Guides" />
+  <meta property="og:description" content="Get started with automatic code versioning, explore the API reference, interactive demos, and configuration guides." />
+  <meta property="og:image" content="https://chronocode-ai.vercel.app/assets/logo.svg" />
+  <meta property="og:site_name" content="ChronoCode" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="ChronoCode Documentation â€” Setup, API Reference & Guides" />
+  <meta name="twitter:description" content="Get started with automatic code versioning, explore the API reference, interactive demos, and guides." />
+  <meta name="twitter:image" content="https://chronocode-ai.vercel.app/assets/logo.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    "name": "ChronoCode Documentation",
+    "url": "https://chronocode-ai.vercel.app/docs/",
+    "description": "ChronoCode documentation: get started with automatic code versioning, explore the API reference, interactive demos, and configuration guides.",
+    "author": {
+      "@type": "Person",
+      "name": "Harsh Khatri"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "ChronoCode"
+    }
+  }
+  </script>
+</head>
+<body>
+  <div class="bg-dots"></div>
+  <div class="bg-grid"></div>
+  <div class="ambient-orb orb-indigo" id="orb"></div>
+  <div class="ambient-orb orb-lime"></div>
+
+  <div class="site-wrap">
+
+    <!-- NAVBAR -->
+    <header class="navbar">
+      <div class="navbar-inner">
+        <a href="../index.html" class="nav-brand">
+          <svg viewBox="0 0 512 512" fill="none" width="24" height="24">
+            <defs>
+              <linearGradient id="rg" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#6366f1"/>
+                <stop offset="50%" stop-color="#a78bfa"/>
+                <stop offset="100%" stop-color="#c5f21d"/>
+              </linearGradient>
+            </defs>
+            <circle cx="256" cy="256" r="220" stroke="url(#rg)" stroke-width="32" fill="none"/>
+            <line x1="256" y1="120" x2="256" y2="310" stroke="#c5f21d" stroke-width="28" stroke-linecap="round"/>
+          </svg>
+          ChronoCode
+        </a>
+        <nav class="nav-links">
+          <a href="#features" class="nav-link">Features</a>
+          <a href="#demo" class="nav-link">Interactive Demo</a>
+          <a href="#demo" class="nav-link">Quick Start</a>
+          <a href="https://github.com/harshkhatri7/ChronoCode-web" class="nav-link">GitHub</a>
+        </nav>
+        <button class="nav-hamburger" aria-label="Menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </header>
+
+    <!-- HERO -->
+    <main>
+    <section class="hero" style="min-height: 70vh;">
+      <div class="container">
+        <div class="hero-content reveal">
+          <span class="tag tag-indigo" style="margin-bottom:12px">ChronoCode v1.0.0</span>
+          <h1 class="hero-title">Automatic versioning for the AI coding era</h1>
+          <p class="hero-desc">
+            ChronoCode watches your workspace, captures snapshots on every save, and exposes an interactive dashboard to browse, compare, and restore any micro-version.
+          </p>
+          <div class="hero-actions" style="flex-direction:column; align-items:center; gap:12px;">
+            <a href="#demo" class="btn btn-primary">Try Interactive Demo</a>
+            <div style="display:flex; align-items:center; gap:8px; background:var(--surface-200); border:1px solid var(--border-default); padding:8px 14px; border-radius:var(--radius-md);">
+              <code style="font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--lime);">git clone https://github.com/harshkhatri7/ChronoCode-web.git</code>
+              <button onclick="copyCmd()" style="color:var(--text-400); padding:4px; transition:color 0.15s;" onmouseover="this.style.color='var(--text-100)'" onmouseout="this.style.color='var(--text-400)'">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- INTERACTIVE DEMO -->
+    <section class="section-sm" id="demo">
+      <div class="container">
+        <div class="section-head reveal">
+          <h2 class="section-title">Interactive Time Travel</h2>
+          <p class="section-desc">Click nodes to simulate traveling through code snapshots.</p>
+        </div>
+        <div class="card card-glass reveal demo-card-grid" style="display:grid; grid-template-columns: 280px 1fr; overflow:hidden; min-height:380px;">
+          <!-- Sidebar -->
+          <div style="border-right:1px solid var(--border-subtle); display:flex; flex-direction:column;">
+            <div style="padding:10px 16px; border-bottom:1px solid var(--border-subtle); font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:var(--text-400);">Snapshots</div>
+            <div style="padding:8px; display:flex; flex-direction:column; gap:4px; overflow-y:auto; flex:1;" id="demoNodes"></div>
+          </div>
+          <!-- Code Panel -->
+          <div style="display:flex; flex-direction:column; background:var(--surface-000);">
+            <div style="padding:10px 16px; border-bottom:1px solid var(--border-subtle); font-size:12px; font-family:'JetBrains Mono',monospace;">
+              <span style="color:var(--text-400)">server.js</span>
+              <span style="color:var(--text-500); margin:0 4px;">/</span>
+              <span style="color:var(--indigo); font-weight:500;" id="demoHeader">Clean up watcher logs</span>
+            </div>
+            <pre style="padding:16px; font-family:'JetBrains Mono',monospace; font-size:13px; line-height:1.7; color:var(--text-200); overflow:auto; flex:1; margin:0;" id="demoCode">Loading...</pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section class="section-sm" id="features">
+      <div class="container">
+        <div class="section-head reveal">
+          <h2 class="section-title">Why ChronoCode?</h2>
+          <p class="section-desc">Built to fill the safety gap left by manual Git commits.</p>
+        </div>
+        <div class="features-grid">
+          <div class="card-glass feature-card reveal">
+            <div class="feature-icon-wrap" style="background:var(--lime-dim); border-color:rgba(197,242,29,0.12); color:var(--lime);">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            </div>
+            <h3 class="feature-title">Debounced Auto-Saves</h3>
+            <p class="feature-desc">Every save event is queued and debounced by 300ms, storing snapshots locally without interrupting focus.</p>
+          </div>
+          <div class="card-glass feature-card reveal">
+            <div class="feature-icon-wrap" style="background:var(--emerald-dim); border-color:rgba(16,185,129,0.15); color:var(--emerald);">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="6" y1="3" x2="6" y2="15"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 1-9 9"/></svg>
+            </div>
+            <h3 class="feature-title">Git Branch Aware</h3>
+            <p class="feature-desc">Reads the active Git branch and tags each version. Travel back to specific feature iterations.</p>
+          </div>
+          <div class="card-glass feature-card reveal">
+            <div class="feature-icon-wrap">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+            </div>
+            <h3 class="feature-title">Active IDE Tracking</h3>
+            <p class="feature-desc">Queries the foreground window to detect which IDE is in focus and tags versions with the active file.</p>
+          </div>
+          <div class="card-glass feature-card reveal">
+            <div class="feature-icon-wrap" style="background:var(--crimson-dim); border-color:rgba(239,68,68,0.12); color:var(--crimson);">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+            </div>
+            <h3 class="feature-title">One-Click Restores</h3>
+            <p class="feature-desc">Find the version you need, click Restore, and your workspace reverts instantly. Zero CLI friction.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-inner">
+          <div class="footer-left">
+            <a href="../index.html"><img src="../assets/logo.svg" alt="ChronoCode" /></a>
+            <span>&copy; 2026 ChronoCode. Open Source MIT License.</span>
+          </div>
+          <div class="footer-links">
+            <a href="https://github.com/harshkhatri7/ChronoCode-web" class="footer-link">GitHub</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+  </div>
+
+  <div id="toast" class="toast">Copied to clipboard!</div>
+
+  <script>
+    // â”€â”€â”€ DEMO DATA â”€â”€â”€
+    const demoData = [
+      { header: "Clean up watcher logs", code: `// START SERVERS\nconst httpServer = createServer(app);\n\nhttpServer.listen(config.portHttp, () => {\n  console.log(\`ChronoCode HTTP active at http://localhost:\${config.portHttp}\`);\n  console.log(\`Watcher heartbeats verified. [Operational]\`);\n});` },
+      { header: "Setup ws heartbeats", code: `// WebSocket Heartbeats\nwss.on('connection', (ws) => {\n  clients.add(ws);\n  console.log('Client connected to WebSocket pipeline');\n  \n  const pingInterval = setInterval(() => {\n    if (ws.readyState === 1) ws.send(JSON.stringify({ type: 'ping' }));\n  }, 30000);\n});` },
+      { header: "Add active window tracker", code: `// Active window tracker (Windows only)\nasync function startActiveWindowTracker() {\n  if (os.platform() !== 'win32') return;\n  const psScriptPath = path.join(config.chronoDir, 'active-window.ps1');\n  const psProc = spawn('powershell', ['-File', psScriptPath]);\n  \n  psProc.on('error', (err) => {\n    console.error('Window tracker failed:', err.message);\n  });\n}` },
+      { header: "Add Express endpoint", code: `// Health check endpoint\napp.get('/api/health', async (_req, res) => {\n  const history = await readHistory();\n  const diskUsage = await getDirSize(config.chronoDir);\n  res.json({\n    status: 'ok',\n    snapshotCount: history.length,\n    diskUsageBytes: diskUsage\n  });\n});` }
+    ];
+
+    function selectDemoNode(idx, btn) {
+      document.querySelectorAll('.node-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('demoHeader').textContent = demoData[idx].header;
+      document.getElementById('demoCode').textContent = demoData[idx].code;
+    }
+
+    // Render demo nodes
+    const demoNodesEl = document.getElementById('demoNodes');
+    if (demoNodesEl) {
+      const times = ['10:42:15 AM', '10:39:10 AM', '10:35:48 AM', '10:31:02 AM'];
+      const descs = ['Clean up watcher logs', 'Setup ws heartbeats', 'Add active window tracker', 'Add Express endpoint'];
+      demoData.forEach((d, i) => {
+        const btn = document.createElement('button');
+        btn.className = 'node-btn' + (i === 0 ? ' active' : '');
+        btn.style.cssText = 'display:flex; align-items:flex-start; gap:10px; background:none; border:1px solid transparent; padding:10px 12px; border-radius:var(--radius-md); cursor:pointer; text-align:left; transition:all 0.15s; width:100%;';
+        btn.innerHTML = '<span style="width:7px;height:7px;background:var(--emerald);border-radius:50%;margin-top:5px;flex-shrink:0;box-shadow:0 0 6px var(--emerald);"></span><div style="display:flex;flex-direction:column;gap:1px;"><span style="font-size:10px;color:var(--text-400);font-family:JetBrains Mono,monospace;">' + times[i] + '</span><span style="font-size:12px;color:var(--text-200);font-weight:500;">' + descs[i] + '</span></div>';
+        btn.addEventListener('click', function() { selectDemoNode(i, this); });
+        demoNodesEl.appendChild(btn);
+      });
+      selectDemoNode(0, demoNodesEl.querySelector('.node-btn'));
+    }
+
+    // â”€â”€â”€ SCROLL REVEAL â”€â”€â”€
+    const reveals = document.querySelectorAll('.reveal');
+    if (reveals.length) {
+      const obs = new IntersectionObserver(entries => {
+        entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+      }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+      reveals.forEach(el => obs.observe(el));
+    }
+
+    // â”€â”€â”€ AMBIENT ORB â”€â”€â”€
+    const orb = document.getElementById('orb');
+    if (orb) {
+      let mx = window.innerWidth / 2, my = window.innerHeight / 2;
+      let ox = mx, oy = my;
+      document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+      (function animOrb() {
+        ox += (mx - ox) * 0.06;
+        oy += (my - oy) * 0.06;
+        orb.style.left = ox + 'px';
+        orb.style.top = oy + 'px';
+        requestAnimationFrame(animOrb);
+      })();
+    }
+
+    // â”€â”€â”€ COPY CMD â”€â”€â”€
+    function copyCmd() {
+      navigator.clipboard.writeText('git clone https://github.com/harshkhatri7/ChronoCode-web.git');
+      const t = document.getElementById('toast');
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2000);
+    }
+  </script>
+</body>
+</html>

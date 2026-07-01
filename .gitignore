@@ -1,8 +1,35 @@
-# ChronoCode - Private Repository
-# Source code is not published here.
-# Visit https://chronocode-app.vercel.app for the live product.
+﻿# ChronoCode - Private Repository
 
-*
-!index.html
-!README.md
-!.gitignore
+# Secrets
+.env*
+
+# Dependencies
+node_modules/
+
+# Electron build output
+dist-electron/
+dist/
+out/
+build/
+
+# OS files
+Thumbs.db
+.DS_Store
+
+# IDE
+.vscode/
+.idea/
+
+# Logs
+*.log
+npm-debug.log*
+
+# ChronoCode local data
+.chrono/
+
+# Deployment state
+.vercel/
+.netlify/
+
+# Android admin app (separate project)
+android-admin/

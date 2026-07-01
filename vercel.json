@@ -1,0 +1,87 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "api/admin.js",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "server.js",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "public/**/*",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "assets/**/*",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "*.html",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "docs/**/*.html",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "styles.css",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "app.js",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "sitemap.xml",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "robots.txt",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/admin(.*)",
+      "dest": "api/admin.js"
+    },
+    {
+      "src": "/api/(.*)",
+      "dest": "server.js"
+    },
+    {
+      "src": "/(server\\.js|db\\.js|package\\.json|package-lock\\.json|\\.env|electron-main\\.js|preload\\.js|netlify\\.toml|render\\.yaml|builder-debug\\.yml)",
+      "status": 404,
+      "headers": { "Content-Type": "application/json" },
+      "continue": false
+    },
+    {
+      "src": "/(.*\\.json|.*\\.env|.*\\.yml|.*\\.yaml)",
+      "status": 404,
+      "headers": { "Content-Type": "application/json" },
+      "continue": false
+    },
+    {
+      "src": "/aabbcc",
+      "dest": "/aabbcc.html"
+    },
+    {
+      "src": "/admin",
+      "dest": "/admin.html"
+    },
+    {
+      "src": "/login",
+      "dest": "/login.html"
+    },
+    {
+      "src": "/pro",
+      "dest": "/pro.html"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/$1"
+    }
+  ]
+}
